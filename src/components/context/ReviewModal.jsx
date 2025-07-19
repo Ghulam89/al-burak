@@ -49,7 +49,7 @@ const ReviewModal = ({
         formData.append("images", file);
       }
 
-      const response = await axios.post(
+      const response = await axios.get(
         `${BaseUrl}/v1/product/review/${productId}`,
         formData
       );
