@@ -1,0 +1,657 @@
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { BaseUrl } from "../../utils/BaseUrl";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { resetCart } from "../../store/nextSlice";
+
+const CheckoutPage = () => {
+  const [userData, setUserData] = useState(
+    JSON.parse(localStorage.getItem("userId")) || null
+  );
+  const productData = useSelector((state) => state?.next?.productData || []);
+
+  const [orderCompleted, setOrderCompleted] = useState(false);
+  const [orderId, setOrderId] = useState(null);
+
+  const [loading, setLoading] = useState(false);
+  const [orderLoading, setOrderLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("COD");
+  const [note, setNote] = useState("");
+  const [showEmailForm, setShowEmailForm] = useState(!userData);
+  const [tempEmail, setTempEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const navigate = useNavigate();
+const dispatch = useDispatch();
+
+  const [formData, setFormData] = useState({
+    fullName: "",
+    country: "",
+    city: "",
+    state: "",
+    town: "",
+    address: "",
+    famousSpot: "",
+    phoneNumber: "",
+    email: userData?.email || "",
+  });
+
+  // Discounted price helper
+  const getDiscountedPrice = (item) => {
+    if (!item.discount) return item.price;
+    return item.price - item.price * (item.discount / 100);
+  };
+
+  // Subtotal and total
+  const subtotal = productData.reduce(
+    (sum, item) => sum + getDiscountedPrice(item) * item.quantity, 0
+  );
+  const shipping = 0;
+  const totalAmount = subtotal + shipping;
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault();
+    if (!tempEmail) {
+      setEmailError("Email is required");
+      return;
+    }
+    if (!validateEmail(tempEmail)) {
+      setEmailError("Please enter a valid email address");
+      return;
+    }
+    setLoading(true);
+    setEmailError("");
+    try {
+      const response = await axios.post(`${BaseUrl}/v1/customer`, {
+        email: tempEmail,
+      });
+      if (response.data.success) {
+        const user = response.data.data;
+        localStorage.setItem("userId", JSON.stringify(user));
+        setUserData(user);
+        setFormData((prev) => ({ ...prev, email: tempEmail }));
+        setShowEmailForm(false);
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setEmailError(error.response.data.message);
+      } else {
+        setEmailError("Failed to process email. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const OrderSuccess = ({ orderId }) => {
+    return (
+      <div className="bg-black min-h-screen text-white p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex justify-between border-b border-lightGray py-3.5 items-center">
+            <h1 className="text-3xl m-0 text-lightGray font-medium">
+              Al-Buraq
+            </h1>
+            <div className="bg-transparent border border-gray-500 rounded-full w-7 h-7 flex justify-center items-center text-base text-gray-300 cursor-pointer">
+              ?
+            </div>
+          </div>
+
+          <div className="mt-10 text-center">
+            <div className="text-black bg-lightGray w-20 h-20 mx-auto rounded-full text-6xl mb-4 flex justify-center items-center">
+              ✓
+            </div>
+            <h2 className="text-2xl font-bold mb-2">
+              Order Placed Successfully!
+            </h2>
+            <p className="text-gray-300 mb-6">
+              Your order has been placed and is being processed. You'll receive
+              a confirmation email shortly.
+            </p>
+
+            <div className="bg-gray-800 rounded-lg p-6 mx-auto text-left">
+              <h3 className="text-lg font-semibold mb-4">Order Details</h3>
+              <p className="mb-2">
+                <span className="text-gray-400">Order ID:</span> {orderId}
+              </p>
+              <p className="mb-4">
+                <span className="text-gray-400">Status:</span> Processing
+              </p>
+
+              <div className="border-t border-gray-700 pt-4">
+                <p className="text-sm text-gray-400 mb-2">
+                  You can track your order status by creating an account with
+                  the email you used for this order.
+                </p>
+                <Link
+                  to={"/signup"}
+                  className="bg-yellow-500 text-black py-2 px-4 rounded-md text-sm font-bold mt-2 hover:bg-yellow-600 transition-colors"
+                >
+                  Create Account
+                </Link>
+              </div>
+            </div>
+
+            <div className="mt-8">
+              <button
+                onClick={() => (window.location.href = "/")}
+                className="bg-yellow-500 text-black py-3 px-6 rounded-md text-base font-bold hover:bg-yellow-600 transition-colors"
+              >
+                Continue Shopping
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handlePaymentMethodChange = (e) => {
+    setPaymentMethod(e.target.value);
+  };
+
+  const updateCustomerAddress = async () => {
+    try {
+      const response = await axios.patch(`${BaseUrl}/v1/customer/address`, {
+        email: formData.email,
+        city: formData.city,
+        country: formData.country,
+        state: formData.state,
+        town: formData.town,
+        address: formData.address,
+        famousSpot: formData.famousSpot,
+        phoneNumber: formData.phoneNumber,
+        name: formData.fullName,
+      });
+      if (response.data.success) {
+        const user = response.data.data;
+        localStorage.setItem("userId", JSON.stringify(user));
+        return response.data.data;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error updating address:", error);
+      throw error;
+    }
+  };
+
+  const createOrder = async (updatedUser) => {
+    try {
+      const orderData = {
+        customerId: updatedUser._id,
+        items: productData.map((item) => ({
+          productId: item._id,
+          selectedSizeId: item.sizeId,
+          quantity: item.quantity,
+        })),
+        paymentMethod: paymentMethod,
+        note: note,
+        totalAmount: totalAmount,
+      };
+      const response = await axios.post(`${BaseUrl}/v1/order`, orderData);
+      return response.data;
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message
+      ); 
+    }
+  };
+
+  const handleSubmitOrder = async (e) => {
+    e.preventDefault();
+    if (!userData?._id || productData.length === 0) return;
+    setOrderLoading(true);
+    try {
+      const updatedUser = await updateCustomerAddress();
+      if (!updatedUser) {
+        throw new Error("Failed to update address");
+      }
+      const orderResponse = await createOrder(updatedUser);
+      if (orderResponse.success) {
+        setOrderId(orderResponse.data._id);
+        setOrderCompleted(true);
+        dispatch(resetCart());
+      }
+    } catch (error) {
+      console.error("Order processing error:", error);
+    } finally {
+      setOrderLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (userData) {
+      setFormData((prev) => ({
+        ...prev,
+        email: userData.email,
+        fullName: userData.name || "",
+        country: userData.shippingAddress?.country || "",
+        city: userData.shippingAddress?.city || "",
+        state: userData.shippingAddress?.state || "",
+        town: userData.shippingAddress?.town || "",
+        address: userData.shippingAddress?.address || "",
+        famousSpot: userData.shippingAddress?.famousSpot || "",
+        phoneNumber: userData.shippingAddress?.phoneNumber || "",
+      }));
+    }
+  }, [userData]);
+
+  if (orderCompleted) {
+    return <OrderSuccess orderId={orderId} />;
+  }
+
+  return (
+    <div className="bg-black">
+      <div className="flex justify-between border-b border-lightGray px-4 py-3.5 items-center text-gray-100">
+        <h1 className="text-3xl m-0 text-lightGray font-medium">Al-Buraq</h1>
+        <div className="bg-transparent border border-gray-500 rounded-full w-7 h-7 flex justify-center items-center text-base text-gray-300 cursor-pointer">
+          ?
+        </div>
+      </div>
+
+      <div className="flex items-start mx-auto overflow-hidden flex-wrap">
+        <div className="flex-[2.1] p-5 bg-black min-w-[350px] box-border">
+          <form onSubmit={handleSubmitOrder}>
+            <div className="text-lg font-bold text-primary mb-3 pb-2">
+              Shipping Address
+            </div>
+
+            {showEmailForm ? (
+              <div className="mb-4">
+                <label
+                  htmlFor="tempEmail"
+                  className="block mb-1 text-gray-400 text-xs"
+                >
+                  Email Address *
+                </label>
+                <input
+                  type="email"
+                  id="tempEmail"
+                  name="tempEmail"
+                  value={tempEmail}
+                  onChange={(e) => {
+                    setTempEmail(e.target.value);
+                    // Validate email format as user types
+                    if (!validateEmail(e.target.value)) {
+                      setEmailError("Please enter a valid email address");
+                      return;
+                    }
+                    setEmailError("");
+                  }}
+                  onBlur={async (e) => {
+                    if (!tempEmail) {
+                      setEmailError("Email is required");
+                      return;
+                    }
+
+                    if (!validateEmail(tempEmail)) {
+                      setEmailError("Please enter a valid email address");
+                      return;
+                    }
+
+                    setLoading(true);
+                    setEmailError("");
+
+                    try {
+                      const response = await axios.post(
+                        `${BaseUrl}/v1/customer`,
+                        {
+                          email: tempEmail,
+                        }
+                      );
+
+                      if (response.data.success) {
+                        const user = response.data.data;
+                        localStorage.setItem("userId", JSON.stringify(user));
+                        setUserData(user);
+                        setFormData((prev) => ({ ...prev, email: tempEmail }));
+                        setShowEmailForm(false);
+                      }
+                    } catch (error) {
+                      console.error("Error processing email:", error);
+                      if (
+                        error.response &&
+                        error.response.data &&
+                        error.response.data.message
+                      ) {
+                        setEmailError(error.response.data.message);
+                      } else {
+                        setEmailError(
+                          "Failed to process email. Please try again."
+                        );
+                      }
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
+                  className="w-[calc(100%-20px)] p-2 bg-gray-800 border border-gray-600 text-gray-300 text-sm box-border"
+                  required
+                />
+                {emailError && (
+                  <p className="text-red-500 text-xs mt-1">{emailError}</p>
+                )}
+                {loading && (
+                  <p className="text-yellow-500 text-xs mt-1">
+                    Processing email...
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className="mb-4">
+                <label
+                  htmlFor="email"
+                  className="block mb-1 text-gray-400 text-xs"
+                >
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="w-[calc(100%-20px)] p-2 bg-gray-800 border border-gray-600 text-gray-300 text-sm box-border"
+                  disabled
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowEmailForm(true);
+                    setTempEmail(formData.email);
+                  }}
+                  className="text-yellow-500 text-xs mt-1 hover:underline"
+                >
+                  Change email
+                </button>
+              </div>
+            )}
+
+            <div className="mb-4">
+              <label
+                htmlFor="fullName"
+                className="block mb-1 text-gray-400 text-xs"
+              >
+                Full name *
+              </label>
+              <input
+                type="text"
+                id="fullName"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleInputChange}
+                placeholder="Enter Full Name"
+                className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="mb-4">
+                <label
+                  htmlFor="country"
+                  className="block mb-1 text-gray-400 text-sm"
+                >
+                  Country/Region *
+                </label>
+                <input
+                  type="text"
+                  id="country"
+                  name="country"
+                  value={formData.country}
+                  onChange={handleInputChange}
+                  placeholder="Enter Country/Region"
+                  className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="city"
+                  className="block mb-1 text-gray-400 text-xs"
+                >
+                  City *
+                </label>
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleInputChange}
+                  placeholder="Enter City"
+                  className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="state"
+                  className="block mb-1 text-gray-400 text-xs"
+                >
+                  State/Province *
+                </label>
+                <input
+                  type="text"
+                  id="state"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleInputChange}
+                  placeholder="Enter State/Province"
+                  className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="town"
+                  className="block mb-1 text-gray-400 text-xs"
+                >
+                  Town *
+                </label>
+                <input
+                  type="text"
+                  id="town"
+                  name="town"
+                  value={formData.town}
+                  onChange={handleInputChange}
+                  placeholder="Enter Town"
+                  className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="address"
+                  className="block mb-1 text-gray-400 text-xs"
+                >
+                  Address *
+                </label>
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  placeholder="Enter Address"
+                  className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="famousSpot"
+                  className="block mb-1 text-gray-400 text-xs"
+                >
+                  Famous Spot
+                </label>
+                <input
+                  type="text"
+                  id="famousSpot"
+                  name="famousSpot"
+                  value={formData.famousSpot}
+                  onChange={handleInputChange}
+                  placeholder="Enter Famous Spot"
+                  className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="phoneNumber"
+                  className="block mb-1 text-gray-400 text-xs"
+                >
+                  Phone Number *
+                </label>
+                <input
+                  type="text"
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleInputChange}
+                  placeholder="Enter Phone Number"
+                  className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="text-lg font-bold text-primary mb-3 pb-2">
+              Payment Method
+            </div>
+            <div className="my-4">
+              <div className="flex flex-col gap-2">
+                <label className="bg-lightGray border rounded-md p-3 flex justify-between items-center cursor-pointer transition-colors border-primary">
+                  <div className="flex items-center flex-grow">
+                    <input
+                      type="radio"
+                      name="payment-method"
+                      value="standard-delivery-pay"
+                      checked={paymentMethod === "standard-delivery-pay"}
+                      onChange={handlePaymentMethodChange}
+                      className="mr-2 w-4 h-4 cursor-pointer accent-gray-600"
+                    />
+                    <strong className="text-lightGray2 font-medium text-sm">
+                      Standard Delivery
+                    </strong>
+                  </div>
+                </label>
+                <label className="bg-lightGray border rounded-md p-3 flex justify-between items-center cursor-pointer transition-colors border-primary">
+                  <div className="flex items-center flex-grow">
+                    <input
+                      type="radio"
+                      name="payment-method"
+                      value="COD"
+                      checked={paymentMethod === "COD"}
+                      onChange={handlePaymentMethodChange}
+                      className="mr-2 w-4 h-4 cursor-pointer accent-yellow-500"
+                    />
+                    <strong className="text-lightGray2 font-medium text-sm">
+                      COD
+                    </strong>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="note"
+                className="block mb-1 text-gray-400 text-xs"
+              >
+                Order Note (Optional)
+              </label>
+              <textarea
+                id="note"
+                name="note"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="Any special instructions..."
+                className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                rows="3"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={orderLoading || productData.length === 0 || showEmailForm}
+              className="bg-lightGray text-black py-3 font-[inter] px-5 rounded-md text-base font-bold cursor-pointer w-full mt-6 hover:bg-yellow-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {orderLoading ? "Processing Order..." : "Complete Order"}
+            </button>
+          </form>
+        </div>
+
+        <div className="flex-1 p-5 bg-lightGray border-l min-w-[350px] box-border">
+          <div className="mb-5 pb-5">
+            {productData?.map((item) => (
+              <div key={item._id} className="flex items-center my-3">
+                <div className="relative w-[70px] h-[70px] mr-3 flex-shrink-0">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full bg-gray-700 rounded-lg overflow-hidden object-cover"
+                  />
+                </div>
+                <div className="flex-grow flex justify-between items-start pt-1">
+                  <div className="text-black font-medium">
+                    {item.title} (Qty: {item.quantity})
+                  </div>
+                  <div className="text-black font-medium">
+                    Rs {getDiscountedPrice(item) * item.quantity}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-between gap-5 mb-5">
+            <input
+              type="text"
+              placeholder="Discount code"
+              className="flex-grow p-3.5 bg-white placeholder:text-lightGray2 font-semibold text-black text-sm border-none rounded-md box-border"
+            />
+            <button className="bg-black text-white py-2 px-4 rounded-md cursor-pointer text-sm font-bold hover:bg-gray-900 transition-colors">
+              Apply
+            </button>
+          </div>
+
+          <div className="mb-0 pt-1">
+            <div className="flex justify-between mb-2 text-sm text-gray-300">
+              <span className="text-lightGray2 font-medium">
+                Subtotal {productData.length} items
+              </span>
+              <span className="text-lightGray2 font-bold">
+                Rs {subtotal}
+              </span>
+            </div>
+            <div className="flex justify-between mb-2 text-sm text-gray-300">
+              <span className="text-lightGray2 font-medium">Shipping</span>
+              <span className="text-lightGray2 font-bold">Rs {shipping}</span>
+            </div>
+            <div className="flex justify-between text-base font-bold text-white pt-3 mt-4">
+              <span className="text-black">Total</span>
+              <span className="text-black">Rs {totalAmount}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CheckoutPage;
