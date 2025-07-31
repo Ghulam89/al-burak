@@ -6,9 +6,9 @@ import Button from "../common/Button";
 const HeroSection = () => {
   return (
     <div className="border-b border-black">
-      <div className="flex flex-col-reverse md:flex-row items-center justify-center px-4 sm:px-6 lg:px-8 w-full box-border min-h-[70vh] max-w-6xl mx-auto">
+      <div className="flex flex-col md:flex-row items-center justify-center px-4 sm:px-6 lg:px-8 w-full box-border min-h-[70vh] max-w-6xl mx-auto">
         {/* Text Content */}
-        <div className="py-6 md:py-0 w-full md:w-1/2 lg:w-6/12 text-center md:text-left">
+        <div className="py-6 md:py-0 w-full  md:w-6/12 text-center md:text-left">
           <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-[64px] text-center tracking-[0.1em] font-bold font-[inter] mb-2 md:mb-4">
             Dirham Ard <br className="" /> Al Zaafaran
           </h1>
