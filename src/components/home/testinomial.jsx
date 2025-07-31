@@ -59,9 +59,10 @@ export default function Testimonials() {
   ];
 
   return (
-    <section className="py-16 px-5 text-center ">
+    <section className="py-10 px-5 text-center ">
       <h2 className="flex items-center justify-center text-2xl font-semibold tracking-wider mb-10">
-        TESTIMONIALS
+        
+        Testimonials
       </h2>
       
       <div className="max-w-6xl mx-auto">

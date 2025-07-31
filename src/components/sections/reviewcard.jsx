@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { BaseUrl } from "../../utils/BaseUrl";
 
-const ReviewCard = ({ name, rating, comment, createdAt }) => {
+const ReviewCard = ({ name, rating, comment, createdAt,image}) => {
   const starIcons = "★".repeat(rating) + "☆".repeat(5 - rating);
   const reviewDate = new Date(createdAt).toLocaleDateString();
 
@@ -12,10 +12,17 @@ const ReviewCard = ({ name, rating, comment, createdAt }) => {
     <div className="max-w-6xl mx-auto py-3 border-b border-lightGray2">
       <div className="stars text-lg">{starIcons}</div>
       <div className="flex items-center gap-4 my-2">
-        <div className="text-primary text-lg font-semibold">{name || "Anonymous"}</div>
-       
+        <div className=" flex items-center gap-2">
+          <div>
+            <img  src={image} />
+          </div>
+          <div>
+            <div className="text-black text-lg font-semibold">{name || "Anonymous"}</div>
+        <div className="text-lightGray2 text-sm">{reviewDate}</div>
+          </div>
+        </div>
       </div>
-      <div className="review-text text-lightGray2">"{comment}"</div>
+      <div className="review-text text-black">"{comment}"</div>
     </div>
   );
 };
@@ -27,24 +34,64 @@ const ReviewSection = () => {
   const [error, setError] = useState(null);
   const { id } = useParams();
 
- 
+  // Mock data for demonstration
+  const mockReviews = [
+    {
+      user: { name: "John Doe" },
+      rating: 5,
+      image:require('../../assets/images/reviewimage1.png'),
+      comment: "Absolutely love this product! The quality exceeded my expectations and it arrived sooner than expected.",
+      createdAt: "2023-05-15T10:30:00Z"
+    },
+    {
+      user: { name: "Jane Smith" },
+      rating: 4,
+            image:require('../../assets/images/reviewiamge2.png'),
+
+      comment: "Great product overall, but the packaging could be improved. The item itself works perfectly though.",
+      createdAt: "2023-06-22T14:45:00Z"
+    },
+    {
+      user: { name: "Alex Johnson" },
+      rating: 3,
+      image:require('../../assets/images/reviewimage1.png'),
+      comment: "It's okay for the price. Does what it's supposed to but nothing extraordinary.",
+      createdAt: "2023-07-10T09:15:00Z"
+    },
+    {
+      user: { name: "Sarah Williams" },
+      rating: 5,
+            image:require('../../assets/images/reviewiamge2.png'),
+      comment: "Perfect! Exactly as described. Will definitely purchase again from this seller.",
+      createdAt: "2023-08-05T16:20:00Z"
+    },
+    {
+      user: { name: "Michael Brown" },
+      rating: 2,
+      image:require('../../assets/images/reviewiamge2.png'),
+      comment: "Not what I expected. The product didn't match the description and arrived damaged.",
+      createdAt: "2023-08-18T11:10:00Z"
+    }
+  ];
+
   useEffect(() => {
     const fetchProductReviews = async () => {
       try {
         const response = await axios.get(`${BaseUrl}/v1/product/reveiw/${id}`);
         
-        // Check if response has data array
         if (response.data.success && response.data.data) {
-          // If the API returns an array of reviews
           setReviews(response.data.data);
-          // If you need the product name, you might need a separate API call
-          // Or modify your backend to include product info in the response
-          setProduct({ name: "Product Name" }); // Replace with actual product name
+          setProduct({ name: "Product Name" });
         } else {
-          setReviews([]);
+          // If no reviews from API, use mock data
+          setReviews(mockReviews);
+          setProduct({ name: "Demo Product" });
         }
       } catch (err) {
-        setError(err.message);
+        // setError(err.message);
+        // // If API fails, use mock data instead
+        // setReviews(mockReviews);
+        // setProduct({ name: "Demo Product" });
       } finally {
         setLoading(false);
       }
@@ -55,57 +102,35 @@ const ReviewSection = () => {
 
   if (loading) {
     return (
-      <div className="bg-black  flex items-center justify-center">
+      <div className="bg-black flex items-center justify-center min-h-[200px]">
         <div className="text-lightGray2">Loading reviews...</div>
       </div>
     );
   }
 
-  if (error) {
-    return (
-      <div className="bg-black min-h-screen flex items-center justify-center">
-        <div className="text-red-500">Error: {error}</div>
-      </div>
-    );
-  }
-
   return (
-    <div style={{ backgroundColor: "#000",padding: "20px 0" }}>
-      <style>
-        {`
-          .stars {
-            color: #EBC351;
-          }
-          .review-text {
-            font-size: 16px;
-            line-height: 1.5;
-            color: #E5D0A5;
-          }
-          @media (max-width: 600px) {
-            .review-text {
-              font-size: 14px;
-            }
-          }
-        `}
-      </style>
+    <div style={{padding: "20px 0" }}> 
+      
 
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto pb-5 border-t-2">
+      
         
-       {reviews.length > 0 ? (
-  reviews.map((review, index) => (
-    <ReviewCard 
-      key={index}
-      name={review.user.name} 
-      rating={review.rating}
-      comment={review.comment}
-      createdAt={review.createdAt}
-    />
-  ))
-) : (
-  <div className="text-lightGray2 text-center py-10">
-    No reviews yet for this product.
-  </div>
-)}
+        {reviews.length > 0 ? (
+          reviews.map((review, index) => (
+            <ReviewCard 
+              key={index}
+              name={review.user?.name} 
+              rating={review.rating}
+              image={review.image}
+              comment={review.comment}
+              createdAt={review.createdAt}
+            />
+          ))
+        ) : (
+          <div className="text-lightGray2 text-center py-10">
+            No reviews yet for this product.
+          </div>
+        )}
       </div>
     </div>
   );

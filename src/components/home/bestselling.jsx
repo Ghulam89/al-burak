@@ -7,36 +7,48 @@ import product2 from '../../assets/images/product2.png';
 import product3 from '../../assets/images/product3.png';
 import product4 from '../../assets/images/product4.png';
 import Button from "../common/Button";
+import { addToCart } from "../../store/nextSlice";
+import { useDispatch } from "react-redux";
+import AddToCartSideMenu from "../header-footer.jsx/AddToCartSideMenu";
+import { FiX } from "react-icons/fi";
 const BestSelling = () => {
   const {id} = useParams();
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const  data  = [
     {
       id:1,
       product:product1,
       title:'Jimmy choo',
-      price:'3,990'
+      price:'3990'
     },
     {
       id:2,
       product:product2,
       title:'Jimmy choo',
-      price:'3,990'
+      price:'3990'
     },
     {
       id:3,
       product:product3,
       title:'Jimmy choo',
-      price:'3,990'
+      price:'3990'
     },
     {
       id:4,
       product:product4,
       title:'Jimmy choo',
-      price:'3,990'
+      price:'3990'
     },
   ]
+    
+  const [showCartSideMenu,setShowCartSideMenu] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+   const toggleCartSideMenu = () => {
+    setShowCartSideMenu(!showCartSideMenu);
+    if (isMenuOpen) setIsMenuOpen(false);
+  };
+
   return (
     <div className="bg-white text-white p-5 md:p-10 font-sans">
       <div className="flex items-center justify-center mb-8 md:mb-12">
@@ -49,15 +61,16 @@ const BestSelling = () => {
           <div 
             key={index} 
              className="relative"
-            onClick={() => navigate(`/product/${index + 1}`)}
+           
           >
               
             <div className="bg-black   rounded-lg border border-black shadow-lg shadow-gold-100">
                
                 <img
                   src={item?.product}
+                   onClick={() => navigate(`/product/${item?.id}`)}
                   alt="product"
-                  className="w-full h-[250px] sm:h-[300px] md:h-[400px] object-cover"
+                  className="w-full  h-[250px] sm:h-[300px] md:h-[400px] object-cover"
                 />
 
                {/* <div className="absolute top-4 right-8 w-14 h-14 rounded-full border-4 border-lightGray  bg-black flex justify-center items-center">
@@ -77,11 +90,31 @@ const BestSelling = () => {
               <p className="text-black  font-semibold font-[inter] text-base md:text-lg lg:text-xl mb-4">
                 Rs.{item?.price}
               </p>
-              <Button label={'Add To Bag'} className=" border border-black mx-auto  w-full  font-semibold text-black rounded-md" />
+              <Button type="button"  onClick={() => {
+                              dispatch(
+                                addToCart({
+                                  _id: item?.id,
+                                  image:item?.product,
+                                  quantity:1,
+                                  title: item?.title,
+                                  price: item.price,
+                                  cutPrice:item.price
+                                })
+                              );
+
+                              toggleCartSideMenu();
+                            }}
+                             label={'Add To Bag'} className=" border border-black mx-auto  w-full  font-semibold text-black rounded-md" />
             </div>
           </div>
         ))}
       </div>
+
+      {/* Cart Side Menu */}
+            {showCartSideMenu ? <AddToCartSideMenu onClose={()=>setShowCartSideMenu(false)}  />:null} 
+               
+           
+
     </div>
   );
 };

@@ -258,18 +258,18 @@ const dispatch = useDispatch();
   }
 
   return (
-    <div className="bg-black">
-      <div className="flex justify-between border-b border-lightGray px-4 py-3.5 items-center text-gray-100">
-        <h1 className="text-3xl m-0 text-lightGray font-medium">Al-Buraq</h1>
-        <div className="bg-transparent border border-gray-500 rounded-full w-7 h-7 flex justify-center items-center text-base text-gray-300 cursor-pointer">
-          ?
+    <div className="bg-white">
+      <div className="flex justify-between   px-4 py-3.5 items-center text-gray-100">
+        <h1 className="text-3xl m-0 text-black  font-semibold">Al-Buraq</h1>
+        <div>
+          <img src={require('../../assets/images/bag.png')} alt="" />
         </div>
       </div>
 
-      <div className="flex items-start mx-auto overflow-hidden flex-wrap">
-        <div className="flex-[2.1] p-5 bg-black min-w-[350px] box-border">
+      <div className="flex items-start  sm:px-4  px-2 mx-auto overflow-hidden flex-wrap">
+        <div className="flex-[2.1] p-5 min-w-[350px] box-border">
           <form onSubmit={handleSubmitOrder}>
-            <div className="text-lg font-bold text-primary mb-3 pb-2">
+            <div className="text-lg font-bold text-black mb-3 pb-2">
               Shipping Address
             </div>
 
@@ -277,7 +277,7 @@ const dispatch = useDispatch();
               <div className="mb-4">
                 <label
                   htmlFor="tempEmail"
-                  className="block mb-1 text-gray-400 text-xs"
+                  className="block mb-1 text-black text-xs"
                 >
                   Email Address *
                 </label>
@@ -341,7 +341,8 @@ const dispatch = useDispatch();
                       setLoading(false);
                     }
                   }}
-                  className="w-[calc(100%-20px)] p-2 bg-gray-800 border border-gray-600 text-gray-300 text-sm box-border"
+                  placeholder="Enter Your Email"
+                  className="w-[calc(100%-20px)] p-2.5 rounded-md bg-white border border-gray-600 text-black text-sm box-border"
                   required
                 />
                 {emailError && (
@@ -357,7 +358,7 @@ const dispatch = useDispatch();
               <div className="mb-4">
                 <label
                   htmlFor="email"
-                  className="block mb-1 text-gray-400 text-xs"
+                  className="block mb-1 text-black text-xs"
                 >
                   Email Address
                 </label>
@@ -367,7 +368,7 @@ const dispatch = useDispatch();
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-[calc(100%-20px)] p-2 bg-gray-800 border border-gray-600 text-gray-300 text-sm box-border"
+                  className="w-[calc(100%-20px)] p-2.5 rounded-md bg-white border border-gray-600 text-black text-sm box-border"
                   disabled
                 />
                 <button
@@ -386,7 +387,7 @@ const dispatch = useDispatch();
             <div className="mb-4">
               <label
                 htmlFor="fullName"
-                className="block mb-1 text-gray-400 text-xs"
+                  className="block mb-1 text-black text-xs"
               >
                 Full name *
               </label>
@@ -397,7 +398,7 @@ const dispatch = useDispatch();
                 value={formData.fullName}
                 onChange={handleInputChange}
                 placeholder="Enter Full Name"
-                className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                  className="w-[calc(100%-20px)] p-2.5 rounded-md bg-white border border-gray-600 text-black text-sm box-border"
                 required
               />
             </div>
@@ -406,7 +407,7 @@ const dispatch = useDispatch();
               <div className="mb-4">
                 <label
                   htmlFor="country"
-                  className="block mb-1 text-gray-400 text-sm"
+                  className="block mb-1 text-black text-xs"
                 >
                   Country/Region *
                 </label>
@@ -417,14 +418,14 @@ const dispatch = useDispatch();
                   value={formData.country}
                   onChange={handleInputChange}
                   placeholder="Enter Country/Region"
-                  className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                  className="w-[calc(100%-20px)] p-2.5 rounded-md bg-white border border-gray-600 text-black text-sm box-border"
                   required
                 />
               </div>
               <div className="mb-4">
                 <label
                   htmlFor="city"
-                  className="block mb-1 text-gray-400 text-xs"
+                  className="block mb-1 text-black text-xs"
                 >
                   City *
                 </label>
@@ -435,14 +436,14 @@ const dispatch = useDispatch();
                   value={formData.city}
                   onChange={handleInputChange}
                   placeholder="Enter City"
-                  className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                  className="w-[calc(100%-20px)] p-2.5 rounded-md bg-white border border-gray-600 text-black text-sm box-border"
                   required
                 />
               </div>
               <div className="mb-4">
                 <label
                   htmlFor="state"
-                  className="block mb-1 text-gray-400 text-xs"
+                  className="block mb-1 text-black text-xs"
                 >
                   State/Province *
                 </label>
@@ -453,14 +454,14 @@ const dispatch = useDispatch();
                   value={formData.state}
                   onChange={handleInputChange}
                   placeholder="Enter State/Province"
-                  className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                  className="w-[calc(100%-20px)] p-2.5 rounded-md bg-white border border-gray-600 text-black text-sm box-border"
                   required
                 />
               </div>
               <div className="mb-4">
                 <label
                   htmlFor="town"
-                  className="block mb-1 text-gray-400 text-xs"
+                  className="block mb-1 text-black text-xs"
                 >
                   Town *
                 </label>
@@ -471,14 +472,14 @@ const dispatch = useDispatch();
                   value={formData.town}
                   onChange={handleInputChange}
                   placeholder="Enter Town"
-                  className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                  className="w-[calc(100%-20px)] p-2.5 rounded-md bg-white border border-gray-600 text-black text-sm box-border"
                   required
                 />
               </div>
               <div className="mb-4">
                 <label
                   htmlFor="address"
-                  className="block mb-1 text-gray-400 text-xs"
+                  className="block mb-1 text-black text-xs"
                 >
                   Address *
                 </label>
@@ -489,14 +490,14 @@ const dispatch = useDispatch();
                   value={formData.address}
                   onChange={handleInputChange}
                   placeholder="Enter Address"
-                  className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                  className="w-[calc(100%-20px)] p-2.5 rounded-md bg-white border border-gray-600 text-black text-sm box-border"
                   required
                 />
               </div>
               <div className="mb-4">
                 <label
                   htmlFor="famousSpot"
-                  className="block mb-1 text-gray-400 text-xs"
+                  className="block mb-1 text-black text-xs"
                 >
                   Famous Spot
                 </label>
@@ -507,13 +508,13 @@ const dispatch = useDispatch();
                   value={formData.famousSpot}
                   onChange={handleInputChange}
                   placeholder="Enter Famous Spot"
-                  className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                  className="w-[calc(100%-20px)] p-2.5 rounded-md bg-white border border-gray-600 text-black text-sm box-border"
                 />
               </div>
               <div className="mb-4">
                 <label
                   htmlFor="phoneNumber"
-                  className="block mb-1 text-gray-400 text-xs"
+                  className="block mb-1 text-black text-xs"
                 >
                   Phone Number *
                 </label>
@@ -524,18 +525,18 @@ const dispatch = useDispatch();
                   value={formData.phoneNumber}
                   onChange={handleInputChange}
                   placeholder="Enter Phone Number"
-                  className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                  className="w-[calc(100%-20px)] p-2.5 rounded-md bg-white border border-gray-600 text-black text-sm box-border"
                   required
                 />
               </div>
             </div>
 
-            <div className="text-lg font-bold text-primary mb-3 pb-2">
+            <div className="text-lg font-bold text-black mb-3 pb-2">
               Payment Method
             </div>
             <div className="my-4">
               <div className="flex flex-col gap-2">
-                <label className="bg-lightGray border rounded-md p-3 flex justify-between items-center cursor-pointer transition-colors border-primary">
+                <label className="bg-white border rounded-md p-3 flex justify-between items-center cursor-pointer transition-colors border-primary">
                   <div className="flex items-center flex-grow">
                     <input
                       type="radio"
@@ -545,12 +546,12 @@ const dispatch = useDispatch();
                       onChange={handlePaymentMethodChange}
                       className="mr-2 w-4 h-4 cursor-pointer accent-gray-600"
                     />
-                    <strong className="text-lightGray2 font-medium text-sm">
+                    <strong className="text-black font-medium text-sm">
                       Standard Delivery
                     </strong>
                   </div>
                 </label>
-                <label className="bg-lightGray border rounded-md p-3 flex justify-between items-center cursor-pointer transition-colors border-primary">
+                <label className="bg-white border rounded-md p-3 flex justify-between items-center cursor-pointer transition-colors border-primary">
                   <div className="flex items-center flex-grow">
                     <input
                       type="radio"
@@ -560,7 +561,7 @@ const dispatch = useDispatch();
                       onChange={handlePaymentMethodChange}
                       className="mr-2 w-4 h-4 cursor-pointer accent-yellow-500"
                     />
-                    <strong className="text-lightGray2 font-medium text-sm">
+                    <strong className="text-black font-medium text-sm">
                       COD
                     </strong>
                   </div>
@@ -571,7 +572,7 @@ const dispatch = useDispatch();
             <div className="mb-4">
               <label
                 htmlFor="note"
-                className="block mb-1 text-gray-400 text-xs"
+                  className="block mb-1 text-black text-xs"
               >
                 Order Note (Optional)
               </label>
@@ -581,7 +582,7 @@ const dispatch = useDispatch();
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 placeholder="Any special instructions..."
-                className="w-[calc(100%-20px)] p-2 bg-black border border-gray-600 text-gray-200 text-sm box-border focus:outline-none focus:border-yellow-500"
+                  className="w-[calc(100%-20px)] p-2.5 rounded-md bg-white border border-gray-600 text-black text-sm box-border"
                 rows="3"
               />
             </div>
@@ -589,14 +590,14 @@ const dispatch = useDispatch();
             <button
               type="submit"
               disabled={orderLoading || productData.length === 0 || showEmailForm}
-              className="bg-lightGray text-black py-3 font-[inter] px-5 rounded-md text-base font-bold cursor-pointer w-full mt-6 hover:bg-yellow-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-black text-white py-3 font-[inter] px-5 rounded-md text-base  font-semibold cursor-pointer w-full mt-6 hover:bg-primary hover:text-black transition-colors  disabled:cursor-not-allowed"
             >
               {orderLoading ? "Processing Order..." : "Complete Order"}
             </button>
           </form>
         </div>
 
-        <div className="flex-1 p-5 bg-lightGray border-l min-w-[350px] box-border">
+        <div className="flex-1 p-5 bg-white border border-black rounded-lg min-w-[350px] box-border">
           <div className="mb-5 pb-5">
             {productData?.map((item) => (
               <div key={item._id} className="flex items-center my-3">
@@ -623,7 +624,7 @@ const dispatch = useDispatch();
             <input
               type="text"
               placeholder="Discount code"
-              className="flex-grow p-3.5 bg-white placeholder:text-lightGray2 font-semibold text-black text-sm border-none rounded-md box-border"
+              className="flex-grow p-3.5 bg-gray-100 placeholder:text-black font-semibold text-black text-sm border-none rounded-md box-border"
             />
             <button className="bg-black text-white py-2 px-4 rounded-md cursor-pointer text-sm font-bold hover:bg-gray-900 transition-colors">
               Apply
@@ -632,16 +633,16 @@ const dispatch = useDispatch();
 
           <div className="mb-0 pt-1">
             <div className="flex justify-between mb-2 text-sm text-gray-300">
-              <span className="text-lightGray2 font-medium">
+              <span className="text-black font-medium">
                 Subtotal {productData.length} items
               </span>
-              <span className="text-lightGray2 font-bold">
+              <span className="text-black font-bold">
                 Rs {subtotal}
               </span>
             </div>
             <div className="flex justify-between mb-2 text-sm text-gray-300">
-              <span className="text-lightGray2 font-medium">Shipping</span>
-              <span className="text-lightGray2 font-bold">Rs {shipping}</span>
+              <span className="text-black font-medium">Shipping</span>
+              <span className="text-black font-bold">Rs {shipping}</span>
             </div>
             <div className="flex justify-between text-base font-bold text-white pt-3 mt-4">
               <span className="text-black">Total</span>

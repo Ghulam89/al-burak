@@ -4,13 +4,20 @@ import product from "../../assets/images/product.jpg";
 import { FiMenu, FiX } from "react-icons/fi";
 import axios from "axios";
 import { BaseUrl } from "../../utils/BaseUrl";
-import Navbar from "../header-footer.jsx/Navbar";
 import Footer from "../header-footer.jsx/Footer";
 import Banner from "./manhero";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../store/nextSlice";
 import UserModal from "../context/UserModal";
+import Navbar from "../Navbar";
+
+import product1 from "../../assets/images/product1.png";
+import product2 from "../../assets/images/product2.png";
+import product3 from "../../assets/images/product3.png";
+import product4 from "../../assets/images/product4.png";
+import Button from "../common/Button";
+import AddToCartSideMenu from "../header-footer.jsx/AddToCartSideMenu";
 
 // Sidebar Component
 const Sidebar = ({ isOpen, onClose, searchParams, setSearchParams }) => {
@@ -62,7 +69,6 @@ const Sidebar = ({ isOpen, onClose, searchParams, setSearchParams }) => {
 
   const fetchCategory = async () => {
     const respose = await axios.get(`${BaseUrl}/v1/category`);
-
     setCategory(respose.data.categories);
   };
 
@@ -72,62 +78,62 @@ const Sidebar = ({ isOpen, onClose, searchParams, setSearchParams }) => {
 
   return (
     <div
-      className={`fixed md:static inset-y-0 left-0 bg-black  p-5 w-64 z-40 flex-shrink-0 border-r border-amber-300 transform ${
-        isOpen ? "translate-x-0" : "-translate-x-full"
-      } md:translate-x-0 transition-transform duration-300 ease-in-out`}
-    >
+  className={`fixed top-0 left-0 h-screen bg-white p-5 w-64 z-40  transform ${
+    isOpen ? "translate-x-0" : "-translate-x-full"
+  } transition-transform duration-300 ease-in-out overflow-y-auto`}
+>
       <button
         onClick={onClose}
-        className="md:hidden absolute top-4 right-4 text-amber-300 hover:text-white"
+        className=" absolute top-4 right-4 text-black hover:text-black"
       >
         <FiX size={24} />
       </button>
       <div className="mb-8">
-        <h2 className="text-xl md:text-3xl font-bold mb-5  text-primary font-[inter] tracking-[9px]">
+        <h2 className="text-xl md:text-3xl font-bold  mb-5 text-black font-[inter] tracking-[9px]">
           Gender
         </h2>
-        <label className="flex items-center text-lightGray mb-4 text-base md:text-lg font-[inter] tracking-[3px] cursor-pointer">
+        <label className="flex items-center text-black mb-4 text-base md:text-lg font-[inter] tracking-[3px] cursor-pointer">
           <input
             type="radio"
             name="gender"
             value="men"
             checked={selectedGender === "men"}
             onChange={() => handleGenderChange("men")}
-            className="appearance-none text-lightGray w-4 h-4 md:w-5 md:h-5 rounded-full border-2  border-lightGray mr-3 checked:bg-primary relative checked:after:content-[''] checked:after:absolute checked:after:w-2 checked:after:h-2 checked:after:bg-black checked:after:rounded-full checked:after:top-1/2 checked:after:left-1/2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
+            className="appearance-none text-black w-4 h-4 md:w-5 md:h-5 rounded-full border-2 border-black mr-3 checked:bg-black relative checked:after:content-[''] checked:after:absolute checked:after:w-2 checked:after:h-2 checked:after:bg-black checked:after:rounded-full checked:after:top-1/2 checked:after:left-1/2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
           />
           Men
         </label>
-        <label className="flex items-center text-lightGray mb-4 text-base md:text-lg font-[inter] tracking-[3px] cursor-pointer">
+        <label className="flex items-center text-black mb-4 text-base md:text-lg font-[inter] tracking-[3px] cursor-pointer">
           <input
             type="radio"
             name="gender"
             value="women"
             checked={selectedGender === "women"}
             onChange={() => handleGenderChange("women")}
-            className="appearance-none text-lightGray w-4 h-4 md:w-5 md:h-5 rounded-full border-2  border-lightGray mr-3 checked:bg-primary relative checked:after:content-[''] checked:after:absolute checked:after:w-2 checked:after:h-2 checked:after:bg-black checked:after:rounded-full checked:after:top-1/2 checked:after:left-1/2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
+            className="appearance-none text-black w-4 h-4 md:w-5 md:h-5 rounded-full border-2 border-black mr-3 checked:bg-black relative checked:after:content-[''] checked:after:absolute checked:after:w-2 checked:after:h-2 checked:after:bg-black checked:after:rounded-full checked:after:top-1/2 checked:after:left-1/2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
           />
           Women
         </label>
-        <label className="flex items-center text-lightGray mb-4 text-base md:text-lg font-[inter] tracking-[3px] cursor-pointer">
+        <label className="flex items-center text-black mb-4 text-base md:text-lg font-[inter] tracking-[3px] cursor-pointer">
           <input
             type="radio"
             name="gender"
             value="unisex"
             checked={selectedGender === "unisex"}
             onChange={() => handleGenderChange("unisex")}
-            className="appearance-none text-lightGray w-4 h-4 md:w-5 md:h-5 rounded-full border-2  border-lightGray mr-3 checked:bg-primary relative checked:after:content-[''] checked:after:absolute checked:after:w-2 checked:after:h-2 checked:after:bg-black checked:after:rounded-full checked:after:top-1/2 checked:after:left-1/2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
+            className="appearance-none text-black w-4 h-4 md:w-5 md:h-5 rounded-full border-2 border-black mr-3 checked:bg-black relative checked:after:content-[''] checked:after:absolute checked:after:w-2 checked:after:h-2 checked:after:bg-black checked:after:rounded-full checked:after:top-1/2 checked:after:left-1/2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
           />
           Unisex
         </label>
       </div>
       <div className="mb-8">
-        <h2 className="text-xl md:text-3xl font-bold mb-5  text-primary font-[inter] tracking-[9px]">
+        {/* <h2 className="text-xl md:text-3xl font-bold mb-5 text-black font-[inter] tracking-[9px]">
           category
-        </h2>
+        </h2> */}
         {category.map((item, index) => (
           <label
             key={index}
-            className="flex items-center text-lightGray mb-4 text-base md:text-lg font-[inter] tracking-[3px] cursor-pointer"
+            className="flex items-center text-black mb-4 text-base md:text-lg font-[inter] tracking-[3px] cursor-pointer"
           >
             <input
               type="radio"
@@ -135,35 +141,35 @@ const Sidebar = ({ isOpen, onClose, searchParams, setSearchParams }) => {
               value={item.name}
               checked={selectedArticle === item.name}
               onChange={() => handleCategoryChange(item.name)}
-              className="appearance-none text-lightGray w-4 h-4 md:w-5 md:h-5 rounded-full border-2  border-lightGray mr-3 checked:bg-primary relative checked:after:content-[''] checked:after:absolute checked:after:w-2 checked:after:h-2 checked:after:bg-black checked:after:rounded-full checked:after:top-1/2 checked:after:left-1/2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
+              className="appearance-none text-black w-4 h-4 md:w-5 md:h-5 rounded-full border-2 border-black mr-3 checked:bg-black relative checked:after:content-[''] checked:after:absolute checked:after:w-2 checked:after:h-2 checked:after:bg-black checked:after:rounded-full checked:after:top-1/2 checked:after:left-1/2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
             />
             {item.name}
           </label>
         ))}
       </div>
-      <div className="mb-8">
-        <h2 className="text-xl md:text-2xl font-bold mb-5 text-amber-300 font-inter tracking-widest">
+      <div className="mb-8 border-t">
+        <h2 className="text-xl md:text-2xl font-bold mb-5 text-black font-inter tracking-widest">
           Pricing
         </h2>
-        <label className="flex items-center text-lightGray mb-4 text-base md:text-lg font-[inter] tracking-[3px] cursor-pointer">
+        <label className="flex items-center text-black mb-4 text-base md:text-lg font-[inter] tracking-[3px] cursor-pointer">
           <input
             type="radio"
             name="pricing"
             value="price-asc"
             checked={selectedPricing === "price-asc"}
             onChange={() => handlePriceSort("price-asc")}
-            className="appearance-none text-lightGray w-4 h-4 md:w-5 md:h-5 rounded-full border-2  border-lightGray mr-3 checked:bg-primary relative checked:after:content-[''] checked:after:absolute checked:after:w-2 checked:after:h-2 checked:after:bg-black checked:after:rounded-full checked:after:top-1/2 checked:after:left-1/2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
+            className="appearance-none text-black w-4 h-4 md:w-5 md:h-5 rounded-full border-2 border-black mr-3 checked:bg-black relative checked:after:content-[''] checked:after:absolute checked:after:w-2 checked:after:h-2 checked:after:bg-black checked:after:rounded-full checked:after:top-1/2 checked:after:left-1/2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
           />
           Low to High
         </label>
-        <label className="flex items-center text-lightGray mb-4 text-base md:text-lg font-[inter] tracking-[3px] cursor-pointer">
+        <label className="flex items-center text-black mb-4 text-base md:text-lg font-[inter] tracking-[3px] cursor-pointer">
           <input
             type="radio"
             name="pricing"
             value="price-desc"
             checked={selectedPricing === "price-desc"}
             onChange={() => handlePriceSort("price-desc")}
-            className="appearance-none text-lightGray w-4 h-4 md:w-5 md:h-5 rounded-full border-2  border-lightGray mr-3 checked:bg-primary relative checked:after:content-[''] checked:after:absolute checked:after:w-2 checked:after:h-2 checked:after:bg-black checked:after:rounded-full checked:after:top-1/2 checked:after:left-1/2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
+            className="appearance-none text-black w-4 h-4 md:w-5 md:h-5 rounded-full border-2 border-black mr-3 checked:bg-black relative checked:after:content-[''] checked:after:absolute checked:after:w-2 checked:after:h-2 checked:after:bg-black checked:after:rounded-full checked:after:top-1/2 checked:after:left-1/2 checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
           />
           High to Low
         </label>
@@ -173,12 +179,70 @@ const Sidebar = ({ isOpen, onClose, searchParams, setSearchParams }) => {
 };
 
 const BestSelling = () => {
+  const [showCartSideMenu, setShowCartSideMenu] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const toggleCartSideMenu = () => {
+    setShowCartSideMenu(!showCartSideMenu);
+    if (isMenuOpen) setIsMenuOpen(false);
+  };
+
+  const data = [
+    {
+      id: 1,
+      product: product1,
+      title: "Jimmy choo",
+      price: "3990",
+    },
+    {
+      id: 2,
+      product: product2,
+      title: "Jimmy choo",
+      price: "3990",
+    },
+    {
+      id: 3,
+      product: product3,
+      title: "Jimmy choo",
+      price: "3990",
+    },
+    {
+      id: 4,
+      product: product4,
+      title: "Jimmy choo",
+      price: "3990",
+    },
+     {
+      id: 5,
+      product: product4,
+      title: "Jimmy choo",
+      price: "3990",
+    },
+     {
+      id: 6,
+      product: product3,
+      title: "Jimmy choo",
+      price: "3990",
+    },
+     {
+      id: 7,
+      product: product2,
+      title: "Jimmy choo",
+      price: "3990",
+    },
+    {
+      id: 8,
+      product: product1,
+      title: "Jimmy choo",
+      price: "3990",
+    },
+  ];
+
   const dispatch = useDispatch();
   const userData = JSON.parse(localStorage.getItem("userId")) || null;
   const [isModalCustomer, setIsModalCustomer] = useState(false);
   const closeCustomerModal = () => setIsModalCustomer(false);
 
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(data);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -188,6 +252,25 @@ const BestSelling = () => {
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+
+  // Close sidebar when clicking outside on mobile
+  const handleClickOutside = (e) => {
+    if (
+      sidebarOpen &&
+      !e.target.closest(".sidebar") &&
+      !e.target.closest(".sidebar-toggle")
+    ) {
+      setSidebarOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [sidebarOpen]);
+
   const category = searchParams.get("category");
   const fetchProducts = async () => {
     try {
@@ -214,7 +297,7 @@ const BestSelling = () => {
       if (rating) queryString += `&rating=${rating}`;
 
       const response = await axios.get(`${BaseUrl}/v1/product?${queryString}`);
-      setProducts(response.data.data);
+      // setProducts(response.data.data);
     } catch (err) {
       setError(err.message || "Failed to fetch products");
       console.error("Error fetching products:", err);
@@ -265,18 +348,21 @@ const BestSelling = () => {
       toast.error("An error occurred while adding to cart");
     }
   };
+
   return (
     <>
       <Navbar />
-      <Banner categoryName={category} />
-      <div className="flex flex-col md:flex-row bg-black text-white border-t border-amber-500 p-2.5 font-inter min-h-screen">
-        {/* Mobile Toggle Button */}
-        <button
-          onClick={toggleSidebar}
-          className="md:hidden fixed top-4 left-4 z-30 bg-black p-2 rounded-md border border-amber-300 text-amber-300"
-        >
-          <FiMenu size={24} />
-        </button>
+      <div className="flex flex-col md:flex-row bg-white text-white border-t border-amber-500 p-2.5 font-inter min-h-screen">
+        {/* Sidebar Toggle Button - Visible on all screens */}
+       
+
+        {/* Sidebar - Updated to work on both mobile and desktop */}
+        <Sidebar
+          isOpen={sidebarOpen}
+          onClose={toggleSidebar}
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+        />
 
         {/* Overlay for mobile when sidebar is open */}
         {sidebarOpen && (
@@ -286,27 +372,26 @@ const BestSelling = () => {
           ></div>
         )}
 
-        <Sidebar
-          isOpen={sidebarOpen}
-          onClose={toggleSidebar}
-          searchParams={searchParams}
-          setSearchParams={setSearchParams}
-        />
-
-        <div className="flex-grow flex flex-col items-center md:pl-5 pt-16 md:pt-0">
-          <div className="w-full flex justify-between items-center md:pr-5 py-3 mb-8 md:mb-5 px-4 md:px-0">
+        {/* Main content area */}
+        <div className="flex-grow flex flex-col items-center  pt-16 md:pt-0 overflow-y-auto">
+          <div className="w-full flex justify-between items-center  max-w-7xl py-3 mb-8 md:mb-5 px-4 md:px-0">
             <div>
-              <h4 className="text-lightGray text-lg font-[inter]">
+              {/* <h4 className="text-black text-lg font-[inter]">
                 {products.length}{" "}
                 {products.length === 1 ? "Product" : "Products"}
-              </h4>
+              </h4> */}
+             
+        <div  onClick={toggleSidebar} className=" flex gap-2 items-center cursor-pointer">
+          <img  src={require('../../assets/images/filter.png')}  alt="" />
+          <h3 className=" text-black font-semibold">Filter</h3>
+        </div>
             </div>
             <div>
               <select
                 id="sort-by"
                 value={searchParams.get("sort") || "default"}
                 onChange={handleSortChange}
-                className="px-3 py-1 md:px-4 md:py-2 bg-transparent border border-lightGray text-lightGray2 rounded font-inter font-bold text-sm md:text-base cursor-pointer"
+                className="px-3 py-1 md:px-4 md:py-2 bg-transparent border text-black border-black text-black2 rounded font-inter font-bold text-sm md:text-base cursor-pointer"
               >
                 <option value="default">Sort</option>
                 <option value="price-asc">Price: Low to High</option>
@@ -317,79 +402,52 @@ const BestSelling = () => {
             </div>
           </div>
 
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="text-amber-300 py-4">
-                <div class="animate-spin rounded-full h-10 w-10 border-4 border-dotted  border-lightGray border-t-transparent"></div>
-              </div>
-            </div>
-          ) : error ? (
-            <div className="text-red-500 py-4">{error}</div>
-          ) : products.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 w-full max-w-6xl px-4 pb-8">
-              {products.map((item, index) => (
-                <div key={index} className="relative mx-auto w-full max-w-sm">
-                  <div className="bg-black border-8 border-lightGray rounded-tl-full rounded-tr-full overflow-hidden shadow-lg shadow-gold-100">
-                    <Link to={`/product/${item?._id}`}>
-                      <img
-                        src={item?.images?.[0]}
-                        alt="product"
-                        className="w-full h-[200px] sm:h-[250px] md:h-[300px] object-cover"
-                      />
-                    </Link>
-
-                    <div className="absolute top-2 right-4 md:top-4 md:right-8 w-10 h-10 md:w-14 md:h-14 rounded-full border-2 md:border-4 border-gray-300 bg-black flex justify-center items-center">
-                      <span
-                        className={`text-white text-xl md:text-2xl font-bold ${
-                          index === 1 ? "text-red-500" : "text-white"
-                        }`}
-                      >
-                        ♥
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="bg-black pt-4 md:pt-7 text-center w-full md:w-[230px] mx-auto rounded-b-xl">
-                    <h3 className="font-bold text-lg md:text-2xl text-lightGray font-[inter] mb-1">
-                      {item?.name}
-                    </h3>
-                    <div className="">
-                      <p className="text-sm md:text-base lg:text-xl font-medium font-[inter] text-lightGray mb-2">
-                        {item?.description}
-                      </p>
-                    </div>
-                    <p className="text-amber-300 font-medium font-[inter] text-base md:text-lg lg:text-xl mb-4">
-                      Rs. {item.sizes?.[0]?.price || "N/A"}
-                    </p>
-                    <button
-                      onClick={() => {
-                        dispatch(
-                          addToCart({
-                            _id: item?._id,
-                            image: item?.images[0],
-                            description: item?.description,
-                            title: item?.name,
-                            quantity: 1,
-                          })
-                        );
-                        AddToCart(item);
-                      }}
-                      className="font-[inter] w-full h-[45px] sm:h-[50px] md:h-[64px] text-black bg-lightGray border-none font-inter rounded-lg cursor-pointer font-bold text-sm sm:text-base md:text-lg hover:bg-primary transition-colors duration-300"
-                    >
-                      Add to Cart
-                    </button>
-                  </div>
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 w-full max-w-7xl pb-8">
+            {products.map((item, index) => (
+              <div key={index} className="relative w-full">
+                <div className="bg-black rounded-lg border border-black shadow-lg shadow-gold-100">
+                  <img
+                    src={item?.product}
+                    onClick={() => navigate(`/product/${item?.id}`)}
+                    alt="product"
+                    className="w-full h-[250px] sm:h-[300px] md:h-[400px] object-cover"
+                  />
                 </div>
-              ))}
-            </div>
-          ) : (
-            !loading && (
-              <div className="text-lightGray py-8">
-                No products found matching your criteria.
+
+                <div className="pt-7 text-center sm:px-8 px-4 rounded-b-xl">
+                  <h3 className="font-semibold uppercase text-black font-[inter] mb-1">
+                    {item?.title}
+                  </h3>
+                  <p className="text-black font-semibold font-[inter] text-base md:text-lg lg:text-xl mb-4">
+                    Rs.{item?.price}
+                  </p>
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      dispatch(
+                        addToCart({
+                          _id: item?.id,
+                          image: item?.product,
+                          quantity: 1,
+                          title: item?.title,
+                          price: item.price,
+                          cutPrice: item.price,
+                        })
+                      );
+                      toggleCartSideMenu();
+                    }}
+                    label={"Add To Bag"}
+                    className="border border-black mx-auto w-full font-semibold text-black rounded-md"
+                  />
+                </div>
               </div>
-            )
-          )}
+            ))}
+          </div>
         </div>
+
+        {showCartSideMenu ? (
+          <AddToCartSideMenu onClose={() => setShowCartSideMenu(false)} />
+        ) : null}
       </div>
       <Footer />
       <UserModal

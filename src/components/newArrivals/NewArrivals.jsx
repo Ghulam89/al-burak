@@ -7,9 +7,20 @@ import product2 from '../../assets/images/product2.png';
 import product3 from '../../assets/images/product3.png';
 import product4 from '../../assets/images/product4.png';
 import Button from "../common/Button";
+import AddToCartSideMenu from "../header-footer.jsx/AddToCartSideMenu";
+import { addToCart } from "../../store/nextSlice";
+import { useDispatch } from "react-redux";
 const NewArrivals = () => {
   const {id} = useParams();
   const navigate = useNavigate();
+const dispatch = useDispatch()
+
+  const [showCartSideMenu,setShowCartSideMenu] = React.useState(false);
+    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+     const toggleCartSideMenu = () => {
+      setShowCartSideMenu(!showCartSideMenu);
+      if (isMenuOpen) setIsMenuOpen(false);
+    };
 
   const  data  = [
     {
@@ -49,12 +60,13 @@ const NewArrivals = () => {
           <div 
             key={index} 
              className="relative"
-            onClick={() => navigate(`/product/${index + 1}`)}
+            // onClick={() => navigate(`/product/${index + 1}`)}
           >
               
             <div className="bg-black   rounded-lg border border-black shadow-lg shadow-gold-100">
                
                 <img
+                 onClick={() => navigate(`/product/${item?.id}`)}
                   src={item?.product}
                   alt="product"
                   className="w-full h-[250px] sm:h-[300px] md:h-[400px] object-cover"
@@ -77,11 +89,26 @@ const NewArrivals = () => {
               <p className="text-black  font-semibold font-[inter] text-base md:text-lg lg:text-xl mb-4">
                 Rs.{item?.price}
               </p>
-              <Button label={'Add To Bag'} className=" border border-black mx-auto  w-full  font-semibold text-black rounded-md" />
+              <Button  onClick={() => {
+                                            dispatch(
+                                              addToCart({
+                                                _id: item?.id,
+                                                image:item?.product,
+                                                quantity:1,
+                                                title: item?.title,
+                                                price: item.price,
+                                                cutPrice:item.price
+                                              })
+                                            );
+              
+                                            toggleCartSideMenu();
+                                          }} label={'Add To Bag'} className=" border border-black mx-auto  w-full  font-semibold text-black rounded-md" />
             </div>
           </div>
         ))}
       </div>
+                  {showCartSideMenu ? <AddToCartSideMenu onClose={()=>setShowCartSideMenu(false)}  />:null} 
+
     </div>
   );
 };

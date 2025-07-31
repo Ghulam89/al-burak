@@ -34,7 +34,7 @@ const coupons = [
 
 const CouponSection = () => {
   return (
-    <div className="  md:py-[40px] py-[30px]  font-sans overflow-x-hidden max-w-7xl mx-auto px-4 md:px-0">
+    <div className="  md:py-[40px] py-[30px] border-b border-t border-black  font-sans overflow-x-hidden max-w-8xl mx-auto px-4 md:px-0">
    
       {/* Coupon Cards Section */}
       <div className="flex flex-col md:flex-row flex-wrap w-full  justify-center gap-4 md:gap-[25px]">
@@ -51,7 +51,7 @@ const CouponSection = () => {
                 className="w-[90px] md:w-[100px] h-auto mb-1 md:mb-0 md:mr-[10px] object-contain"
               />
               <div>
-                <h3 className="text-[15px] md:text-[18px]  text-black  font-mono mb-1 md:mb-[10px]  md:font-sans">
+                <h3 className="text-[15px] md:text-[18px]  font-semibold text-black  font-mono mb-1 md:mb-[10px]  md:font-sans">
                   {coupon.title}
                 </h3>
                 <p className="text-[14px] md:text-[17px] text-[#525258] mb-2 md:mb-[15px] font-['Righteous'] md:font-sans">
@@ -60,7 +60,7 @@ const CouponSection = () => {
                   </span>{" "}
                   Off
                 </p>
-                <div className="text-[11px] md:text-[14px] text-black flex justify-between gap-1 md:gap-[8px] text-center font-['Righteous'] md:font-sans">
+                <div className="text-[11px] font-semibold md:text-[14px] text-black flex justify-between gap-1 md:gap-[8px] text-center font-['Righteous'] md:font-sans">
                   <span>{coupon.time.day} DAY</span> |
                   <span>{coupon.time.hrs} HRS</span> |
                   <span>{coupon.time.min} MIN</span> |

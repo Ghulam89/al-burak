@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from '../components/header-footer.jsx/Navbar';
-import Footer from '../components/header-footer.jsx/Footer';
 import Productpage from '../components/sections/productpage';
 import Review from '../components/sections/reviewcard';
-import Rating from '../components/sections/rating';
 import BestSelling from '../components/home/bestselling';
-import axios from "axios";
-import { BaseUrl } from "../utils/BaseUrl";
-import ReviewModal from "../components/context/ReviewModal";
+import Navbar from "../components/Navbar";
+import Footer from "../components/header-footer.jsx/Footer";
+import SubscribeBanner from "../components/home/subscribe";
 
 const ProductPage = () => {
 
@@ -17,23 +14,23 @@ const ProductPage = () => {
     
 
 
-  const fetchSingleProduct  =  async()=>{
-    const response  = axios.get(`${BaseUrl}/v1/product/${id}`) 
-    setSingleProduct(response?.data?.data)
-  }
+  // const fetchSingleProduct  =  async()=>{
+  //   const response  = axios.get(`${BaseUrl}/v1/product/${id}`) 
+  //   setSingleProduct(response?.data?.data)
+  // }
 
   useEffect(()=>{
-   fetchSingleProduct()
+  //  fetchSingleProduct()
   },[])
   return (
     <>
-    <Navbar />
+    <Navbar/>
     <Productpage singleProduct={singleProduct} />
-    <Rating />
-      <ReviewModal/>
+    {/* <ReviewModal/> */}
     <Review />
     <BestSelling />
-    <Footer />
+    <SubscribeBanner/>
+    <Footer/>
     </>
   );
 };

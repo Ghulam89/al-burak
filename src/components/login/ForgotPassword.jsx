@@ -20,8 +20,8 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="m-0 p-0 h-screen w-screen font-sans bg-black flex justify-center items-center overflow-x-hidden box-border">
-      <div className="bg-[#E5D0A5] w-[90%] max-w-[800px] p-5 md:p-6 rounded-[30px] shadow-[0_0_10px_rgba(0,0,0,0.3)] box-border">
+    <div className="m-0 p-0 h-screen w-screen font-sans bg-white flex justify-center items-center overflow-x-hidden box-border">
+      <div className="bg-white w-[90%] max-w-[800px] p-5 md:p-6 rounded-[25px] border border-black shadow-[0_0_10px_rgba(0,0,0,0.1)] box-border">
         <h1 className="text-center text-[40px] mb-2.5">Al-Buraq</h1>
         <h2 className="text-[30px] font-bold mb-5 text-left">Forgot Password</h2>
         
@@ -32,7 +32,8 @@ const ForgotPassword = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="p-2.5 mb-2.5 bg-[#E5D0A5] border border-black text-base"
+            className="p-2.5 mb-2.5 bg-white border border-black text-base"
+            placeholder=' Enter your email'
           />
           
           <button 

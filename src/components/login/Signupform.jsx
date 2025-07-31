@@ -74,8 +74,8 @@ const SignupForm = () => {
   });
 
   return (
-    <div className="m-0 p-0 py-5 font-sans bg-black flex justify-center items-center box-border">
-      <div className="bg-[#E5D0A5] w-[90%] max-w-[800px] p-5 md:p-[20px] rounded-[30px] shadow-[0_0_10px_rgba(0,0,0,0.3)] box-border">
+    <div className="m-0 p-0 py-5 font-sans  flex justify-center items-center box-border">
+      <div className=" w-[90%] max-w-[800px] p-5 md:p-[20px]  border border-black rounded-[25px] shadow-[0_0_10px_rgba(0,0,0,0.1)] box-border">
         <h1 className="text-center text-[40px] font-semibold mb-[10px] font-[inter]">
           Al-Buraq
         </h1>
@@ -93,7 +93,7 @@ const SignupForm = () => {
             value={formik.values.name}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            className={`p-[10px] mb-[5px] bg-[#E5D0A5]  placeholder:text-black border-2 ${
+            className={`p-[10px] mb-[5px]   bg-white placeholder:text-black border-2 ${
               formik.touched.name && formik.errors.name
                 ? " border-darkRed"
                 : "border-black"
@@ -114,7 +114,7 @@ const SignupForm = () => {
             value={formik.values.email}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            className={`p-[10px] mb-[5px] bg-[#E5D0A5] placeholder:text-black border-2 ${
+            className={`p-[10px] mb-[5px] bg-white placeholder:text-black border-2 ${
               formik.touched.email && formik.errors.email
                 ? "border-darkRed"
                 : "border-black"
@@ -135,7 +135,7 @@ const SignupForm = () => {
             value={formik.values.phone}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            className={`p-[10px] mb-[5px] bg-[#E5D0A5] placeholder:text-black border-2 ${
+            className={`p-[10px] mb-[5px] bg-white placeholder:text-black border-2 ${
               formik.touched.phone && formik.errors.phone
                 ? "border-darkRed"
                 : "border-black"
@@ -156,7 +156,7 @@ const SignupForm = () => {
             value={formik.values.password}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            className={`p-[10px] mb-[5px] bg-[#E5D0A5] placeholder:text-black border-2 ${
+            className={`p-[10px] mb-[5px] bg-white placeholder:text-black border-2 ${
               formik.touched.password && formik.errors.password
                 ? "  border-darkRed"
                 : "border-black"

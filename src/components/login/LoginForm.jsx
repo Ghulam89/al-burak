@@ -59,8 +59,8 @@ const LoginForm = () => {
   });
 
   return (
-    <div className="m-0 p-0 h-screen w-screen font-sans bg-black flex justify-center items-center overflow-x-hidden box-border">
-      <div className="bg-[#E5D0A5] w-[90%] max-w-[800px] p-5 md:p-[20px] rounded-[30px] shadow-[0_0_10px_rgba(0,0,0,0.3)] box-border">
+    <div className="m-0 p-0 h-screen w-screen font-sans bg-white flex justify-center items-center overflow-x-hidden box-border">
+      <div className="bg-white w-[90%] max-w-[800px] p-5 md:p-[20px] rounded-[25px] border border-black shadow-[0_0_10px_rgba(0,0,0,0.1)] box-border">
         <h1 className="text-center text-[40px] font-medium mb-[10px]">Al-Buraq</h1>
         <h2 className="text-[30px] font-bold mb-[20px] text-left">Log in</h2>
 
@@ -74,7 +74,7 @@ const LoginForm = () => {
             value={formik.values.email}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            className={`p-[10px] mb-[5px] bg-[#E5D0A5] placeholder:text-black border-2 ${
+            className={`p-[10px] mb-[5px] bg-white placeholder:text-black border-2 ${
               formik.touched.email && formik.errors.email
                 ? "border-darkRed"
                 : "border-black"
@@ -103,7 +103,7 @@ const LoginForm = () => {
             value={formik.values.password}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            className={`p-[10px] mb-[5px] bg-[#E5D0A5] placeholder:text-black border-2 ${
+            className={`p-[10px] mb-[5px] bg-white placeholder:text-black border-2 ${
               formik.touched.password && formik.errors.password
                 ? "border-darkRed"
                 : "border-black"

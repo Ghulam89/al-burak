@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "../modal";
-const DescriptionModal = ({ isModalOpen, setIsModalOpen, closeModal,data}) => {
+const ShippingModal = ({ isModalOpen, setIsModalOpen, closeModal,data}) => {
   return (
     <Modal
       isOpen={isModalOpen}
@@ -14,7 +14,7 @@ const DescriptionModal = ({ isModalOpen, setIsModalOpen, closeModal,data}) => {
             <div className=" flex justify-between items-center py-4">
               <h2></h2>
               <div>
-                <h3 className=" font-semibold  text-lg  text-black m-0">Description</h3>
+                <h3 className=" font-semibold  text-lg  text-black m-0">Shipping Information</h3>
               </div>
               
               <button 
@@ -36,4 +36,4 @@ const DescriptionModal = ({ isModalOpen, setIsModalOpen, closeModal,data}) => {
   );
 };
 
-export default DescriptionModal;
+export default ShippingModal;

@@ -172,7 +172,7 @@ const Navbar = () => {
             </button>
         
 
-          <Link to={"/wishlist"} className="relative">
+          <Link to={"#"} className="relative">
             <button  aria-label="Wishlist">
               <img className="w-full h-full" src={heart} alt="Wishlist" />
             </button>
@@ -209,7 +209,7 @@ const Navbar = () => {
                   {userData ? (
                     <>
                       <Link
-                        to="/dashboard"
+                        to="#"
                         onClick={() => setShowDropdown(false)}
                       >
                         <button className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100">
@@ -217,7 +217,7 @@ const Navbar = () => {
                         </button>
                       </Link>
                       <Link
-                        to="/settings"
+                        to="#"
                         onClick={() => setShowDropdown(false)}
                       >
                         <button className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100">
@@ -238,7 +238,7 @@ const Navbar = () => {
                           Register
                         </button>
                       </Link>
-                      <Link to="/login" onClick={() => setShowDropdown(false)}>
+                      <Link to="#" onClick={() => setShowDropdown(false)}>
                         <button className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100">
                           Login
                         </button>
