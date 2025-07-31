@@ -10,7 +10,7 @@ const HeroSection = () => {
         {/* Text Content */}
         <div className="py-6 md:py-0 w-full  md:w-6/12 text-center md:text-left">
           <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-[64px] text-center tracking-[0.1em] font-bold font-[inter] mb-2 md:mb-4">
-            Dirham Ard <br className="" /> Al Zaafaran
+            Dirham Ard <br className=" sm:block hidden" /> Al Zaafaran
           </h1>
           <h3 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-[64px] text-center md:text-6xl text-primary font-[inter] font-bold tracking-[0.2em] uppercase mb-2 md:mb-4">
             20% OFF

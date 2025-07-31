@@ -2,7 +2,7 @@ import React from "react";
 export default function SubscribeBanner() {
   return (
     <section className="w-full overflow-hidden pb-16 md:pb-18">
-      <div className=" rounded-xl max-w-6xl mx-auto min-h-[190px]  shadow-lg p-8 md:p-10 flex flex-col items-center justify-center gap-6 md:flex-row md:justify-between md:gap-10">
+      <div className=" rounded-xl max-w-6xl mx-auto min-h-[190px]  shadow-lg p-4 md:p-10 flex flex-col items-center justify-center gap-6 md:flex-row md:justify-between md:gap-10">
         <h2 className="text-black font-roboto font-semibold   px-4 leading-tight text-center max-w-full break-words md:text-left md:text-3xl md:flex-1 lg:text-4xl  text-xl">
           Subscribe for <br /> Latest perfumes & Offers
         </h2>

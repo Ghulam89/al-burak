@@ -8,7 +8,7 @@ import phone from "../../assets/images/Phone.png";
 
 export default function Footer() {
   return (
-    <footer className=" text-[#E5D0A5]  flex flex-col md:flex-row flex-wrap justify-between p-10 border border-black font-righteous">
+    <footer className=" text-[#E5D0A5]  flex flex-col md:flex-row flex-wrap justify-between sm:p-10 p-4 border border-black font-righteous">
       {/* Logo Section */}
       <div className="w-full md:w-auto md:flex-[0_1_auto] md:min-w-0 mb-8 md:mb-0 md:mx-5 md:my-4 md:text-left">
         <img src={logo} className="w-[120px] bg-black p-2 h-auto mb-2.5   " alt="Logo" />

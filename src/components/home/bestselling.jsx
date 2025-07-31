@@ -50,13 +50,13 @@ const BestSelling = () => {
   };
 
   return (
-    <div className="bg-white text-white p-5 md:p-10 font-sans">
+    <div className="bg-white text-white p-4 md:p-10 font-sans">
       <div className="flex items-center justify-center mb-8 md:mb-12">
         <div className="text-xl sm:text-2xl md:text-3xl font-bold font-[roboto]  text-black px-4  tracking-wider">
           Best Selling
         </div>
       </div>
-      <div className="  flex flex-wrap justify-center gap-8 md:gap-10">
+      <div className="   grid lg:grid-cols-4  md:grid-cols-3 grid-cols-2 gap-4 md:gap-7">
         {data?.map((item, index) => (
           <div 
             key={index} 
@@ -70,7 +70,7 @@ const BestSelling = () => {
                   src={item?.product}
                    onClick={() => navigate(`/product/${item?.id}`)}
                   alt="product"
-                  className="w-full  h-[250px] sm:h-[300px] md:h-[400px] object-cover"
+                  className="w-full  h-[200px] sm:h-[300px] md:h-[400px] object-cover"
                 />
 
                {/* <div className="absolute top-4 right-8 w-14 h-14 rounded-full border-4 border-lightGray  bg-black flex justify-center items-center">
@@ -80,7 +80,7 @@ const BestSelling = () => {
                 </div> */}
               </div>
              
-            <div className="  pt-7 text-center sm:px-8 px-4 rounded-b-xl">
+            <div className="  sm:pt-7 pt-4 text-center sm:px-8 px-0 rounded-b-xl">
               <h3 className=" font-semibold  uppercase  text-black font-[inter] mb-1">
                 {item?.title}
               </h3>
@@ -104,7 +104,7 @@ const BestSelling = () => {
 
                               toggleCartSideMenu();
                             }}
-                             label={'Add To Bag'} className=" border border-black mx-auto  w-full  font-semibold text-black rounded-md" />
+                             label={'Add To Bag'} className=" border border-black mx-auto whitespace-nowrap  w-full  font-semibold text-black rounded-md" />
             </div>
           </div>
         ))}
