@@ -7,7 +7,7 @@ import product2 from '../../assets/images/product2.png';
 import product3 from '../../assets/images/product3.png';
 import product4 from '../../assets/images/product4.png';
 import Button from "../common/Button";
-const BestSelling = () => {
+const NewArrivals = () => {
   const {id} = useParams();
   const navigate = useNavigate();
 
@@ -41,7 +41,7 @@ const BestSelling = () => {
     <div className="bg-white text-white p-5 md:p-10 font-sans">
       <div className="flex items-center justify-center mb-8 md:mb-12">
         <div className="text-xl sm:text-2xl md:text-3xl font-bold font-[roboto]  text-black px-4  tracking-wider">
-          Best Selling
+           New Arrivals
         </div>
       </div>
       <div className="  flex flex-wrap justify-center gap-8 md:gap-10">
@@ -86,4 +86,4 @@ const BestSelling = () => {
   );
 };
 
-export default BestSelling;
+export default NewArrivals;

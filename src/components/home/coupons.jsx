@@ -34,27 +34,33 @@ const coupons = [
 
 const CouponSection = () => {
   return (
-    <div style={styles.wrapper}>
-      {/* Heading Section */}
-      <div style={styles.headingContainer}>
-        <div style={styles.line}></div>
-        <div style={styles.heading}>COUPONS</div>
-        <div style={styles.line}></div>
-      </div>
-
+    <div className="  md:py-[40px] py-[30px]  font-sans overflow-x-hidden max-w-7xl mx-auto px-4 md:px-0">
+   
       {/* Coupon Cards Section */}
-      <div style={styles.container}>
+      <div className="flex flex-col md:flex-row flex-wrap w-full  justify-center gap-4 md:gap-[25px]">
         {coupons.map((coupon, index) => (
-          <div key={index} style={styles.card}>
+          <div
+            key={index}
+            className="w-full md:w-[500px] h-auto md:h-[160px]  border border-[#EAEAEF] flex flex-col md:flex-row relative rounded-sm p-4 md:p-[20px] items-stretch md:items-center"
+          >
             {/* Left Section */}
-            <div style={styles.left}>
-              <img src={product} alt="product" style={styles.img} />
+            <div className="flex flex-col md:flex-row gap-2 md:gap-[10px] justify-between items-center text-center md:text-left pb-2 md:pb-0 flex-[2] pr-0 md:pr-[20px] mb-2 md:mb-0">
+              <img
+                src={product}
+                alt="product"
+                className="w-[90px] md:w-[100px] h-auto mb-1 md:mb-0 md:mr-[10px] object-contain"
+              />
               <div>
-                <h3 style={styles.title}>{coupon.title}</h3>
-                <p style={styles.discount}>
-                  <span style={styles.discountNum}>{coupon.discount}</span> Off
+                <h3 className="text-[15px] md:text-[18px]  text-black  font-mono mb-1 md:mb-[10px]  md:font-sans">
+                  {coupon.title}
+                </h3>
+                <p className="text-[14px] md:text-[17px] text-[#525258] mb-2 md:mb-[15px] font-['Righteous'] md:font-sans">
+                  <span className="text-[14px] md:text-[17px] text-[#FF2400] font-normal md:font-[400] font-['Righteous'] md:font-sans">
+                    {coupon.discount}
+                  </span>{" "}
+                  Off
                 </p>
-                <div style={styles.timer}>
+                <div className="text-[11px] md:text-[14px] text-black flex justify-between gap-1 md:gap-[8px] text-center font-['Righteous'] md:font-sans">
                   <span>{coupon.time.day} DAY</span> |
                   <span>{coupon.time.hrs} HRS</span> |
                   <span>{coupon.time.min} MIN</span> |
@@ -64,220 +70,26 @@ const CouponSection = () => {
             </div>
 
             {/* Divider */}
-            <div style={styles.divider}></div>
+            <div className="w-full md:w-[4px] h-[1px] md:h-full border-t md:border-l border-dashed border-[#E5D0A5] my-2 md:my-0 md:mx-[20px] bg-transparent"></div>
 
             {/* Right Section */}
-            <div style={styles.right}>
+            <div className="flex flex-col items-center justify-center relative flex-1">
               <span
-                style={{
-                  ...styles.status,
-                  color: coupon.active ? "#27ae60" : "#c0392b",
-                }}
+                className={`text-[12px] md:text-[14px] font-bold mb-2 md:mb-[15px] font-['Righteous'] md:font-sans ${
+                  coupon.active ? "text-[#27ae60]" : "text-[#c0392b]"
+                }`}
               >
                 {coupon.active ? "Coupon Active" : "Coupon Inactive"}
               </span>
-              <div style={styles.code}>{coupon.code}</div>
+              <div className="bg-[#EBEBEB] text-black text-[12px] md:text-[15px] px-2 md:px-[10px] py-1 md:py-[10px] border-2 border-dashed border-black font-normal md:font-[400] font-mono tracking-[0.5px] md:tracking-[1px]">
+                {coupon.code}
+              </div>
             </div>
           </div>
         ))}
       </div>
     </div>
   );
-};
-
-const styles = {
-  wrapper: {
-    backgroundColor: "#000",
-    padding: "40px 20px",
-    fontFamily: "'Arial', sans-serif",
-    overflowX: "hidden",
-  },
-  headingContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: "30px",
-  },
-  heading: {
-    fontSize: "32px",
-    fontWeight: "700",
-    color: "#E5D0A5",
-    padding: "0 15px",
-    textTransform: "uppercase",
-    letterSpacing: "1px",
-  },
-  line: {
-    height: "3px",
-    backgroundColor: "#E5D0A5",
-    flex: 1,
-    maxWidth: "550px",
-  },
-  container: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    gap: "25px",
-  },
-  card: {
-    width: "500px",
-    height: "160px",
-    backgroundColor: "black",
-    border: "1px solid #EAEAEF",
-    display: "flex",
-    position: "relative",
-    padding: "20px",
-    alignItems: "center",
-  },
-  left: {
-    flex: 2,
-    paddingRight: "20px",
-    display: "flex",
-    gap: "10px",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  img: {
-    width: "100px",
-    height: "auto",
-    marginRight: "10px",
-    objectFit: "contain",
-  },
-  title: {
-    color: "#E5D0A5",
-    fontSize: "18px",
-    fontWeight: "500",
-    marginBottom: "10px",
-  },
-  discount: {
-    color: "#525258",
-    fontSize: "17px",
-    marginBottom: "15px",
-  },
-  discountNum: {
-    color: "#FF2400",
-    fontSize: "17px",
-    fontWeight: "400",
-  },
-  timer: {
-    color: "#E5D0A5",
-    fontSize: "14px",
-    display: "flex",
-    textAlign: "center",
-    justifyContent: "space-between",
-    gap: "8px",
-  },
-  divider: {
-    width: "4px",
-    height: "100%",
-    borderLeft: "3px dashed #E5D0A5",
-    margin: "0 20px",
-    backgroundColor: "transparent",
-  },
-  right: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
-  },
-  status: {
-    fontSize: "14px",
-    fontWeight: "bold",
-    marginBottom: "15px",
-  },
-  code: {
-    backgroundColor: "#E5D0A5",
-    color: "#000",
-    fontSize: "15px",
-    height: "20px",
-    padding: "10px",
-    border: "2px dashed black",
-    fontWeight: "400",
-    fontFamily: "monospace",
-    letterSpacing: "1px",
-  },
-  "@media (max-width: 768px)": {
-    wrapper: {
-      padding: "30px 15px",
-    },
-    headingContainer: {
-      marginBottom: "20px",
-    },
-    heading: {
-      fontSize: "22px",
-      fontFamily: "'Inter', serif",
-      padding: "0 10px",
-      letterSpacing: "0.5px",
-    },
-    line: {
-      height: "2px",
-      maxWidth: "100%",
-    },
-    container: {
-      flexDirection: "column",
-      gap: "15px",
-    },
-    card: {
-      width: "100%",
-      height: "auto",
-      flexDirection: "column",
-      alignItems: "stretch",
-      padding: "15px",
-    },
-    left: {
-      paddingRight: 0,
-      marginBottom: "10px",
-      flexDirection: "column",
-      alignItems: "center",
-      textAlign: "center",
-      gap: "8px",
-    },
-    img: {
-      width: "90px",
-      marginBottom: "5px",
-    },
-    title: {
-      fontSize: "15px",
-      fontFamily: "'Righteous', serif",
-      marginBottom: "5px",
-    },
-    discount: {
-      fontSize: "14px",
-      fontFamily: "'Righteous', serif",
-      marginBottom: "8px",
-    },
-    discountNum: {
-      fontSize: "14px",
-      fontFamily: "'Righteous', serif",
-    },
-    timer: {
-      fontSize: "11px",
-      gap: "3px",
-      fontFamily: "'Righteous', serif",
-    },
-    divider: {
-      width: "100%",
-      height: "1px",
-      borderTop: "1px dashed #E5D0A5",
-      borderLeft: "none",
-      margin: "10px 0",
-    },
-    right: {
-      alignItems: "center",
-    },
-    status: {
-      fontSize: "12px",
-      fontFamily: "'Righteous', serif",
-      marginBottom: "8px",
-    },
-    code: {
-      fontSize: "12px",
-      fontFamily: "'Righteous', serif",
-      padding: "6px 8px",
-      letterSpacing: "0.5px",
-    },
-  },
 };
 
 export default CouponSection;

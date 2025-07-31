@@ -1,141 +1,99 @@
 import React from 'react';
-import '../../App.css';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 export default function Testimonials() {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    pauseOnHover: true,
+    arrows: false,
+    centerMode: true,
+    centerPadding: '0',
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 1,
+          centerMode: false
+        }
+      }
+    ]
+  };
+
+  const testimonials = [
+    {
+      id: 1,
+      name: "Umair Mir",
+      image: "https://i.pravatar.cc/150?img=32",
+      rating: "★★★★★",
+      text: "Lorem Secure your financial future with our comprehensive planning services, expert investment strategies, and insightful market research. Lorem Secure your financial"
+    },
+    {
+      id: 2,
+      name: "Ali Raza",
+      image: "https://i.pravatar.cc/150?img=12",
+      rating: "★★★★★",
+      text: "Lorem Secure your financial future with our comprehensive planning services, expert investment strategies, and insightful market research. Lorem Secure your financial"
+    },
+    {
+      id: 3,
+      name: "Sarah Khan",
+      image: "https://i.pravatar.cc/150?img=5",
+      rating: "★★★★☆",
+      text: "Excellent service! The team provided me with great investment advice that helped grow my portfolio significantly."
+    },
+    {
+      id: 4,
+      name: "John Smith",
+      image: "https://i.pravatar.cc/150?img=7",
+      rating: "★★★★★",
+      text: "The financial planning was thorough and tailored to my specific needs. Highly recommend their services!"
+    }
+  ];
+
   return (
-    <>
-      <style>{`
-        * {
-          box-sizing: border-box;
-          margin: 0;
-          padding: 0;
-        }
-        body {
-          font-family: sans-serif;
-        }
-        .testimonials-section {
-          background-color: #000;
-          color: #EFD9B4;
-          padding: 60px 20px;
-          text-align: center;
-        }
-        .testimonials-title {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 24px;
-          font-weight: 600;
-          letter-spacing: 4px;
-          margin-bottom: 40px;
-        }
-        .testimonials-title::before,
-        .testimonials-title::after {
-          content: "";
-          flex: 1;
-          height: 2px;
-          background-color: #EFD9B4;
-          margin: 0 20px;
-        }
-        .cards {
-          display: flex;
-          gap: 20px;
-          flex-wrap: wrap;
-          justify-content: center;
-        }
-        .card {
-          background-color: #242424;
-          border: 4px solid #EFD9B4;
-          border-radius: 0px;
-          padding: 30px;
-          align-item: center;
-          font-family: "'Work Sans', serif";
-          height: 300px; /* Increased height */
-          max-width: 550px; /* Increased width */
-          flex: 1 1 350px; /* Increased minimum width */
-          text-align: center;
-        }
-        .card-header {
-          display: flex;
-          align-items: center;
-          margin-bottom: 20px;
-        }
-        .avatar {
-          width: 60px;
-          height: 60px;
-          border-radius: 50%;
-          overflow: hidden;
-          margin-right: 15px;
-          flex-shrink: 0;
-        }
-        .avatar img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-        .name-rating {
-          display: flex;
-          flex-direction: column;
-        }
-        .name {
-          color: #fff;
-          font-size: 18px;
-          font-weight: 600;
-          font-family: "'Inter', serif",
-          margin-bottom: 5px;
-        }
-        .stars {
-          font-size: 14px;
-          color: #EFD9B4;
-        }
-        .card-body {
-          font-size: 20px;
-          line-height: 2;
-        }
-        @media (max-width: 768px) {
-          .testimonials-title {
-            font-size: 20px;
-            letter-spacing: 2px;
-          }
-          .card {
-            max-width: 100%;
-            height: auto; /* Make height flexible on mobile */
-            min-height: 350px; /* Minimum height on mobile */
-          }
-        }
-      `}</style>
-      <section className="testimonials-section">
-        <h2 className="testimonials-title">TESTIMONIALS</h2>
-        <div className="cards">
-          <div className="card">
-            <div className="card-header">
-              <div className="avatar">
-                <img src="https://i.pravatar.cc/150?img=32" alt="Umair Mir" />
-              </div>
-              <div className="name-rating">
-                <span className="name">Umair Mir</span>
-                <span className="stars">★★★★★</span>
+    <section className="py-16 px-5 text-center ">
+      <h2 className="flex items-center justify-center text-2xl font-semibold tracking-wider mb-10">
+        TESTIMONIALS
+      </h2>
+      
+      <div className="max-w-6xl mx-auto">
+        <Slider {...settings}>
+          {testimonials.map((testimonial) => (
+            <div key={testimonial.id} className="px-4 outline-none">
+              <div className="border border-black rounded-lg p-8 font-sans h-72 max-w-xl mx-auto min-w-[350px] text-center bg-white transition-all duration-300 hover:shadow-lg">
+                <div className="flex items-center justify-center mb-5">
+                  <div className="w-16 h-16 rounded-full overflow-hidden border border-black mr-4 flex-shrink-0">
+                    <img 
+                      src={testimonial.image} 
+                      alt={testimonial.name} 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-black text-xl font-semibold font-inter">
+                      {testimonial.name}
+                    </span>
+                    <span className="text-primary">
+                      {testimonial.rating}
+                    </span>
+                  </div>
+                </div>
+                <div className="text-xl text-black leading-loose">
+                  {testimonial.text}
+                </div>
               </div>
             </div>
-            <div className="card-body">
-              Lorem Secure your financial future with our comprehensive planning services, expert investment strategies, and insightful market research. Lorem Secure your financial
-            </div>
-          </div>
-          <div className="card">
-            <div className="card-header">
-              <div className="avatar">
-                <img src="https://i.pravatar.cc/150?img=12" alt="Ali Raza" />
-              </div>
-              <div className="name-rating">
-                <span className="name">Ali Raza</span>
-                <span className="stars">★★★★★</span>
-              </div>
-            </div>
-            <div className="card-body">
-              Lorem Secure your financial future with our comprehensive planning services, expert investment strategies, and insightful market research. Lorem Secure your financial
-            </div>
-          </div>
-        </div>
-      </section>
-    </>
+          ))}
+        </Slider>
+      </div>
+    </section>
   );
 }

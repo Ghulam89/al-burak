@@ -7,7 +7,7 @@ import product2 from '../../assets/images/product2.png';
 import product3 from '../../assets/images/product3.png';
 import product4 from '../../assets/images/product4.png';
 import Button from "../common/Button";
-const BestSelling = () => {
+const CategoryProducts = () => {
   const {id} = useParams();
   const navigate = useNavigate();
 
@@ -36,12 +36,36 @@ const BestSelling = () => {
       title:'Jimmy choo',
       price:'3,990'
     },
+     {
+      id:1,
+      product:product1,
+      title:'Jimmy choo',
+      price:'3,990'
+    },
+    {
+      id:2,
+      product:product2,
+      title:'Jimmy choo',
+      price:'3,990'
+    },
+    {
+      id:3,
+      product:product3,
+      title:'Jimmy choo',
+      price:'3,990'
+    },
+    {
+      id:4,
+      product:product4,
+      title:'Jimmy choo',
+      price:'3,990'
+    }
   ]
   return (
     <div className="bg-white text-white p-5 md:p-10 font-sans">
       <div className="flex items-center justify-center mb-8 md:mb-12">
         <div className="text-xl sm:text-2xl md:text-3xl font-bold font-[roboto]  text-black px-4  tracking-wider">
-          Best Selling
+          Men Perfumes
         </div>
       </div>
       <div className="  flex flex-wrap justify-center gap-8 md:gap-10">
@@ -86,4 +110,4 @@ const BestSelling = () => {
   );
 };
 
-export default BestSelling;
+export default CategoryProducts;

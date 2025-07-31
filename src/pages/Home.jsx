@@ -1,20 +1,25 @@
-import Navbar from '../components/header-footer.jsx/Navbar';
+
 import BestSelling from '../components/home/bestselling';
 import HeroSection from '../components/home/herosection';
 import Manper from '../components/home/manper';
-import Coupons from '../components/home/coupons';
 import Footer from '../components/header-footer.jsx/Footer';
 import Testimonial from '../components/home/testinomial';
 import Subscribe from '../components/home/subscribe';
+import Navbar from '../components/Navbar';
+import CouponSection from '../components/home/coupons';
+import NewArrivals from '../components/newArrivals/NewArrivals';
+import CategoryProducts from '../components/categoryProducts';
 
 function App() {
   return (
     <>
-    <Navbar />
+    <Navbar/>
     <HeroSection />
     <BestSelling />
-    <Manper />
-    {/* <Coupons /> */}
+    <NewArrivals/>
+    <CategoryProducts/>
+    {/* <Manper /> */}
+    <CouponSection/>
     <Testimonial />
     <Subscribe />
     <Footer />

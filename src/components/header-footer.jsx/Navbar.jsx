@@ -9,6 +9,9 @@ import axios from "axios";
 import { BaseUrl } from "../../utils/BaseUrl";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { IoClose } from "react-icons/io5";
+import { FiMenu, FiX, FiSearch, FiUser, FiShoppingCart } from "react-icons/fi";
+import AddToCartSideMenu from "./AddToCartSideMenu";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -24,6 +27,7 @@ const Navbar = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [category, setCategory] = useState([]);
   const userData = JSON.parse(localStorage.getItem("userId")) || null;
+  const [showCartSideMenu, setShowCartSideMenu] = useState(false);
 
   // Dummy products data
   const [dummyProducts] = useState([
@@ -84,7 +88,6 @@ const Navbar = () => {
 
   const fetchCategory = async () => {
     const respose = await axios.get(`${BaseUrl}/v1/category`);
-
     setCategory(respose.data.categories);
   };
   const handleSearchTabClick = (tab) => setActiveSearchTab(tab);
@@ -96,128 +99,134 @@ const Navbar = () => {
   }, []);
 
   const navigate = useNavigate();
-  const logout = ()=>{
+  const logout = () => {
     localStorage.removeItem('userId')
     toast.success('Logout Successfully!')
     navigate('/')
   }
 
+  const toggleCartSideMenu = () => {
+    setShowCartSideMenu(!showCartSideMenu);
+  };
+
   return (
     <>
       {/* Shipping Banner */}
-      <div className="bg-gradient-to-b text-primary from-black to-[#191919] text-sm sm:text-base text-gold-500 text-center py-2.5   font-semibold font-[inter] border-b border-black">
+      <div className="bg-gradient-to-b text-primary from-black to-[#191919] text-xs sm:text-sm md:text-base text-gold-500 text-center py-2 px-2 font-semibold font-[inter] border-b border-black">
         For orders of Rs10,000 or more, enjoy free shipping all across Pakistan
       </div>
 
       {/* Navbar */}
-      <nav className="flex justify-between items-center px-4 md:px-12 py-3 md:py-7 bg-black border-b-2 md:border-none border-gold-300 h-28 md:h-auto relative flex-wrap">
+      <nav className="flex flex-wrap justify-between items-center px-4 md:px-6 lg:px-12 py-3 md:py-4 lg:py-5 bg-black border-b-2 md:border-none border-gold-300 h-auto relative">
         {/* Logo */}
-        <Link to="/" className="order-1 md:order-none">
+        <Link to="/" className="order-1 md:order-none flex-shrink-0">
           <img
             src={logo}
             alt="Al-Burak Logo"
-            className="h-11 md:h-24 w-auto cursor-pointer"
+            className="h-8 sm:h-10 md:h-14 lg:h-20 w-auto cursor-pointer"
           />
         </Link>
 
-        {/* Mobile Search Bar */}
+        {/* Mobile Search Bar - Only visible on mobile */}
         {isMobileView && (
-          <div className="flex-grow mx-3 bg-black rounded-full p-2 h-10 w-6 border-2  border-primary flex items-center order-2">
+          <div className="flex-grow mx-2 sm:mx-3 bg-black rounded-full p-1 sm:p-2 h-8 sm:h-10 border-2 border-primary flex items-center order-2">
             <input
               type="text"
-              className="bg-transparent border-none  text-primary flex-grow outline-none text-sm pr-2"
+              className="bg-transparent border-none text-primary flex-grow outline-none text-xs sm:text-sm pr-2"
               placeholder="Search here"
               value={searchTerm}
               onChange={handleSearchInputChange}
               onFocus={handleSearchIconClick}
             />
-            <div
-              className="w-6 h-6 bg-contain bg-center bg-no-repeat cursor-pointer"
-              style={{ backgroundImage: `url(${searchIcon})` }}
+            <FiSearch 
+              className="text-primary cursor-pointer" 
               onClick={handleSearchIconClick}
             />
           </div>
         )}
 
-        {/* Desktop Nav Links */}
+        {/* Desktop Nav Links - Hidden on mobile */}
         {!isMobileView && (
-          <ul className="flex list-none gap-6">
-            <li>
-              <Link
-                to="/"
-                className="no-underline  text-lightGray font-medium text-lg font-[inter] transition-colors duration-300 py-2 hover:text-gold-500"
-              >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/shop"
-                className="no-underline  text-lightGray font-medium text-lg font-[inter] transition-colors duration-300 py-2 hover:text-gold-500"
-              >
-                New Arrivals
-              </Link>
-            </li>
-            {category?.map((item, index) => {
-              return (
+          <div className="flex justify-center mx-4 lg:mx-8 flex-grow max-w-2xl">
+            <ul className="flex flex-wrap list-none gap-2 sm:gap-3 md:gap-4 lg:gap-6 justify-center">
+              <li>
+                <Link
+                  to="/"
+                  className="no-underline text-lightGray font-medium text-sm sm:text-base md:text-lg font-[inter] transition-colors duration-300 py-2 hover:text-gold-500"
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/shop"
+                  className="no-underline text-lightGray font-medium text-sm sm:text-base md:text-lg font-[inter] transition-colors duration-300 py-2 hover:text-gold-500"
+                >
+                  New Arrivals
+                </Link>
+              </li>
+              {category?.map((item, index) => (
                 <li key={index}>
                   <Link
                     to={`/shop?category=${item.name}`}
-                    className="no-underline  text-lightGray font-medium text-lg font-[inter] transition-colors duration-300 py-2 hover:text-gold-500"
+                    className="no-underline text-lightGray font-medium text-sm sm:text-base md:text-lg font-[inter] transition-colors duration-300 py-2 hover:text-gold-500"
                   >
                     {item.name}
                   </Link>
                 </li>
-              );
-            })}
-
-            <li>
-              <Link
-                to="/deals"
-                className="no-underline  text-lightGray font-medium text-lg font-[inter] transition-colors duration-300 py-2 hover:text-gold-500"
-              >
-                Deals
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/gift-box"
-                className="no-underline  text-lightGray font-medium text-lg font-[inter] transition-colors duration-300 py-2 hover:text-gold-500"
-              >
-                Gift Box
-              </Link>
-            </li>
-          </ul>
+              ))}
+              <li>
+                <Link
+                  to="#"
+                  className="no-underline text-lightGray font-medium text-sm sm:text-base md:text-lg font-[inter] transition-colors duration-300 py-2 hover:text-gold-500"
+                >
+                  Deals
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="#"
+                  className="no-underline text-lightGray font-medium text-sm sm:text-base md:text-lg font-[inter] transition-colors duration-300 py-2 hover:text-gold-500"
+                >
+                  Gift Box
+                </Link>
+              </li>
+            </ul>
+          </div>
         )}
 
         {/* Icon Group */}
-        <div className="flex gap-1 md:gap-4 items-center relative order-3 md:order-none">
-          {/* Desktop Search Icon */}
+        <div className="flex gap-3 sm:gap-4 md:gap-5 items-center relative order-3 md:order-none">
+          {/* Desktop Search Icon - Hidden on mobile */}
           {!isMobileView && (
-            <div
-              className="w-7 h-7 rounded-full bg-contain bg-center bg-no-repeat cursor-pointer transition-transform duration-200 hover:scale-110"
-              style={{ backgroundImage: `url(${searchIcon})` }}
+            <button
+              className="text-primary hover:text-gold-500 transition-colors"
               onClick={handleSearchIconClick}
-            />
+              aria-label="Search"
+            >
+              <FiSearch size={isMobileView ? 20 : 22} />
+            </button>
           )}
 
-          {/* Desktop Customer Icon */}
+          {/* Desktop Customer Icon - Hidden on mobile */}
           {!isMobileView && (
             <div className="relative">
-              <div
-                className="w-7 h-7 rounded-full bg-contain bg-center bg-no-repeat cursor-pointer transition-transform duration-200 hover:scale-110"
-                style={{ backgroundImage: `url(${Customer})` }}
+              <button
+                className="text-primary hover:text-gold-500 transition-colors"
                 onClick={() => setShowDropdown(!showDropdown)}
-              />
+                aria-label="User account"
+              >
+                <FiUser size={isMobileView ? 20 : 22} />
+              </button>
               {showDropdown && (
-                <div className="absolute bg-primary top-10 right-0 bg-gold-200 rounded-lg py-2 min-w-[200px] z-50 shadow-lg">
+                <div className="absolute bg-primary top-10 right-0 bg-gold-200 rounded-lg py-2 min-w-[180px] md:min-w-[200px] z-50 shadow-lg">
                   {userData ? (
                     <>
                       <Link
                         to="/dashboard"
                         onClick={() => setShowDropdown(false)}
                       >
-                        <button className="w-full px-5 py-2.5 border-none bg-transparent text-left cursor-pointer text-black font-semibold hover:bg-gold-300">
+                        <button className="w-full px-4 py-2 md:px-5 md:py-2.5 border-none bg-transparent text-left cursor-pointer text-black font-semibold hover:bg-gold-300 text-sm md:text-base">
                           Profile
                         </button>
                       </Link>
@@ -225,29 +234,29 @@ const Navbar = () => {
                         to="/settings"
                         onClick={() => setShowDropdown(false)}
                       >
-                        <button className="w-full px-5 py-2.5 border-none bg-transparent text-left cursor-pointer text-black font-semibold hover:bg-gold-300">
+                        <button className="w-full px-4 py-2 md:px-5 md:py-2.5 border-none bg-transparent text-left cursor-pointer text-black font-semibold hover:bg-gold-300 text-sm md:text-base">
                           Settings
                         </button>
                       </Link>
                       <button
                         onClick={logout}
-                        className="w-full px-5 py-2.5 border-none bg-transparent text-left cursor-pointer text-black font-semibold hover:bg-gold-300"
+                        className="w-full px-4 py-2 md:px-5 md:py-2.5 border-none bg-transparent text-left cursor-pointer text-black font-semibold hover:bg-gold-300 text-sm md:text-base"
                       >
                         Logout
                       </button>
                     </>
                   ) : (
                     <>
-                    <Link to="/signup" onClick={() => setShowDropdown(false)}>
-                      <button className="w-full px-5 py-2.5 border-none bg-transparent text-left cursor-pointer text-black font-semibold hover:bg-gold-300">
-                        Register
-                      </button>
-                    </Link>
-                     <Link to="/login" onClick={() => setShowDropdown(false)}>
-                      <button className="w-full px-5 py-2.5 border-none bg-transparent text-left cursor-pointer text-black font-semibold hover:bg-gold-300">
-                        Login
-                      </button>
-                    </Link>
+                      <Link to="/signup" onClick={() => setShowDropdown(false)}>
+                        <button className="w-full px-4 py-2 md:px-5 md:py-2.5 border-none bg-transparent text-left cursor-pointer text-black font-semibold hover:bg-gold-300 text-sm md:text-base">
+                          Register
+                        </button>
+                      </Link>
+                      <Link to="/login" onClick={() => setShowDropdown(false)}>
+                        <button className="w-full px-4 py-2 md:px-5 md:py-2.5 border-none bg-transparent text-left cursor-pointer text-black font-semibold hover:bg-gold-300 text-sm md:text-base">
+                          Login
+                        </button>
+                      </Link>
                     </>
                   )}
                 </div>
@@ -256,78 +265,133 @@ const Navbar = () => {
           )}
 
           {/* Cart Icon */}
-          <Link to={"/cart"}>
-            <div
-              className="w-7 h-7 rounded-full bg-contain bg-center  relative bg-no-repeat cursor-pointer transition-transform duration-200 hover:scale-110"
-              style={{ backgroundImage: `url(${cart})` }}
-            />
-            <div className=" bg-darkRed w-5 h-5 rounded-full absolute -top-2 -right-2 flex justify-center items-center text-xs text-white font-bold">
+          <div className="relative">
+            <button
+              className="text-primary hover:text-gold-500 transition-colors"
+              onClick={toggleCartSideMenu}
+              aria-label="Shopping cart"
+            >
+              <FiShoppingCart size={isMobileView ? 20 : 22} />
+            </button>
+            <div className="bg-darkRed w-4 h-4 md:w-5 md:h-5 rounded-full absolute -top-1 -right-1 md:-top-2 md:-right-2 flex justify-center items-center text-xs text-white font-bold">
               {productData?.length || 0}
             </div>
-          </Link>
-          {/* Hamburger Menu Icon */}
+          </div>
+
+          {/* Hamburger Menu Icon - Only visible on mobile */}
           {isMobileView && (
             <button
-              className="text-primary  text-primary text-xl cursor-pointer ml-2.5 order-4 md:hidden"
+              className="text-primary hover:text-gold-500 transition-colors ml-1"
               onClick={toggleMenu}
+              aria-label="Toggle menu"
             >
-              ☰
+              {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
             </button>
           )}
         </div>
+
+        {/* Cart Side Menu */}
+        <div className={`fixed top-0 right-0 h-full w-full sm:w-96 bg-black z-[1002] transform transition-transform duration-300 ease-in-out ${showCartSideMenu ? 'translate-x-0' : 'translate-x-full'} border-l border-primary`}>
+          <div className="flex justify-between items-center p-4 border-b border-primary">
+            <h3 className="text-primary text-xl font-bold">Your Cart</h3>
+            <button 
+              onClick={toggleCartSideMenu}
+              className="text-primary hover:text-gold-500"
+              aria-label="Close cart"
+            >
+              <FiX size={24} />
+            </button>
+          </div>
+          <AddToCartSideMenu />
+        </div>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Only visible on mobile when toggled */}
       {isMenuOpen && isMobileView && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-80 z-[998] flex justify-center items-center transition-opacity duration-300"
-          onClick={toggleMenu}
-        >
-          <button
-            className="absolute top-16 right-2.5 h-6 w-6  bg-primary border-none rounded-full text-black text-xl cursor-pointer z-[1000] flex justify-center items-center"
-            onClick={toggleMenu}
+          className={`fixed inset-0 bg-black bg-opacity-80 z-[998] flex justify-center items-start pt-16 transition-opacity duration-500 ${
+      isMenuOpen ? "opacity-100" : "opacity-0"
+    }`}
+    onClick={toggleMenu}
+  >
+    <div
+      className={`relative w-[90%] max-w-[400px] bg-black border-2 border-primary rounded-xl py-4 z-[999] flex flex-col overflow-y-auto transition-transform duration-500 ${
+        isMenuOpen ? "translate-y-0" : "-translate-y-full"
+      }`}
+      onClick={(e) => e.stopPropagation()}
           >
-            &times;
-          </button>
-          <ul
-            className="relative w-[95%] max-w-[500px] h-[340px] bg-black border-2  border-primary rounded-xl py-5 z-[999] flex flex-col justify-around overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {[
-              "Home",
-              "New Arrivals",
-              "Men Perfumes",
-              "Women Perfumes",
-              "Attar/Out",
-              "Deals",
-              "Gift Box",
-            ].map((item) => (
-              <li key={item} className="list-none px-5 py-1 text-left">
+            <button
+              className="absolute top-2 right-2 h-8 w-8 bg-primary border-none rounded-full text-black text-xl cursor-pointer z-[1000] flex justify-center items-center"
+              onClick={toggleMenu}
+              aria-label="Close menu"
+            >
+              <FiX size={20} />
+            </button>
+            <ul className="mt-4">
+              {[
+                { name: "Home", path: "/" },
+                { name: "New Arrivals", path: "/shop" },
+                ...category.map(item => ({ name: item.name, path: `/shop?category=${item.name}` })),
+                { name: "Deals", path: "#" },
+                { name: "Gift Box", path: "#" }
+              ].map((item) => (
+                <li key={item.name} className="list-none px-4 py-3 text-left border-b border-gray-800 last:border-b-0">
+                  <Link
+                    to={item.path}
+                    className="no-underline text-lightGray font-medium text-base font-roboto block transition-colors duration-300 hover:text-primary"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            {!userData ? (
+              <div className="px-4 py-3 border-t border-gray-800">
                 <Link
-                  to={`/${item.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
-                  className="no-underline   text-lightGray font-medium text-lg font-roboto block transition-colors duration-300  hover:text-primary"
+                  to="/login"
+                  className="block w-full text-center bg-primary text-black font-bold py-2 px-4 rounded mb-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {item}
+                  Login
                 </Link>
-              </li>
-            ))}
-          </ul>
+                <Link
+                  to="/signup"
+                  className="block w-full text-center bg-transparent border border-primary text-primary font-bold py-2 px-4 rounded"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Register
+                </Link>
+              </div>
+            ) : (
+              <div className="px-4 py-3 border-t border-gray-800">
+                <button
+                  onClick={() => {
+                    logout();
+                    setIsMenuOpen(false);
+                  }}
+                  className="block w-full text-center bg-primary text-black font-bold py-2 px-4 rounded"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
       {/* Search Popup */}
       {showSearchPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-start pt-12 z-[1001] transition-opacity duration-300">
-          <div className="bg-black rounded-3xl p-5 w-[90%] max-w-[540px] relative font-[inter]">
-            <div className="flex items-center mb-5 border-b  border-lightGray2 pb-2.5">
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-start pt-12 md:pt-20 z-[1001] transition-opacity duration-300">
+          <div className="bg-black rounded-xl md:rounded-2xl lg:rounded-3xl p-4 md:p-5 w-[95%] sm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] max-w-[540px] relative font-[inter]">
+            <div className="flex items-center mb-4 md:mb-5 border-b border-lightGray2 pb-2 md:pb-2.5">
               <div className="flex items-center flex-grow pb-1">
-                <span className=" text-lightGray text-base mr-2.5">
+                <span className="text-lightGray text-sm md:text-base mr-2 md:mr-2.5">
                   Search for...
                 </span>
                 <input
                   type="text"
-                  className="bg-transparent border-none  text-primary flex-grow text-base outline-none"
+                  className="bg-transparent border-none text-primary flex-grow text-sm md:text-base outline-none"
                   placeholder=""
                   value={searchTerm}
                   onChange={handleSearchInputChange}
@@ -336,19 +400,20 @@ const Navbar = () => {
               </div>
               <button
                 onClick={handleCloseSearchPopup}
-                className=" bg-primary border-none w-5 h-5 rounded-full text-black text-xs cursor-pointer flex justify-center items-center p-0"
+                className="bg-primary border-none w-5 h-5 rounded-full text-black text-xs cursor-pointer flex justify-center items-center p-0"
+                aria-label="Close search"
               >
-                ✖
+                <FiX size={12} />
               </button>
             </div>
-            <div className="flex mb-5">
+            <div className="flex mb-4 md:mb-5">
               {["Products", "Suggestions"].map((tab) => (
                 <button
                   key={tab}
-                  className={`px-4 py-2.5 bg-transparent border-none font-bold cursor-pointer    text-primary text-sm transition-colors duration-200 ${
+                  className={`px-3 py-2 md:px-4 md:py-2.5 bg-transparent border-none font-bold cursor-pointer text-sm md:text-base transition-colors duration-200 ${
                     activeSearchTab === tab
-                      ? " text-lightGray"
-                      : " text-lightGray2"
+                      ? "text-lightGray border-b-2 border-primary"
+                      : "text-lightGray2"
                   }`}
                   onClick={() => handleSearchTabClick(tab)}
                 >
@@ -356,57 +421,63 @@ const Navbar = () => {
                 </button>
               ))}
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3 md:gap-4 max-h-[60vh] overflow-y-auto">
               {activeSearchTab === "Products" &&
                 (searchResults.length > 0 ? (
                   searchResults.map((product) => (
-                    <div
+                    <Link 
+                      to={`/product/${product.id}`} 
                       key={product.id}
-                      className="flex items-center bg-transparent rounded px-2 py-1.5 cursor-pointer transition-colors duration-200  hover:bg-lightGray2"
+                      onClick={handleCloseSearchPopup}
                     >
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-16 h-16 mr-4  object-cover"
-                      />
-                      <div className="flex flex-col">
-                        <span className=" text-lightGray font-bold text-lg">
-                          {product.name}
-                        </span>
-                        <span className=" text-lightGray  text-sm">
-                          Rs. {product.price.toLocaleString("en-IN")}
-                        </span>
+                      <div className="flex items-center bg-transparent rounded px-2 py-1 md:px-2 md:py-1.5 cursor-pointer transition-colors duration-200 hover:bg-lightGray2">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mr-3 md:mr-4 object-cover"
+                        />
+                        <div className="flex flex-col">
+                          <span className="text-lightGray font-bold text-sm sm:text-base md:text-lg">
+                            {product.name}
+                          </span>
+                          <span className="text-lightGray text-xs sm:text-sm">
+                            Rs. {product.price.toLocaleString("en-IN")}
+                          </span>
+                        </div>
                       </div>
-                    </div>
+                    </Link>
                   ))
                 ) : searchTerm.length > 0 ? (
-                  <div className="text-gray-400 text-center mt-5 italic">
+                  <div className="text-gray-400 text-center my-4 md:my-5 italic text-sm md:text-base">
                     No products found for "{searchTerm}"
                   </div>
                 ) : (
                   dummyProducts.map((product) => (
-                    <div
+                    <Link 
+                      to={`/product/${product.id}`} 
                       key={product.id}
-                      className="flex items-center bg-transparent rounded px-0 py-1.5 cursor-pointer transition-colors duration-200 hover:bg-gray-800"
+                      onClick={handleCloseSearchPopup}
                     >
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-15 h-15 rounded mr-4 object-cover"
-                      />
-                      <div className="flex flex-col">
-                        <span className="text-primary font-bold text-base">
-                          {product.name}
-                        </span>
-                        <span className="text-secondary font-bold text-sm">
-                          Rs. {product.price.toLocaleString("en-IN")}
-                        </span>
+                      <div className="flex items-center bg-transparent rounded px-2 py-1 md:px-2 md:py-1.5 cursor-pointer transition-colors duration-200 hover:bg-lightGray2">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mr-3 md:mr-4 object-cover"
+                        />
+                        <div className="flex flex-col">
+                          <span className="text-lightGray font-bold text-sm sm:text-base md:text-lg">
+                            {product.name}
+                          </span>
+                          <span className="text-lightGray text-xs sm:text-sm">
+                            Rs. {product.price.toLocaleString("en-IN")}
+                          </span>
+                        </div>
                       </div>
-                    </div>
+                    </Link>
                   ))
                 ))}
               {activeSearchTab === "Suggestions" && (
-                <div className="text-gray-400 text-center mt-5 italic">
+                <div className="text-gray-400 text-center my-4 md:my-5 italic text-sm md:text-base">
                   No suggestions available yet.
                 </div>
               )}
