@@ -34,3 +34,22 @@
 *{
   font-family: inter !important;
 }
+
+
+@supports (backdrop-filter: blur(12px)) {
+  .backdrop-blur-sm {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

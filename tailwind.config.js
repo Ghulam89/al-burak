@@ -15,6 +15,9 @@ module.exports = {
         lightGray: '#E5D0A5',
         lightGray2: '#B29367'
       },
+      backgroundImage:{
+        "HeroBg":"url('/src/assets/images/hero_bg.png')"
+      }
     },
   },
   plugins: [],

@@ -4,6 +4,9 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { BaseUrl } from "../../utils/BaseUrl";
 import { toast } from "react-toastify";
+import Navbar from "../Navbar";
+import Footer from "../header-footer.jsx/Footer";
+import SubscribeBanner from "../home/subscribe";
 
 const OrdersPage = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -62,71 +65,18 @@ const OrdersPage = () => {
   }
 
   return (
-    <div className="font-sans bg-[#E5D0A5] min-h-screen flex flex-col">
-      <header className="bg-[#E5D0A5] px-8 py-4 min-h-20 flex justify-between items-center text-black">
-        <div className="flex items-center">
-          <h2 className="m-0 mr-8 text-black">Al-Buraq</h2>
-          <nav className="flex gap-6">
-            <a href="#" className="text-black no-underline font-bold text-lg">
-              Shop
-            </a>
-            <a href="#" className="text-black no-underline font-bold text-lg">
-              Orders
-            </a>
-          </nav>
-        </div>
-        <div className="relative flex items-center gap-2">
-          <div
-            className="text-3xl cursor-pointer flex items-center"
-            onClick={toggleDropdown}
-          >
-            <img src={User} alt="User" className="w-8 h-8 rounded-full" />
-          </div>
-          <span className="text-black text-base" onClick={toggleDropdown}>
-            {isDropdownOpen ? <FaChevronUp /> : <FaChevronDown />}
-          </span>
-          <div
-            className={`absolute top-14 right-0 p-2.5 bg-[#E5D0A5] rounded-xl shadow-lg z-10 min-w-[220px] 
-            ${
-              isDropdownOpen
-                ? "opacity-100 translate-y-0 visible"
-                : "opacity-0 -translate-y-2.5 invisible"
-            } 
-            transition-all duration-300 ease-out`}
-          >
-            <div className="px-4 py-3 font-bold text-[#333]">{userData?.email}</div>
-            <a
-              href="#"
-              className="block px-4 py-3 cursor-pointer text-[#333] no-underline border-b border-[#C0B08E] hover:bg-[#F5E0B5] transition-colors duration-200"
-            >
-              Profile
-            </a>
-            <a
-              href="#"
-              className="block px-4 py-3 cursor-pointer text-[#333] no-underline border-b border-[#C0B08E] hover:bg-[#F5E0B5] transition-colors duration-200"
-            >
-              Setting
-            </a>
-            <a
-               onClick={()=>logout()}
-              href="#"
-              className="block px-4 py-3 cursor-pointer text-[#333] no-underline hover:bg-[#F5E0B5] transition-colors duration-200"
-            >
-              Logout
-            </a>
-          </div>
-        </div>
-      </header>
+    <div className="font-sans  min-h-screen flex flex-col">
+      <Navbar/>
 
-      <main className="bg-black flex-grow p-8 flex flex-col">
-        <h1 className="text-white text-left mb-6">Orders</h1>
+      <main className=" flex-grow p-8 flex flex-col">
+        <h1 className="text-black text-lg font-bold text-left mb-6">My Account</h1>
 
-          <div className="bg-lightGray rounded-xl">
-            <div className="p-8 w-full mb-5">
-              <div className="grid grid-cols-4 gap-5 pb-5 mb-5 font-bold text-gold-500 border-b border-lightGray2">
-                <div className="text-black col-span-2">Product</div>
-                <div className="text-black">Quantity</div>
-                <div className="text-black">Total</div>
+          <div className=" border">
+            <div className=" w-full mb-5">
+              <div className="grid grid-cols-4 gap-5  font-bold text-gold-500 border-b">
+                <div className="text-black col-span-2 p-2.5">Product</div>
+                <div className="text-black p-2.5">Quantity</div>
+                <div className="text-black p-2.5">Total</div>
               </div>
 
               
@@ -183,18 +133,8 @@ const OrdersPage = () => {
           </div>
        
       </main>
-
-      <footer className="flex justify-start gap-5 p-5 bg-black">
-        <a href="#" className="text-white underline text-sm">
-          Refund policy
-        </a>
-        <a href="#" className="text-white underline text-sm">
-          Shipping policy
-        </a>
-        <a href="#" className="text-white underline text-sm">
-          Privacy policy
-        </a>
-      </footer>
+     <SubscribeBanner/>
+    <Footer/>
     </div>
   );
 };

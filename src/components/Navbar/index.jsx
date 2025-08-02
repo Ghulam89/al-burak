@@ -30,8 +30,9 @@ const Navbar = () => {
   const [category, setCategory] = useState([]);
   const userData = JSON.parse(localStorage.getItem("userId")) || null;
   const menuRef = useRef(null);
+  const [sticky, setSticky] = useState(false);
+  const navbarRef = useRef(null);
 
-  // Dummy products data
   const [dummyProducts] = useState([
     { id: 1, name: "Prada", price: 3990, image: Product },
     { id: 2, name: "Prada", price: 3990, image: Product },
@@ -51,7 +52,6 @@ const Navbar = () => {
     }
   }, [showSearchPopup]);
 
-  // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -63,6 +63,19 @@ const Navbar = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setSticky(true);
+      } else {
+        setSticky(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleMenu = () => {
@@ -130,6 +143,94 @@ const Navbar = () => {
     navigate("/");
   };
 
+  const menuIcons = () => {
+    return (
+      <div className="flex gap-1 xs:gap-2 sm:gap-3 md:gap-4 items-center relative order-3">
+        <button
+          onClick={handleSearchIconClick}
+          aria-label="Search"
+          className="transition-transform duration-200 hover:scale-110"
+        >
+          <img className="w-full h-full mb-1" src={searchIcon} alt="Search" />
+        </button>
+
+        <Link to={"#"} className="relative">
+          <button
+            aria-label="Wishlist"
+            className="transition-transform duration-200 hover:scale-110"
+          >
+            <img className="w-full h-full" src={heart} alt="Wishlist" />
+          </button>
+        </Link>
+
+        <div className="relative">
+          <button
+            aria-label="Cart"
+            onClick={toggleCartSideMenu}
+            className="transition-transform duration-200 hover:scale-110"
+          >
+            <img className="w-full h-full" src={cart} alt="Cart" />
+            {productData?.length > 0 && (
+              <div className="absolute -top-1 -right-1 bg-darkRed w-4 h-4 rounded-full flex justify-center items-center text-xs text-white font-bold">
+                {productData.length}
+              </div>
+            )}
+          </button>
+          {showCartSideMenu && (
+            <AddToCartSideMenu onClose={() => setShowCartSideMenu(false)} />
+          )}
+        </div>
+
+        <div className="relative">
+          <button
+            className="transition-transform duration-200 hover:scale-110"
+            onClick={() => setShowDropdown(!showDropdown)}
+            aria-label="Account"
+          >
+            <img className="w-full h-full" src={Customer} alt="Account" />
+          </button>
+          {showDropdown && (
+            <div className="absolute bg-white top-8 right-0 rounded-lg py-2 min-w-[160px] sm:min-w-[180px] shadow-lg z-50 border border-gray-200 animate-fadeIn">
+              {userData ? (
+                <>
+                  <Link to="#" onClick={() => setShowDropdown(false)}>
+                    <button className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100 transition-colors duration-200">
+                      Profile
+                    </button>
+                  </Link>
+                  <Link to="#" onClick={() => setShowDropdown(false)}>
+                    <button className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100 transition-colors duration-200">
+                      Settings
+                    </button>
+                  </Link>
+                  <button
+                    onClick={logout}
+                    className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100 transition-colors duration-200"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/signup" onClick={() => setShowDropdown(false)}>
+                    <button className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100 transition-colors duration-200">
+                      Register
+                    </button>
+                  </Link>
+                  <Link to="#" onClick={() => setShowDropdown(false)}>
+                    <button className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100 transition-colors duration-200">
+                      Login
+                    </button>
+                  </Link>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <Announcement />
@@ -145,206 +246,113 @@ const Navbar = () => {
             {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>
         )}
-      <div>
-        
-      </div>
+
+        <div></div>
+
         {/* Logo - Moved to start on mobile */}
         <Link
           to="/"
-          className={` ${isMobileView ? "order-2 mx-auto" : "order-none"}`}
+          className={`${isMobileView ? "order-2 mx-auto" : "order-none"}`}
         >
           <img
             src={logo}
             alt="Al-Burak Logo"
-            className=" mx-auto sm:w-24 w-16 sm:h-24  ml-20 h-16 cursor-pointer"
+            className="mx-auto sm:w-24 w-16 sm:h-24 ml-20 h-16 cursor-pointer transition-transform duration-300 hover:scale-105"
           />
         </Link>
 
         {/* Icon Group */}
-        <div className="flex gap-1 xs:gap-2 sm:gap-3 md:gap-4 items-center relative order-3">
-          
-            <button
-              
-              onClick={handleSearchIconClick}
-              aria-label="Search"
-            >
-              <img className="w-full h-full mb-1" src={searchIcon} alt="Search" />
-            </button>
-        
-
-          <Link to={"#"} className="relative">
-            <button  aria-label="Wishlist">
-              <img className="w-full h-full" src={heart} alt="Wishlist" />
-            </button>
-          </Link>
-
-          <div className="relative">
-            <button
-         
-              aria-label="Cart"
-              onClick={toggleCartSideMenu}
-            >
-              <img className="w-full h-full" src={cart} alt="Cart" />
-              {productData?.length > 0 && (
-                <div className="absolute -top-1 -right-1 bg-darkRed w-4 h-4 rounded-full flex justify-center items-center text-xs text-white font-bold">
-                  {productData.length}
-                </div>
-              )}
-            </button>
-            {showCartSideMenu && (
-              <AddToCartSideMenu onClose={() => setShowCartSideMenu(false)} />
-            )}
-          </div>
-
-            <div className="relative">
-              <button
-                className=""
-                onClick={() => setShowDropdown(!showDropdown)}
-                aria-label="Account"
-              >
-                <img className="w-full h-full" src={Customer} alt="Account" />
-              </button>
-              {showDropdown && (
-                <div className="absolute bg-white top-8 right-0 rounded-lg py-2 min-w-[160px] sm:min-w-[180px] shadow-lg z-50 border border-gray-200">
-                  {userData ? (
-                    <>
-                      <Link
-                        to="#"
-                        onClick={() => setShowDropdown(false)}
-                      >
-                        <button className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100">
-                          Profile
-                        </button>
-                      </Link>
-                      <Link
-                        to="#"
-                        onClick={() => setShowDropdown(false)}
-                      >
-                        <button className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100">
-                          Settings
-                        </button>
-                      </Link>
-                      <button
-                        onClick={logout}
-                        className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100"
-                      >
-                        Logout
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <Link to="/signup" onClick={() => setShowDropdown(false)}>
-                        <button className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100">
-                          Register
-                        </button>
-                      </Link>
-                      <Link to="#" onClick={() => setShowDropdown(false)}>
-                        <button className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100">
-                          Login
-                        </button>
-                      </Link>
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
-      
-        </div>
+        {menuIcons()}
       </nav>
 
-     
       {/* Main Navigation - Hidden on mobile */}
       {!isMobileView && (
-        <nav className="h-16 flex justify-center items-center border-b  border-black bg-white">
+     <nav
+  ref={navbarRef}
+  className={`flex justify-between items-center px-2 sm:px-4 md:px-6 lg:px-12 py-3 bg-white border-b border-black ${
+    sticky
+      ? "fixed top-0 left-0 right-0 z-50 shadow-lg bg-opacity-80 backdrop-blur-sm transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+      : "relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+  }`}
+  style={{
+    transform: sticky ? "translateY(0)" : "translateY(0)",
+    animation: sticky ? "fadeInDown 0.5s ease-out" : "none"
+  }}
+>
+          {sticky && (
+            <Link to="/" className="order-none">
+              <img
+                src={logo}
+                alt="Al-Burak Logo"
+        className="order-none w-20"
+                 initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3 }}
+              />
+            </Link>
+          )}
+
           <ul className="flex flex-wrap items-center justify-center list-none gap-1 xs:gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 w-full px-1 overflow-x-auto whitespace-nowrap">
-            <li>
-              <Link
-                to="/"
-                className="no-underline text-black font-medium text-[10px] xs:text-xs sm:text-sm md:text-base hover:text-primary px-1"
-              >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/shop"
-                className="no-underline text-black font-medium text-[10px] xs:text-xs sm:text-sm md:text-base hover:text-primary px-1"
-              >
-                New Arrivals
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/shop"
-                className="no-underline text-black font-medium text-[10px] xs:text-xs sm:text-sm md:text-base hover:text-primary px-1"
-              >
-                Men Perfumes
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/shop"
-                className="no-underline text-black font-medium text-[10px] xs:text-xs sm:text-sm md:text-base hover:text-primary px-1"
-              >
-                Women Perfumes
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/shop"
-                className="no-underline text-black font-medium text-[10px] xs:text-xs sm:text-sm md:text-base hover:text-primary px-1"
-              >
-                Attar/Oud
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="#"
-                className="no-underline text-black font-medium text-[10px] xs:text-xs sm:text-sm md:text-base hover:text-primary px-1"
-              >
-                Deals
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="#"
-                className="no-underline text-black font-medium text-[10px] xs:text-xs sm:text-sm md:text-base hover:text-primary px-1"
-              >
-                Gift Box
-              </Link>
-            </li>
+            {[
+              { name: "Home", path: "/" },
+              { name: "New Arrivals", path: "/shop" },
+              { name: "Men Perfumes", path: "/shop" },
+              { name: "Women Perfumes", path: "/shop" },
+              { name: "Attar/Oud", path: "/shop" },
+              { name: "Deals", path: "#" },
+              { name: "Gift Box", path: "#" },
+            ].map((item) => (
+              <li key={item.name}>
+                <Link
+                  to={item.path}
+                  className="no-underline text-black font-medium text-[10px] xs:text-xs sm:text-sm md:text-base hover:text-primary px-1 transition-colors duration-300"
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
           </ul>
+
+           {sticky && (
+      <div 
+        className="flex gap-2 sm:gap-3 md:gap-4 items-center"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3, staggerChildren: 0.1 }}
+      >
+        {menuIcons()}
+      </div>
+    )}
         </nav>
       )}
 
       {/* Mobile Menu - Slide from left */}
       {isMenuOpen && isMobileView && (
         <div
-          className="fixed inset-0 bg-white bg-opacity-50 z-[998]"
+          className="fixed inset-0 bg-black bg-opacity-50 z-[998] transition-opacity duration-300"
           onClick={toggleMenu}
         >
           <div
-              ref={menuRef}
-      className={`fixed top-0  transition-all duration-300 ease-in-out transform left-0  h-full w-3/4 max-w-xs bg-white border-r border-black z-[999]  ${
-        isMenuOpen ? "translate-x-0" : "-translate-x-full"
-      }  shadow-xl`}
-      onClick={(e) => e.stopPropagation()}
+            ref={menuRef}
+            className={`fixed top-0 transition-all duration-300 ease-in-out transform left-0 h-full w-3/4 max-w-xs bg-white border-r border-black z-[999] ${
+              isMenuOpen ? "translate-x-0" : "-translate-x-full"
+            } shadow-xl`}
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center p-4 border-b">
-              <div className=" flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 <img
-                src={logo}
-                alt="Al-Burak Logo"
-                className="h-12 w-auto cursor-pointer"
-                onClick={() => {
-                  navigate("/");
-                  setIsMenuOpen(false);
-                }}
-              />
-              {/* <p className=" m-0">Al-Burak</p> */}
+                  src={logo}
+                  alt="Al-Burak Logo"
+                  className="h-12 w-auto cursor-pointer transition-transform duration-300 hover:scale-105"
+                  onClick={() => {
+                    navigate("/");
+                    setIsMenuOpen(false);
+                  }}
+                />
               </div>
               <button
-                className="text-black text-xl cursor-pointer"
+                className="text-black text-xl cursor-pointer transition-transform duration-200 hover:rotate-90"
                 onClick={toggleMenu}
                 aria-label="Close menu"
               >
@@ -365,7 +373,7 @@ const Navbar = () => {
                 ].map((item) => (
                   <li
                     key={item.name}
-                    className="px-4 py-3 border-b"
+                    className="px-4 py-3 border-b transition-colors duration-200 hover:bg-gray-50"
                   >
                     <Link
                       to={item.path}
@@ -441,12 +449,12 @@ const Navbar = () => {
 
       {/* Search Popup */}
       {showSearchPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-start pt-10 sm:pt-12 md:pt-20 z-[1001] px-2">
-          <div className="bg-white rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 w-full max-w-[400px] sm:max-w-[500px] relative">
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-start pt-10 sm:pt-12 md:pt-20 z-[1001] px-2 transition-opacity duration-300">
+          <div className="bg-white rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 w-full max-w-[400px] sm:max-w-[500px] relative animate-fadeInUp">
             <div className="flex items-center mb-3 border-b border-gray-200 pb-2">
               <input
                 type="text"
-                className="bg-transparent border-none text-black flex-grow text-sm sm:text-base outline-none px-2"
+                className="bg-transparent border-none text-black flex-grow text-sm sm:text-base outline-none px-2 transition-all duration-300 focus:ring-1 focus:ring-primary"
                 placeholder="Search for..."
                 value={searchTerm}
                 onChange={handleSearchInputChange}
@@ -454,7 +462,7 @@ const Navbar = () => {
               />
               <button
                 onClick={handleCloseSearchPopup}
-                className="bg-gray-200 border-none w-6 h-6 rounded-full text-black text-xs cursor-pointer flex justify-center items-center p-0"
+                className="bg-gray-200 border-none w-6 h-6 rounded-full text-black text-xs cursor-pointer flex justify-center items-center p-0 transition-colors duration-200 hover:bg-gray-300"
                 aria-label="Close search"
               >
                 ✖
@@ -464,10 +472,10 @@ const Navbar = () => {
               {["Products", "Suggestions"].map((tab) => (
                 <button
                   key={tab}
-                  className={`px-3 py-1 text-xs sm:text-sm font-medium ${
+                  className={`px-3 py-1 text-xs sm:text-sm font-medium transition-colors duration-200 ${
                     activeSearchTab === tab
                       ? "text-black border-b-2 border-primary"
-                      : "text-gray-500"
+                      : "text-gray-500 hover:text-gray-700"
                   }`}
                   onClick={() => handleSearchTabClick(tab)}
                 >
@@ -485,11 +493,11 @@ const Navbar = () => {
                       onClick={handleCloseSearchPopup}
                       className="no-underline"
                     >
-                      <div className="flex items-center bg-gray-50 rounded p-2 cursor-pointer hover:bg-gray-100">
+                      <div className="flex items-center bg-gray-50 rounded p-2 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
                         <img
                           src={product.image}
                           alt={product.name}
-                          className="w-10 h-10 sm:w-12 sm:h-12 object-cover mr-2 sm:mr-3"
+                          className="w-10 h-10 sm:w-12 sm:h-12 object-cover mr-2 sm:mr-3 transition-transform duration-200 hover:scale-105"
                         />
                         <div className="flex flex-col">
                           <span className="text-black font-medium text-xs sm:text-sm">
@@ -514,11 +522,11 @@ const Navbar = () => {
                       onClick={handleCloseSearchPopup}
                       className="no-underline"
                     >
-                      <div className="flex items-center bg-gray-50 rounded p-2 cursor-pointer hover:bg-gray-100">
+                      <div className="flex items-center bg-gray-50 rounded p-2 cursor-pointer hover:bg-gray-100 transition-colors duration-200">
                         <img
                           src={product.image}
                           alt={product.name}
-                          className="w-10 h-10 sm:w-12 sm:h-12 object-cover mr-2 sm:mr-3"
+                          className="w-10 h-10 sm:w-12 sm:h-12 object-cover mr-2 sm:mr-3 transition-transform duration-200 hover:scale-105"
                         />
                         <div className="flex flex-col">
                           <span className="text-black font-medium text-xs sm:text-sm">
@@ -541,9 +549,35 @@ const Navbar = () => {
           </div>
         </div>
       )}
-      
-    </>
 
+      {/* Add this to your CSS or in a global stylesheet */}
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out;
+        }
+        .animate-fadeInUp {
+          animation: fadeInUp 0.3s ease-out;
+        }
+      `}</style>
+    </>
   );
 };
 

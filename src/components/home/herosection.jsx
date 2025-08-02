@@ -1,47 +1,46 @@
 import React from "react";
 import hero_cricle from "../../assets/images/hero_circle.png";
-import hero from "../../assets/images/hero.png";
+import hero from "../../assets/images/hero_right.png";
+import heroLeft from "../../assets/images/hero_left.png";
 import Button from "../common/Button";
 
 const HeroSection = () => {
   return (
-    <div className="border-b border-black">
-      <div className="flex flex-col md:flex-row items-center justify-center px-4 sm:px-6 lg:px-8 w-full box-border min-h-[70vh] max-w-6xl mx-auto">
-        {/* Text Content */}
-        <div className="py-6 md:py-0 w-full  md:w-6/12 text-center md:text-left">
-          <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-[64px] text-center tracking-[0.1em] font-bold font-[inter] mb-2 md:mb-4">
-            Dirham Ard <br className=" sm:block hidden" /> Al Zaafaran
-          </h1>
-          <h3 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-[64px] text-center md:text-6xl text-primary font-[inter] font-bold tracking-[0.2em] uppercase mb-2 md:mb-4">
-            20% OFF
-          </h3>
-          <p className="text-lg sm:text-xl lg:text-[32px] text-center font-[inter] tracking-wider mb-6 md:mb-8">
-            on all perfumes
-          </p>
-          <div className="mt-4 md:mt-6 mx-auto">
-            <Button
-              label={"Shop Now"}
-              className="bg-black mx-auto font-[inter] w-32 text-primary hover:bg-gray-800 transition-colors"
-            />
-          </div>
+    <div className="border-b border-black bg-HeroBg bg-no-repeat  bg-cover bg-center">
+      <div className="flex flex-col md:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 w-full box-border  max-w-7xl mx-auto">
+        {/* Left Image - Hidden on smallest screens, shown from sm upwards */}
+        <div className="hidden sm:flex w-full md:w-1/2 lg:w-3/12 items-center justify-center p-2 sm:p-4">
+          <img
+            src={heroLeft}
+            alt="Gold Incense Perfume"
+            className="  w-96 h-96 object-cover"
+          />
         </div>
 
-        {/* Image Content */}
-        <div className="w-full md:w-1/2 lg:w-6/12 flex items-center justify-center p-2 sm:p-4">
-          <div className="relative w-full max-w-xs sm:max-w-md lg:max-w-lg xl:max-w-xl mx-auto">
-            <img
-              src={hero_cricle}
-              alt="Gold Incense Perfume"
-              className="w-full h-auto"
-            />
-            <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-              <img
-                src={hero}
-                alt="Gold Incense Perfume"
-                className="w-3/4 h-auto transform -translate-y-3 sm:-translate-y-5 -translate-x-6 sm:-translate-x-8 md:-translate-x-12"
-              />
-            </div>
+        {/* Text Content - Always centered */}
+        <div className="py-6 md:py-0 w-full md:w-6/12 lg:w-5/12 text-center">
+          <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-[32px] lg:text-[40px] text-white tracking-[0.1em] font-bold font-[inter] mb-2 md:mb-4 leading-tight">
+            Explore Unique  Fragrance Journeys
+          </h1>
+          
+          <div className="my-4 md:my-6">
+            <button className="font-[inter] text-center text-white border border-white px-3 py-2 transition-colors  hover:bg-white hover:text-black">
+              Where elegance meets perfume.
+            </button>
           </div>
+          
+          <h3 className="text-xl sm:text-2xl whitespace-nowrap md:text-3xl text-center text-primary font-[inter] font-bold  uppercase mb-2 md:mb-4">
+            DIRHAM ARD AL ZAAFRAN
+          </h3>
+        </div>
+
+        <div className="w-full sm:w-auto md:w-1/2 lg:w-4/12 flex items-center justify-center p-2 sm:p-4">
+        
+          <img
+            src={hero}
+            alt="Gold Incense Perfume"
+            className="  w-96  sm:h-96 h-72 object-cover"
+          />
         </div>
       </div>
     </div>
