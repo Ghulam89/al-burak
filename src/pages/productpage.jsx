@@ -26,9 +26,7 @@ const ProductPage = () => {
     <>
     <Navbar/>
     <Productpage singleProduct={singleProduct} />
-    {/* <ReviewModal/> */}
     <Review />
-    <BestSelling />
     <SubscribeBanner/>
     <Footer/>
     </>

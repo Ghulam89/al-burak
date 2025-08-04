@@ -43,7 +43,7 @@ const SignupForm = () => {
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
         // API call to register user
-        const response = await axios.post(`${BaseUrl}/v1/user`, {
+        const response = await axios.patch(`${BaseUrl}/v1/customer`, {
           name: values.name,
           email: values.email,
           phone: values.phone,

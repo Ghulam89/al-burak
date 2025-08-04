@@ -7,8 +7,6 @@ import Testimonial from '../components/home/testinomial';
 import Subscribe from '../components/home/subscribe';
 import Navbar from '../components/Navbar';
 import CouponSection from '../components/home/coupons';
-import NewArrivals from '../components/newArrivals/NewArrivals';
-import CategoryProducts from '../components/categoryProducts';
 
 function App() {
   return (
@@ -16,8 +14,8 @@ function App() {
     <Navbar/>
     <HeroSection />
     <BestSelling />
-    <NewArrivals/>
-    <CategoryProducts/>
+    {/* <NewArrivals/> */}
+    {/* <CategoryProducts/> */}
     {/* <Manper /> */}
     <CouponSection/>
     <Testimonial />

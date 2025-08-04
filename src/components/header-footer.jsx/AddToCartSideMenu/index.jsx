@@ -92,10 +92,10 @@ const AddToCartSideMenu = ({ onClose }) => {
                 <div className="flex justify-between items-start">
                   <p className="font-semibold text-black">{product.title}</p>
                 </div>
-                <p className="text-black font-semibold mt-1 flex items-center gap-2 line-through">
-                  Rs. {product.price.toLocaleString()}{" "}
+                <p className="text-black font-semibold mt-1 flex items-center gap-2">
+                  Rs. {product.cutPrice?.toLocaleString()}
                   <p className="text-darkRed font-semibold line-through">
-                    Rs. {product.price.toLocaleString()}
+                    Rs. {product.price?.toLocaleString()}
                   </p>
                 </p>
                 <div className="flex items-center gap-2 mt-3">

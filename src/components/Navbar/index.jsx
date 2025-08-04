@@ -17,6 +17,9 @@ import AddToCartSideMenu from "../header-footer.jsx/AddToCartSideMenu";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const productData = useSelector((state) => state?.next?.productData);
+
+  console.log(productData);
+  
   const { userInfo } = useSelector((state) => state.next);
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -154,14 +157,14 @@ const Navbar = () => {
           <img className="w-full h-full mb-1" src={searchIcon} alt="Search" />
         </button>
 
-        <Link to={"#"} className="relative">
+        {/* <Link to={"#"} className="relative">
           <button
             aria-label="Wishlist"
             className="transition-transform duration-200 hover:scale-110"
           >
             <img className="w-full h-full" src={heart} alt="Wishlist" />
           </button>
-        </Link>
+        </Link> */}
 
         <div className="relative">
           <button
@@ -193,7 +196,7 @@ const Navbar = () => {
             <div className="absolute bg-white top-8 right-0 rounded-lg py-2 min-w-[160px] sm:min-w-[180px] shadow-lg z-50 border border-gray-200 animate-fadeIn">
               {userData ? (
                 <>
-                  <Link to="#" onClick={() => setShowDropdown(false)}>
+                  <Link to="/dashboard" onClick={() => setShowDropdown(false)}>
                     <button className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100 transition-colors duration-200">
                       Profile
                     </button>
@@ -295,10 +298,10 @@ const Navbar = () => {
           <ul className="flex flex-wrap items-center justify-center list-none gap-1 xs:gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 w-full px-1 overflow-x-auto whitespace-nowrap">
             {[
               { name: "Home", path: "/" },
-              { name: "New Arrivals", path: "/shop" },
-              { name: "Men Perfumes", path: "/shop" },
-              { name: "Women Perfumes", path: "/shop" },
-              { name: "Attar/Oud", path: "/shop" },
+              { name: "New Arrivals", path: `/shop?newArrivals=true`},
+              { name: "Men Perfumes", path: `/shop?category=Men`},
+              { name: "Women Perfumes", path:  `/shop?category=Women`},
+              { name: "Attar/Oud", path:  `/shop?category=Attar`},
               { name: "Deals", path: "#" },
               { name: "Gift Box", path: "#" },
             ].map((item) => (

@@ -23,33 +23,34 @@ import ShippingModal from "../context/ShippingModal";
 const ProductPage = () => {
   const { id } = useParams();
   const [singleProduct, setSingleProduct] = useState({
-    name: 'Creed Aventus',
-    description: 'Aventus by Creed is a fragrance that celebrates strength, power, and success. Launched in 2010, it is inspired by the life of a historic emperor and embodies the spirit of victory. The scent opens with fresh notes of bergamot, blackcurrant, and apple, leading to a heart of birch, patchouli, and jasmine. The base features a rich blend of musk, oakmoss, and vanilla, creating a sophisticated and long-lasting fragrance that is perfect for confident individuals.',
-    images: [product1, product2, product3, product4],
-    sizes: [{ ml: 50, price: 10000, discount: 10, _id: 'size1' }, { ml: 100, price: 15000, discount: 15, _id: 'size2' }],
+    name: "",
+    images: [],
+    sizes: [],
     reviews: [],
-    _id: 'product1',
-    price: 10000,
+    description: "",
+    itemDetails: []
   });
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const userData = JSON.parse(localStorage.getItem("userId")) || null;
 
   const dispatch = useDispatch();
+  const [showCartSideMenu, setShowCartSideMenu] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  
+  const toggleCartSideMenu = () => {
+    setShowCartSideMenu(!showCartSideMenu);
+    if (isMenuOpen) setIsMenuOpen(false);
+  };
+
   const nextImage = () => {
     setCurrentImageIndex((prevIndex) =>
       prevIndex === singleProduct?.images?.length - 1 ? 0 : prevIndex + 1
     );
   };
-
-
-   const [showCartSideMenu,setShowCartSideMenu] = React.useState(false);
-    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-     const toggleCartSideMenu = () => {
-      setShowCartSideMenu(!showCartSideMenu);
-      if (isMenuOpen) setIsMenuOpen(false);
-    };
 
   const prevImage = () => {
     setCurrentImageIndex((prevIndex) =>
@@ -74,12 +75,27 @@ const ProductPage = () => {
     </button>
   );
 
-  useEffect(() => {
-    // Set first size as selected by default
-    if (singleProduct?.sizes?.length > 0 && !selectedSize) {
-      setSelectedSize(singleProduct.sizes[0]);
+  const fetchProducts = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get(`${BaseUrl}/v1/product/${id}`);
+      setSingleProduct(response?.data?.data);
+      // Set first size as selected by default if sizes exist
+      if (response?.data?.data?.sizes?.length > 0) {
+        setSelectedSize(response.data.data.sizes[0]);
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to fetch product");
+      toast.error(err.response?.data?.message || "Failed to fetch product");
+    } finally {
+      setIsLoading(false);
     }
-  }, [singleProduct]);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, [id]); // Only depend on id
 
   const calculatePrice = (size) => {
     if (!size) return 0;
@@ -97,7 +113,7 @@ const ProductPage = () => {
     setIsModalOpen(false);
   };
 
-   const ShippingcloseModal = () => {
+  const ShippingcloseModal = () => {
     setIsShippingModal(false);
   };
   const closeCustomerModal = () => {
@@ -127,9 +143,17 @@ const ProductPage = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message)
+      toast.error(error.response?.data?.message || "Failed to add to cart");
     }
   };
+
+  // if (isLoading) {
+  //   return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  // }
+
+  // if (error) {
+  //   return <div className="min-h-screen flex items-center justify-center text-red-500">{error}</div>;
+  // }
 
   return (
     <div className="bg-white text-amber-400 font-sans min-h-screen p-4 sm:p-8">
@@ -139,26 +163,18 @@ const ProductPage = () => {
           {/* Main Image */}
           <div className="relative mb-4 sm:mb-6">
             <div className="relative overflow-hidden h-64 sm:h-96 md:h-[550px] border rounded-2xl border-black">
-              <img
-                src={singleProduct?.images?.[currentImageIndex]}
-                alt="Main product"
-                className="w-full h-full object-cover transition-transform duration-300"
-              />
-              {/* Navigation arrows for mobile */}
-              {/* <div className="lg:hidden absolute top-1/2 transform -translate-y-1/2 flex justify-between w-full px-2">
-                <button 
-                  onClick={prevImage}
-                  className="bg-black bg-opacity-50 text-white p-2 rounded-full"
-                >
-                  &lt;
-                </button>
-                <button 
-                  onClick={nextImage}
-                  className="bg-black bg-opacity-50 text-white p-2 rounded-full"
-                >
-                  &gt;
-                </button>
-              </div> */}
+              {singleProduct?.images?.length > 0 ? (
+                <img
+                  src={singleProduct.images[currentImageIndex]}
+                  alt="Main product"
+                  className="w-full h-full object-cover transition-transform duration-300"
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                  No image available
+                </div>
+              )}
+             
             </div>
           </div>
           
@@ -268,19 +284,24 @@ const ProductPage = () => {
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
             <button
               onClick={() => {
-                                           dispatch(
-                                             addToCart({
-                                               _id: singleProduct?.id,
-                                               image:require('../../assets/images/product4.png'),
-                                               quantity:1,
-                                               title: singleProduct?.title,
-                                               price: singleProduct.price,
-                                               cutPrice:singleProduct.price
-                                             })
-                                           );
-             
-                                           toggleCartSideMenu();
-                                         }}
+                if (!selectedSize) {
+                  toast.error("Please select a size");
+                  return;
+                }
+                dispatch(
+                  addToCart({
+                    _id: singleProduct._id,
+                    image: singleProduct.images[0] || product4,
+                    description: singleProduct.description,
+                    title: singleProduct.name,
+                    quantity: quantity,
+                    sizeId: selectedSize._id,
+                    price: discountedPrice,
+                    cutPrice: originalPrice
+                  })
+                );
+                toggleCartSideMenu();
+              }}
               className="w-full py-3 sm:py-4 border-2 border-black text-black font-bold text-lg sm:text-xl rounded-full"
             >
               Add to cart
@@ -293,13 +314,14 @@ const ProductPage = () => {
                 }
                 dispatch(
                   addToCart({
-                    _id: singleProduct?._id,
-                    image: singleProduct?.images,
-                    description: singleProduct?.description,
-                    title: singleProduct?.name,
+                    _id: singleProduct._id,
+                    image: singleProduct.images[0] || product4,
+                    description: singleProduct.description,
+                    title: singleProduct.name,
                     quantity: quantity,
                     sizeId: selectedSize._id,
-                    price: selectedSize.price,
+                    price: discountedPrice,
+                    cutPrice: originalPrice
                   })
                 );
                 navigate("/checkout");
@@ -317,7 +339,10 @@ const ProductPage = () => {
             >
               Description
             </button>
-            <button onClick={() => setIsShippingModal(true)} className="w-full py-2 sm:py-3 border border-black text-black text-lg sm:text-xl rounded-lg">
+            <button 
+              onClick={() => setIsShippingModal(true)} 
+              className="w-full py-2 sm:py-3 border border-black text-black text-lg sm:text-xl rounded-lg"
+            >
               Shipping Information
             </button>
           </div>
@@ -334,17 +359,16 @@ const ProductPage = () => {
         isModalOpen={isModalOpen}
         closeModal={closeModal}
       />
-       <ShippingModal
+      <ShippingModal
         data={singleProduct}
         setIsModalOpen={setIsShippingModal}
         isModalOpen={isShippingModal}
         closeModal={ShippingcloseModal}
       />
 
-
-        {showCartSideMenu && (
-                    <AddToCartSideMenu onClose={() => setShowCartSideMenu(false)} />
-                  )}
+      {showCartSideMenu && (
+        <AddToCartSideMenu onClose={() => setShowCartSideMenu(false)} />
+      )}
     </div>
   );
 };

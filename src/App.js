@@ -56,7 +56,13 @@ function App() {
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-
+ <Route
+          path="/order/:id"
+          element={
+              <OrderConfirmationPage />
+          
+          }
+        />
         {/* Protected Dashboard Route */}
         <Route
           path="/dashboard"
@@ -67,14 +73,7 @@ function App() {
           }
         />
 
-        <Route
-          path="/dashboard/order/:id"
-          element={
-            <ProtectedRoute>
-              <OrderConfirmationPage />
-            </ProtectedRoute>
-          }
-        />
+       
       </Routes>
     </Router>
     </>

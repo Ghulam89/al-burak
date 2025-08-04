@@ -11,7 +11,8 @@ const CheckoutPage = () => {
     JSON.parse(localStorage.getItem("userId")) || null
   );
   const productData = useSelector((state) => state?.next?.productData || []);
-
+  console.log(productData);
+  
   const [orderCompleted, setOrderCompleted] = useState(false);
   const [orderId, setOrderId] = useState(null);
 
@@ -39,8 +40,8 @@ const dispatch = useDispatch();
 
   // Discounted price helper
   const getDiscountedPrice = (item) => {
-    if (!item.discount) return item.price;
-    return item.price - item.price * (item.discount / 100);
+    if (!item.discount) return item.cutPrice;
+    return item.cutPrice - item.cutPrice * (item.discount / 100);
   };
 
   // Subtotal and total
@@ -95,46 +96,46 @@ const dispatch = useDispatch();
 
   const OrderSuccess = ({ orderId }) => {
     return (
-      <div className="bg-black min-h-screen text-white p-6">
+      <div className="bg-white min-h-screen  p-6">
         <div className="max-w-4xl mx-auto">
-          <div className="flex justify-between border-b border-lightGray py-3.5 items-center">
-            <h1 className="text-3xl m-0 text-lightGray font-medium">
+          <div className="flex justify-between border-b border-black py-3.5 items-center">
+            <h1 className="text-3xl m-0 text-black font-medium">
               Al-Buraq
             </h1>
-            <div className="bg-transparent border border-gray-500 rounded-full w-7 h-7 flex justify-center items-center text-base text-gray-300 cursor-pointer">
-              ?
-            </div>
+          <div>
+          <img src={require('../../assets/images/bag.png')} alt="" />
+        </div>
           </div>
 
           <div className="mt-10 text-center">
-            <div className="text-black bg-lightGray w-20 h-20 mx-auto rounded-full text-6xl mb-4 flex justify-center items-center">
+            <div className="   text-lightGray bg-black w-20 h-20 mx-auto rounded-full text-6xl mb-4 flex justify-center items-center">
               ✓
             </div>
-            <h2 className="text-2xl font-bold mb-2">
+            <h2 className="text-2xl  text-black font-bold mb-2">
               Order Placed Successfully!
             </h2>
-            <p className="text-gray-300 mb-6">
+            <p className=" text-lightGray mb-6">
               Your order has been placed and is being processed. You'll receive
               a confirmation email shortly.
             </p>
 
-            <div className="bg-gray-800 rounded-lg p-6 mx-auto text-left">
-              <h3 className="text-lg font-semibold mb-4">Order Details</h3>
+            <div className="  bg-white shadow-lg rounded-lg p-6 mx-auto text-left">
+              <h3 className="text-lg font-semibold  mb-4">Order Details</h3>
               <p className="mb-2">
-                <span className="text-gray-400">Order ID:</span> {orderId}
+                <span className="  text-black">Order ID:</span> {orderId}
               </p>
               <p className="mb-4">
-                <span className="text-gray-400">Status:</span> Processing
+                <span className="text-black">Status:</span> Processing
               </p>
 
-              <div className="border-t border-gray-700 pt-4">
-                <p className="text-sm text-gray-400 mb-2">
+              <div className="border-t  border-lightGray2 pt-4">
+                <p className="text-sm text-black mb-2">
                   You can track your order status by creating an account with
                   the email you used for this order.
                 </p>
                 <Link
                   to={"/signup"}
-                  className="bg-yellow-500 text-black py-2 px-4 rounded-md text-sm font-bold mt-2 hover:bg-yellow-600 transition-colors"
+                  className="bg-primary text-black py-2 mt-3 px-4  text-sm font-bold transition-colors"
                 >
                   Create Account
                 </Link>
@@ -144,7 +145,7 @@ const dispatch = useDispatch();
             <div className="mt-8">
               <button
                 onClick={() => (window.location.href = "/")}
-                className="bg-yellow-500 text-black py-3 px-6 rounded-md text-base font-bold hover:bg-yellow-600 transition-colors"
+                className="bg-primary text-black py-3 px-6 rounded-md text-base font-bold hover:bg-yellow-600 transition-colors"
               >
                 Continue Shopping
               </button>
@@ -226,7 +227,8 @@ const dispatch = useDispatch();
       const orderResponse = await createOrder(updatedUser);
       if (orderResponse.success) {
         setOrderId(orderResponse.data._id);
-        setOrderCompleted(true);
+        // setOrderCompleted(true);
+        navigate(`/order/${orderResponse?.data?._id}`);
         dispatch(resetCart());
       }
     } catch (error) {

@@ -32,6 +32,7 @@ const ReviewModal = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const userData = JSON.parse(localStorage.getItem("userId")) || null;
+console.log(userData );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,7 +40,7 @@ const ReviewModal = ({
     setError(null);
 
     try {
-      const productId = fetchData?.items?.[0]?.productId?._id;
+      const productId = fetchData?._id;
       const formData = new FormData();
       formData.append("userId", userData?._id);
       formData.append("comment", reviewComment);
@@ -49,7 +50,7 @@ const ReviewModal = ({
         formData.append("images", file);
       }
 
-      const response = await axios.get(
+      const response = await axios.post(
         `${BaseUrl}/v1/product/review/${productId}`,
         formData
       );
@@ -84,14 +85,14 @@ const ReviewModal = ({
     >
       <div
         onClick={() => setIsModalOpen(false)}
-        className=" cursor-pointer w-6 h-6 bg-primary rounded-full flex justify-center items-center  float-right text-black"
+        className=" cursor-pointer w-6 h-6 bg-gray-300 rounded-full flex justify-center items-center  float-right text-black"
       >
         <IoClose size={20} className=" text-black" />
       </div>
-      <div className="font-sans bg-black min-h-screen flex flex-col items-center w-full mx-auto py-10 box-border">
+      <div className="font-sans bg-white min-h-screen flex flex-col items-center w-full mx-auto py-10 box-border">
         <form
           onSubmit={handleSubmit}
-          className="bg-black rounded-3xl px-3 box-border"
+          className="bg-white rounded-3xl px-3 box-border"
         >
           {/* Error message */}
           {error && (
@@ -101,7 +102,7 @@ const ReviewModal = ({
           )}
 
           <div className="mb-6">
-            <label className="block mb-2 text-[#EBC351] font-normal text-base">
+            <label className="block mb-2 text-black font-normal text-base">
               RATING
             </label>
             <div className="flex gap-1 cursor-pointer">
@@ -122,7 +123,7 @@ const ReviewModal = ({
           <div className="mb-6">
             <label
               htmlFor="reviewComment"
-              className="block mb-2 text-[#EBC351] font-normal text-base"
+              className="block mb-2 text-black font-normal text-base"
             >
               REVIEW
             </label>
@@ -131,14 +132,14 @@ const ReviewModal = ({
               value={reviewComment}
               onChange={(e) => setReviewComment(e.target.value)}
               placeholder="Write your comment here"
-              className="w-full px-3 py-3 bg-[#E5D0A5] border-none text-sm text-black box-border outline-none min-h-[120px] resize-y"
+              className="w-full px-3 py-3  border-black border text-sm text-black box-border outline-none min-h-[120px] resize-y"
               rows="5"
               required
             ></textarea>
           </div>
 
           <div className="mb-6">
-            <label className="block mb-2 text-[#EBC351] font-normal text-base">
+            <label className="block mb-2 text-black font-normal text-base">
               PICTURE/VIDEO (OPTIONAL)
             </label>
             <label
@@ -162,7 +163,7 @@ const ReviewModal = ({
             </label>
           </div>
 
-          <p className="text-[#EBC351] text-sm mt-8 leading-relaxed">
+          <p className="text-black text-sm mt-8 leading-relaxed">
             How we use your data: We'll only contact you about the review you
             left, and if necessary. By submitting your review, you agree to
             judge. our terms, privacy and content polices
@@ -170,7 +171,7 @@ const ReviewModal = ({
 
           <button
             type="submit"
-            className="bg-[#E5D0A5] text-black px-8 py-4 border-none text-lg font-normal cursor-pointer mt-8 w-full block transition-colors duration-200 hover:bg-[#EBC351]"
+            className="bg-black text-white px-8 py-4 border-none text-lg font-normal cursor-pointer mt-8 w-full block transition-colors duration-200 hover:bg-primary hover:text-black"
             disabled={isSubmitting}
           >
             {isSubmitting ? "SUBMITTING..." : "SUBMIT REVIEW"}
