@@ -19,6 +19,31 @@ import product4 from "../../assets/images/product4.png";
 import Button from "../common/Button";
 import AddToCartSideMenu from "../header-footer.jsx/AddToCartSideMenu";
 
+
+// Skeleton Loader Components
+const ProductSkeleton = () => (
+  <div className="relative w-full animate-pulse">
+    <div className="bg-gray-200 rounded-lg h-[250px] sm:h-[300px] md:h-[400px]"></div>
+    <div className="pt-7 text-center sm:px-8 px-4 rounded-b-xl">
+      <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-2"></div>
+      <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto mb-4"></div>
+      <div className="h-10 bg-gray-200 rounded w-full"></div>
+    </div>
+  </div>
+);
+
+const FilterSkeleton = () => (
+  <div className="h-8 bg-gray-200 rounded w-24 animate-pulse"></div>
+);
+
+const PaginationSkeleton = () => (
+  <div className="flex justify-center items-center gap-2 mb-8">
+    {[...Array(5)].map((_, i) => (
+      <div key={i} className="h-10 w-10 bg-gray-200 rounded-md animate-pulse"></div>
+    ))}
+  </div>
+); 
+
 // Sidebar Component
 const Sidebar = ({ isOpen, onClose, searchParams, setSearchParams }) => {
   const navigate = useNavigate();
@@ -345,102 +370,135 @@ const BestSelling = () => {
 
         <div className="flex-grow flex flex-col items-center pt-16 md:pt-0 overflow-y-auto">
           <div className="w-full flex justify-between items-center max-w-7xl py-3 mb-8 md:mb-5 px-4 md:px-0">
-            <div onClick={toggleSidebar} className="flex gap-2 items-center cursor-pointer">
-              <img src={require('../../assets/images/filter.png')} alt="" />
-              <h3 className="text-black font-semibold">Filter</h3>
-            </div>
-            <div>
-              <select
-                id="sort-by"
-                value={searchParams.get("sort") || "default"}
-                onChange={handleSortChange}
-                className="px-3 py-1 md:px-4 md:py-2 bg-transparent border text-black border-black text-black2 rounded font-inter font-bold text-sm md:text-base cursor-pointer"
-              >
-                <option value="default">Sort</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-                <option value="name-asc">Name: A-Z</option>
-                <option value="name-desc">Name: Z-A</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 w-full max-w-7xl pb-8">
-            {products.map((item, index) => (
-              <div key={index} className="relative w-full">
-                <div className="bg-black rounded-lg border border-black shadow-lg shadow-gold-100">
-                  <img
-                    src={item?.images?.[0]}
-                    onClick={() => navigate(`/product/${item?._id}`)}
-                    alt="product"
-                    className="w-full h-[250px] sm:h-[300px] md:h-[400px] object-cover"
-                  />
-                </div>
-
-                <div className="pt-7 text-center sm:px-8 px-4 rounded-b-xl">
-                  <h3 className="font-semibold uppercase text-black font-[inter] mb-1">
-                    {item?.name}
-                  </h3>
-                  <p className="text-black font-semibold font-[inter] text-base md:text-lg lg:text-xl mb-4">
-                    Rs.{item?.sizes?.[0]?.price}
-                  </p>
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      dispatch(
-                        addToCart({
-                          _id: item?._id,
-                          image: item?.images?.[0],
-                          quantity: 1,
-                          title: item?.name,
-                          price: item?.sizes?.[0]?.price,
-                          cutPrice: item?.sizes?.[0]?.price,
-                        })
-                      );
-                      toggleCartSideMenu();
-                    }}
-                    label={"Add To Bag"}
-                    className="border border-black mx-auto w-full font-semibold text-black rounded-md"
-                  />
-                </div>
+            {loading ? (
+              <FilterSkeleton />
+            ) : (
+              <div onClick={toggleSidebar} className="flex gap-2 items-center cursor-pointer">
+                <img src={require('../../assets/images/filter.png')} alt="" />
+                <h3 className="text-black font-semibold">Filter</h3>
               </div>
-            ))}
-          </div>
-
-          {/* Pagination Controls */}
-          {pagination.totalPages > 1 && (
-            <div className="flex justify-center items-center gap-2 mb-8">
-              <button
-                onClick={() => handlePageChange(pagination.page - 1)}
-                disabled={pagination.page === 1}
-                className={`px-4 py-2 rounded-md ${pagination.page === 1 ? 'bg-gray-200 cursor-not-allowed' : 'bg-black text-white hover:bg-gray-800'}`}
-              >
-                Previous
-              </button>
-              
-              {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(pageNum => (
-                <button
-                  key={pageNum}
-                  onClick={() => handlePageChange(pageNum)}
-                  className={`px-4 py-2 rounded-md ${pagination.page === pageNum ? 'bg-black text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
+            )}
+            
+            {loading ? (
+              <FilterSkeleton />
+            ) : (
+              <div>
+                <select
+                  id="sort-by"
+                  value={searchParams.get("sort") || "default"}
+                  onChange={handleSortChange}
+                  className="px-3 py-1 md:px-4 md:py-2 bg-transparent border text-black border-black text-black2 rounded font-inter font-bold text-sm md:text-base cursor-pointer"
                 >
-                  {pageNum}
-                </button>
-              ))}
-              
-              <button
-                onClick={() => handlePageChange(pagination.page + 1)}
-                disabled={pagination.page === pagination.totalPages}
-                className={`px-4 py-2 rounded-md ${pagination.page === pagination.totalPages ? 'bg-gray-200 cursor-not-allowed' : 'bg-black text-white hover:bg-gray-800'}`}
-              >
-                Next
-              </button>
-            </div>
-          )}
-
-          <div className="text-black mb-4">
-            Showing {products.length} of {pagination.totalProducts} products
+                  <option value="default">Sort</option>
+                  <option value="price-asc">Price: Low to High</option>
+                  <option value="price-desc">Price: High to Low</option>
+                  <option value="name-asc">Name: A-Z</option>
+                  <option value="name-desc">Name: Z-A</option>
+                </select>
+              </div>
+            )}
           </div>
+
+          {loading ? (
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 w-full max-w-7xl pb-8">
+              {[...Array(8)].map((_, index) => (
+                <ProductSkeleton key={index} />
+              ))}
+            </div>
+          ) : error ? (
+            <div className="text-black text-center py-10">
+              Error loading products: {error}
+            </div>
+          ) : products.length === 0 ? (
+            <div className="text-black text-center py-10">
+              No products found matching your criteria
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 w-full max-w-7xl pb-8">
+                {products.map((item, index) => (
+                  <div key={index} className="relative w-full">
+                    <div className="bg-black rounded-lg border border-black shadow-lg shadow-gold-100">
+                      <img
+                        src={item?.images?.[0]}
+                        onClick={() => navigate(`/product/${item?._id}`)}
+                        alt="product"
+                        className="w-full h-[250px] sm:h-[300px] md:h-[400px] object-cover"
+                      />
+                    </div>
+
+                    <div className="pt-7 text-center sm:px-8 px-4 rounded-b-xl">
+                      <h3 className="font-semibold uppercase text-black font-[inter] mb-1">
+                        {item?.name}
+                      </h3>
+                      <p className="text-black font-semibold font-[inter] text-base md:text-lg lg:text-xl mb-4">
+                        Rs.{item?.sizes?.[0]?.price}
+                      </p>
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          dispatch(
+                            addToCart({
+                              _id: item?._id,
+                              image: item?.images?.[0],
+                              quantity: 1,
+                              title: item?.name,
+                              price: item?.sizes?.[0]?.price,
+                              cutPrice: item?.sizes?.[0]?.price,
+                            })
+                          );
+                          toggleCartSideMenu();
+                        }}
+                        label={"Add To Bag"}
+                        className="border border-black mx-auto w-full font-semibold text-black rounded-md"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Pagination Controls */}
+              {loading ? (
+                <PaginationSkeleton />
+              ) : pagination.totalPages > 1 && (
+                <div className="flex justify-center items-center gap-2 mb-8">
+                  <button
+                    onClick={() => handlePageChange(pagination.page - 1)}
+                    disabled={pagination.page === 1}
+                    className={`px-4 py-2 rounded-md ${pagination.page === 1 ? 'bg-gray-200 cursor-not-allowed' : 'bg-black text-white hover:bg-gray-800'}`}
+                  >
+                    Previous
+                  </button>
+                  
+                  {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(pageNum => (
+                    <button
+                      key={pageNum}
+                      onClick={() => handlePageChange(pageNum)}
+                      className={`px-4 py-2 rounded-md ${pagination.page === pageNum ? 'bg-black text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
+                    >
+                      {pageNum}
+                    </button>
+                  ))}
+                  
+                  <button
+                    onClick={() => handlePageChange(pagination.page + 1)}
+                    disabled={pagination.page === pagination.totalPages}
+                    className={`px-4 py-2 rounded-md ${pagination.page === pagination.totalPages ? 'bg-gray-200 cursor-not-allowed' : 'bg-black text-white hover:bg-gray-800'}`}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+
+              <div className="text-black mb-4">
+                {loading ? (
+                  <div className="h-4 bg-gray-200 rounded w-48 mx-auto animate-pulse"></div>
+                ) : (
+                  `Showing ${products.length} of ${pagination.totalProducts} products`
+                )}
+              </div>
+            </>
+          )}
         </div>
 
         {showCartSideMenu ? (
