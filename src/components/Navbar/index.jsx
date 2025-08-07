@@ -260,7 +260,7 @@ const Navbar = () => {
           <img
             src={logo}
             alt="Al-Burak Logo"
-            className="mx-auto sm:w-24 w-16 sm:h-24 ml-20 h-16 cursor-pointer transition-transform duration-300 hover:scale-105"
+            className="mx-auto sm:w-20 w-16 sm:h-20 ml-20 h-16 cursor-pointer transition-transform duration-300 hover:scale-105"
           />
         </Link>
 
@@ -330,125 +330,130 @@ const Navbar = () => {
       )}
 
       {/* Mobile Menu - Slide from left */}
-      {isMenuOpen && isMobileView && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-[998] transition-opacity duration-300"
-          onClick={toggleMenu}
-        >
-          <div
-            ref={menuRef}
-            className={`fixed top-0 transition-all duration-300 ease-in-out transform left-0 h-full w-3/4 max-w-xs bg-white border-r border-black z-[999] ${
-              isMenuOpen ? "translate-x-0" : "-translate-x-full"
-            } shadow-xl`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center p-4 border-b">
-              <div className="flex items-center gap-2">
-                <img
-                  src={logo}
-                  alt="Al-Burak Logo"
-                  className="h-12 w-auto cursor-pointer transition-transform duration-300 hover:scale-105"
-                  onClick={() => {
-                    navigate("/");
-                    setIsMenuOpen(false);
-                  }}
-                />
-              </div>
-              <button
-                className="text-black text-xl cursor-pointer transition-transform duration-200 hover:rotate-90"
-                onClick={toggleMenu}
-                aria-label="Close menu"
-              >
-                <FaTimes />
-              </button>
-            </div>
-
-            <div className="overflow-y-auto h-[calc(100%-60px)]">
-              <ul className="py-2">
-                {[
-                  { name: "Home", path: "/" },
-                  { name: "New Arrivals", path: "/shop" },
-                  { name: "Men Perfumes", path: "/shop" },
-                  { name: "Women Perfumes", path: "/shop" },
-                  { name: "Attar/Oud", path: "/shop" },
-                  { name: "Deals", path: "#" },
-                  { name: "Gift Box", path: "#" },
-                ].map((item) => (
-                  <li
-                    key={item.name}
-                    className="px-4 py-3 border-b transition-colors duration-200 hover:bg-gray-50"
-                  >
-                    <Link
-                      to={item.path}
-                      className="no-underline text-black font-medium text-sm block transition-colors duration-300 hover:text-primary"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-
-                <div className="px-4 py-3 border-b border-gray-800">
-                  {!userData ? (
-                    <>
-                      <li className="list-none">
-                        <Link
-                          to="/login"
-                          className="no-underline text-white font-medium text-sm block transition-colors duration-300 hover:text-primary mb-2"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          Login
-                        </Link>
-                      </li>
-                      <li className="list-none">
-                        <Link
-                          to="/signup"
-                          className="no-underline text-white font-medium text-sm block transition-colors duration-300 hover:text-primary"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          Register
-                        </Link>
-                      </li>
-                    </>
-                  ) : (
-                    <>
-                      <li className="list-none">
-                        <Link
-                          to="/dashboard"
-                          className="no-underline text-white font-medium text-sm block transition-colors duration-300 hover:text-primary mb-2"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          Profile
-                        </Link>
-                      </li>
-                      <li className="list-none">
-                        <Link
-                          to="/settings"
-                          className="no-underline text-white font-medium text-sm block transition-colors duration-300 hover:text-primary mb-2"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          Settings
-                        </Link>
-                      </li>
-                      <li className="list-none">
-                        <button
-                          onClick={() => {
-                            logout();
-                            setIsMenuOpen(false);
-                          }}
-                          className="no-underline text-white font-medium text-sm block transition-colors duration-300 hover:text-primary"
-                        >
-                          Logout
-                        </button>
-                      </li>
-                    </>
-                  )}
-                </div>
-              </ul>
-            </div>
-          </div>
+     {isMobileView && (
+  <>
+    {/* Overlay */}
+    {isMenuOpen && (
+      <div 
+        className="fixed inset-0 bg-white bg-opacity-50 z-[998] transition-opacity duration-300"
+        onClick={toggleMenu}
+      />
+    )}
+    
+    {/* Sidebar */}
+    <div
+      ref={menuRef}
+      className={`fixed top-0 left-0 h-full w-3/4 max-w-xs bg-white border-r border-black z-[999] shadow-xl transition-all duration-300 ease-in-out ${
+        isMenuOpen ? "translate-x-0" : "-translate-x-full"
+      }`}
+    >
+      <div className="flex justify-between items-center p-4 border-b">
+        <div className="flex items-center gap-2">
+          <img
+            src={logo}
+            alt="Al-Burak Logo"
+            className="h-12 w-auto cursor-pointer transition-transform duration-300 hover:scale-105"
+            onClick={() => {
+              navigate("/");
+              setIsMenuOpen(false);
+            }}
+          />
         </div>
-      )}
+        <button
+          className="text-black text-xl cursor-pointer transition-transform duration-200 hover:rotate-90"
+          onClick={toggleMenu}
+          aria-label="Close menu"
+        >
+          <FaTimes />
+        </button>
+      </div>
+
+      <div className="overflow-y-auto h-[calc(100%-60px)]">
+        <ul className="py-2">
+          {[
+             { name: "Home", path: "/" },
+              { name: "New Arrivals", path: `/shop?newArrivals=true`},
+              { name: "Men Perfumes", path: `/shop?category=Men`},
+              { name: "Women Perfumes", path:  `/shop?category=Women`},
+              { name: "Attar/Oud", path:  `/shop?category=Attar`},
+              { name: "Deals", path: "#" },
+              { name: "Gift Box", path: "#" },
+          ].map((item) => (
+            <li
+              key={item.name}
+              className="px-4 py-3 border-b transition-colors duration-200 hover:bg-gray-50"
+            >
+              <Link
+                to={item.path}
+                className="no-underline text-black font-medium text-sm block transition-colors duration-300 hover:text-primary"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.name}
+              </Link>
+            </li>
+          ))}
+
+          <div className="px-4 py-3 border-b border-gray-800">
+            {!userData ? (
+              <>
+                <li className="list-none">
+                  <Link
+                    to="/login"
+                    className="no-underline text-white font-medium text-sm block transition-colors duration-300 hover:text-primary mb-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Login
+                  </Link>
+                </li>
+                <li className="list-none">
+                  <Link
+                    to="/signup"
+                    className="no-underline text-white font-medium text-sm block transition-colors duration-300 hover:text-primary"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Register
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="list-none">
+                  <Link
+                    to="/dashboard"
+                    className="no-underline text-white font-medium text-sm block transition-colors duration-300 hover:text-primary mb-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Profile
+                  </Link>
+                </li>
+                <li className="list-none">
+                  <Link
+                    to="/settings"
+                    className="no-underline text-white font-medium text-sm block transition-colors duration-300 hover:text-primary mb-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Settings
+                  </Link>
+                </li>
+                <li className="list-none">
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsMenuOpen(false);
+                    }}
+                    className="no-underline text-white font-medium text-sm block transition-colors duration-300 hover:text-primary"
+                  >
+                    Logout
+                  </button>
+                </li>
+              </>
+            )}
+          </div>
+        </ul>
+      </div>
+    </div>
+  </>
+)}
 
       {/* Search Popup */}
       {showSearchPopup && (

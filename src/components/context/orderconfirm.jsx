@@ -17,6 +17,7 @@ const OrderConfirmationPage = () => {
   const [userData, setUserData] = useState(
     JSON.parse(localStorage.getItem("userId")) || null
   );
+  
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
@@ -49,78 +50,92 @@ const OrderConfirmationPage = () => {
 
   const deliveryFee = 200;
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <FaSpinner className="animate-spin text-4xl text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-red-500 text-lg">{error}</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full min-h-screen bg-white flex flex-col items-center box-border overflow-x-hidden text-primary">
+    <div className="w-full min-h-screen bg-white flex flex-col items-center box-border overflow-x-hidden text-primary px-4 sm:px-0">
       {/* Header */}
-      <header className="flex justify-between w-full px-5 py-3.5 items-center">
-        <h1 className="text-3xl m-0 text-black font-medium">Al-Buraq</h1>
+      <header className="flex justify-between w-full max-w-6xl  py-3.5 items-center">
+        <h1 className="text-2xl sm:text-3xl m-0 text-black font-medium">Al-Buraq</h1>
       </header>
 
       {/* Main Content */}
-      <main className="w-full max-w-6xl px-4 py-8">
+      <main className="w-full max-w-6xl  py-6 sm:py-8">
         {/* Thank You Message */}
-        <section className="text-center mb-12 flex flex-col items-center gap-4 text-black">
-          <div className='border border-[#628948] bg-[#EDF9E3] flex justify-center items-center rounded-full w-14 h-14'>
-            <IoMdCheckmark size={40} className='text-[#628948]' />
+        <section className="text-center mb-8 sm:mb-12 flex flex-col items-center gap-4 text-black">
+          <div className='border border-[#628948] bg-[#EDF9E3] flex justify-center items-center rounded-full w-12 h-12 sm:w-14 sm:h-14'>
+            <IoMdCheckmark size={30} className='text-[#628948] sm:w-10' />
           </div>
           
-          <h1 className="text-2xl font-semibold">Thank you for your order</h1>
+          <h1 className="text-xl sm:text-2xl font-semibold">Thank you for your order</h1>
         </section>
 
-        {/* Status Tracker */}
-<section className="flex justify-center items-center relative mb-16 w-full">
-  <div className="flex justify-between items-center w-full max-w-2xl">
-    {['Shopping cart', 'Checkout', 'Order completed'].map((step, index) => {
-      // Determine if step is completed
-      const isCompleted = 
-        (index === 0) || // Shopping cart is always completed
-        (index === 1) || // Checkout is always completed
-        (index === 2 && orderData?.orderStatus === 'completed'); // Order completed depends on status
+        {/* Status Tracker - Responsive */}
+        <section className="flex justify-center items-center relative mb-10 sm:mb-16 w-full">
+          <div className="flex justify-between items-center w-full max-w-2xl">
+            {['Shopping cart', 'Checkout', 'Order completed'].map((step, index) => {
+              const isCompleted = 
+                (index === 0) || 
+                (index === 1) || 
+                (index === 2 && orderData?.orderStatus === 'completed');
 
-      return (
-        <div key={step} className="flex flex-col items-center text-center flex-1 relative">
-          {/* Progress line before each step (except first) */}
-          {index > 0 && (
-            <div 
-              className={`absolute h-0.5 w-1/2 top-7 -left-1/2 z-0 ${
-                isCompleted ? 'bg-primary' : 'bg-gray-300 '
-              }`}
-            ></div>
-          )}
-          
-          {/* Step circle */}
-          <div 
-            className={`w-14 h-14 rounded-full flex justify-center items-center border-2 relative z-10 ${
-              isCompleted 
-                ? 'bg-primary border-primary text-white' 
-                : 'border-black text-black'
-            }`}
-          >
-            {index === 0 ? <FaShoppingCart size={25} /> : 
-             index === 1 ? <FaCreditCard size={25} /> : 
-             <FaCheckCircle size={25} />}
+              return (
+                <div key={step} className="flex flex-col items-center text-center flex-1 relative">
+                  {index > 0 && (
+                    <div 
+                      className={`absolute h-0.5 w-1/2 top-5 sm:top-7 -left-1/2 z-0 ${
+                        isCompleted ? 'bg-primary' : 'bg-gray-300'
+                      }`}
+                    ></div>
+                  )}
+                  
+                  <div 
+                    className={`w-10 h-10 sm:w-14 sm:h-14 rounded-full flex justify-center items-center border-2 relative z-10 ${
+                      isCompleted 
+                        ? 'bg-primary border-primary text-white' 
+                        : 'border-black text-black'
+                    }`}
+                  >
+                    {index === 0 ? <FaShoppingCart size={18} className="sm:w-6" /> : 
+                     index === 1 ? <FaCreditCard size={18} className="sm:w-6" /> : 
+                     <FaCheckCircle size={18} className="sm:w-6" />}
+                  </div>
+                  
+                  <span 
+                    className={`mt-2 text-xs sm:text-sm ${
+                      isCompleted ? 'text-primary font-semibold' : 'text-black font-normal'
+                    }`}
+                  >
+                    {step.split(' ').map((word, i) => (
+                      <span key={i} className="block sm:inline">{word}</span>
+                    ))}
+                  </span>
+                </div>
+              );
+            })}
           </div>
-          
-          {/* Step label */}
-          <span 
-            className={`mt-2 text-sm ${
-              isCompleted ? 'text-primary  font-semibold' : 'text-black font-normal'
-            }`}
-          >
-            {step}
-          </span>
-        </div>
-      );
-    })}
-  </div>
-</section>
+        </section>
 
-        {/* Review Button - Only shown when order status is 'completed' */}
+        {/* Review Button */}
         {orderData?.orderStatus === 'completed' && (
-          <section className="mb-8 text-center">
+          <section className="mb-6 sm:mb-8 text-center">
             <button 
               onClick={() => setIsModalOpen(true)} 
-              className="bg-primary hover:bg-primary-dark text-white font-medium py-2 px-8 rounded-md transition-colors"
+              className="bg-primary hover:bg-primary-dark text-white font-medium py-2 px-6 sm:px-8 rounded-md transition-colors text-sm sm:text-base"
               aria-label="Add review for your order"
             >
               Add Review
@@ -129,12 +144,12 @@ const OrderConfirmationPage = () => {
         )}
 
         {/* Order Details Layout */}
-        <div className="flex flex-col md:flex-row gap-8 mb-10">
+        <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 mb-8 sm:mb-10">
           {/* Left Column */}
           <div className="flex-1 space-y-3">
             {/* Order Detail Card */}
-            <div className="border border-black rounded-2xl p-4 shadow-sm">
-              <h2 className="text-lg font-bold text-black mb-4">Order Detail</h2>
+            <div className="border border-black rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-sm">
+              <h2 className="text-lg font-bold text-black mb-3 sm:mb-4">Order Detail</h2>
               
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
@@ -160,7 +175,7 @@ const OrderConfirmationPage = () => {
                 </div>
               </div>
 
-              <div className="mt-8 pt-4 border-t border-gray-200">
+              <div className="mt-6 sm:mt-8 pt-3 sm:pt-4 border-t border-gray-200">
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Subtotal</span>
@@ -181,11 +196,11 @@ const OrderConfirmationPage = () => {
             </div>
 
             {/* Customer Details */}
-            <div className="space-y-6">
-              <h2 className="text-lg font-bold text-black mb-4">Customer Details</h2>
+            <div className="space-y-4 sm:space-y-6">
+              <h2 className="text-lg font-bold text-black mb-3 sm:mb-4">Customer Details</h2>
               
               <div>
-                <h3 className="font-semibold mb-2 text-black">Contact Information</h3>
+                <h3 className="font-semibold mb-1 sm:mb-2 text-black">Contact Information</h3>
                 <div className="space-y-1 text-sm">
                   <p className='text-gray-600'>Email: {orderData?.customerId?.email || 'N/A'}</p>
                   <p className='text-gray-600'>Phone: {orderData?.shippingAddress?.phoneNumber || 'N/A'}</p>
@@ -193,7 +208,7 @@ const OrderConfirmationPage = () => {
               </div>
               
               <div>
-                <h3 className="font-semibold text-black mb-2">Shipping Address</h3>
+                <h3 className="font-semibold text-black mb-1 sm:mb-2">Shipping Address</h3>
                 <div className="space-y-1 text-sm">
                   <p className='text-black'>{orderData?.shippingAddress?.address || 'N/A'}</p>
                   <p className='text-black'>
@@ -211,28 +226,43 @@ const OrderConfirmationPage = () => {
           </div>
 
           {/* Right Column - Map */}
-          <div className="sm:w-6/12 w-full rounded-lg overflow-hidden">
+          <div className="w-full lg:w-6/12 rounded-lg overflow-hidden mt-6 lg:mt-0">
             <img 
               src={map} 
               alt="Delivery location map" 
-              className="w-full"
+              className="w-full h-auto"
             />
-            <h2 className='text-black font-semibold pt-2'>Your order is confirmed</h2>
-            <p className='text-gray-600 font-semibold py-3'>COD is only applicable on local orders below 50,000 PKR</p>
-            <p className='text-gray-600 font-semibold'>If you order amount does not fall in the range or the shipping country is other than Pakistan, our team will contact you for payment via bank transfer.</p>
+            <h2 className='text-black font-semibold pt-2 text-lg'>Your order is confirmed</h2>
+            <p className='text-gray-600 font-semibold py-2 sm:py-3 text-sm sm:text-base'>
+              COD is only applicable on local orders below 50,000 PKR
+            </p>
+            <p className='text-gray-600 font-semibold text-sm sm:text-base'>
+              If you order amount does not fall in the range or the shipping country is other than Pakistan, 
+              our team will contact you for payment via bank transfer.
+            </p>
 
-            <div className='mt-4 flex justify-end gap-4 items-center'>
-              {userData?.profileCompleted===true?
-               <Link to="/dashboard">
-                <Button label={'My Orders'} className='border border-gray-600 shadow-lg py-2 text-gray-600 font-medium' />
-              </Link>: <Link to="/signup">
-                <Button label={'Track your order'} className='border border-gray-600 shadow-lg py-2 text-gray-600 font-medium' />
-              </Link>
-              }
+            <div className='mt-4 flex flex-col sm:flex-row justify-end gap-3 sm:gap-4 items-center sm:items-end'>
+              {userData?.profileCompleted===true ? (
+                <Link to="/dashboard" className="w-full sm:w-auto">
+                  <Button 
+                    label={'My Orders'} 
+                    className='w-full border border-gray-600 shadow-lg py-2 text-gray-600 font-medium text-sm sm:text-base' 
+                  />
+                </Link>
+              ) : (
+                <Link to="/signup" className="w-full sm:w-auto">
+                  <Button 
+                    label={'Track your order'} 
+                    className='w-full border border-gray-600 shadow-lg py-2 text-gray-600 font-medium text-sm sm:text-base' 
+                  />
+                </Link>
+              )}
              
-
-              <Link to="/">
-                <Button label={'Continue Shopping'} className='border border-gray-600 shadow-lg py-2 bg-black text-white font-medium' />
+              <Link to="/" className="w-full sm:w-auto">
+                <Button 
+                  label={'Continue Shopping'} 
+                  className='w-full border border-gray-600 shadow-lg py-2 bg-black text-white font-medium text-sm sm:text-base' 
+                />
               </Link>
             </div>
           </div>

@@ -5,7 +5,7 @@ const DescriptionModal = ({ isModalOpen, setIsModalOpen, closeModal,data}) => {
     <Modal
       isOpen={isModalOpen}
       onClose={closeModal}
-      className=" h-[80vh] overflow-y-auto px-4 rounded-3xl"
+      className=" h-[80vh] overflow-y-auto px-4 rounded-3xl transition-opacity duration-300"
       
     >
        

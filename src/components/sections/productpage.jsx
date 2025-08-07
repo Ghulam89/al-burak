@@ -192,7 +192,7 @@ const ProductPage = () => {
             <>
               {/* Main Image */}
               <div className="relative mb-4 sm:mb-6">
-                <div className="relative overflow-hidden h-64 sm:h-96 md:h-[550px] border rounded-2xl border-black">
+                <div className="relative overflow-hidden h-80 md:h-[550px] border rounded-2xl border-black">
                   {singleProduct?.images?.length > 0 ? (
                     <img
                       src={singleProduct.images[currentImageIndex]}
@@ -213,7 +213,7 @@ const ProductPage = () => {
                   <button
                     key={index}
                     onClick={() => selectImage(index)}
-                    className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 overflow-hidden ${
+                    className={`flex-shrink-0 w-16 h-16 rounded-lg sm:w-20 sm:h-20 overflow-hidden ${
                       currentImageIndex === index
                         ? "border-2 border-black"
                         : "border border-gray-300"
