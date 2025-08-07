@@ -22,6 +22,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from 'react-toastify';
 import OrderConfirmationPage from './components/context/orderconfirm';
 import { useEffect } from 'react';
+import OrderHistoryDetail from './pages/orders/OrderHistoryDetail';
 function App() {
    const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -63,12 +64,23 @@ function App() {
           
           }
         />
+          
+
+
         {/* Protected Dashboard Route */}
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/order/:id"
+          element={
+            <ProtectedRoute>
+              <OrderHistoryDetail />
             </ProtectedRoute>
           }
         />
