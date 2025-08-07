@@ -81,7 +81,7 @@ const BestSelling = () => {
                 />
               </div>
               <div className="sm:pt-7 pt-4 text-center sm:px-8 px-0 rounded-b-xl">
-                <h3 className="font-semibold uppercase text-black font-[inter] mb-1">
+                 <h3 className="font-semibold text-base uppercase text-black font-[inter] mb-1 line-clamp-2 h-12 overflow-hidden">
                   {item?.name}
                 </h3>
                 <p className="text-black font-semibold font-[inter] text-base md:text-lg lg:text-xl mb-4">

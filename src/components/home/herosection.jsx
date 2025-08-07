@@ -1,48 +1,67 @@
 import React from "react";
-import hero_cricle from "../../assets/images/hero_circle.png";
-import hero from "../../assets/images/hero_right.png";
-import heroLeft from "../../assets/images/hero_left.png";
-import Button from "../common/Button";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import hero from "../../assets/images/banner1.webp";
 
 const HeroSection = () => {
-  return (
-    <div className="border-b border-black bg-HeroBg bg-no-repeat  bg-cover bg-center">
-      <div className="flex flex-col md:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 w-full box-border  max-w-7xl mx-auto">
-        {/* Left Image - Hidden on smallest screens, shown from sm upwards */}
-        <div className="hidden sm:flex w-full md:w-1/2 lg:w-3/12 items-center justify-center p-2 sm:p-4">
-          <img
-            src={heroLeft}
-            alt="Gold Incense Perfume"
-            className="  w-96 h-96 object-cover"
-          />
-        </div>
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    pauseOnHover: true,
+    arrows: true,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+  };
 
-        {/* Text Content - Always centered */}
-        <div className="py-6 md:py-0 w-full md:w-6/12 lg:w-5/12 text-center">
-          <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-[32px] lg:text-[40px] text-white tracking-[0.1em] font-bold font-[inter] mb-2 md:mb-4 leading-tight">
-            Explore Unique  Fragrance Journeys
-          </h1>
-          
-          <div className="my-4 md:my-6">
-            <button className="font-[inter] text-center text-white border border-white px-3 py-2 transition-colors  hover:bg-white hover:text-black">
-              Where elegance meets perfume.
-            </button>
-          </div>
-          
-          <h3 className="text-xl sm:text-2xl whitespace-nowrap md:text-3xl text-center text-primary font-[inter] font-bold  uppercase mb-2 md:mb-4">
-            DIRHAM ARD AL ZAAFRAN
-          </h3>
-        </div>
-
-        <div className="w-full sm:w-auto md:w-1/2 lg:w-4/12 flex items-center justify-center p-2 sm:p-4">
-        
-          <img
-            src={hero}
-            alt="Gold Incense Perfume"
-            className="  w-96  sm:h-96 h-72 object-cover"
-          />
-        </div>
+  function SampleNextArrow(props) {
+    const { onClick } = props;
+    return (
+      <div
+        className="absolute sm:right-5 right-2 top-1/2   bg-black -translate-y-1/2 sm:w-12 w-9 sm:h-12 h-9 bg-orange-500 rounded-lg flex items-center justify-center cursor-pointer opacity-80 hover:opacity-100 z-10"
+        onClick={onClick}
+      >
+        <FaChevronRight className="text-white sm:text-2xl text-lg" />
       </div>
+    );
+  }
+
+  function SamplePrevArrow(props) {
+    const { onClick } = props;
+    return (
+      <div
+        className="absolute sm:left-5 left-2 top-1/2  bg-black  -translate-y-1/2 sm:w-12 w-9 sm:h-12 h-9 bg-orange-500 rounded-lg flex items-center justify-center cursor-pointer opacity-80 hover:opacity-100 z-10"
+        onClick={onClick}
+      >
+        <FaChevronLeft className="text-white sm:text-2xl text-lg" />
+      </div>
+    );
+  }
+
+  const sliderImages = [
+    hero,
+    hero,
+  ];
+
+  return (
+    <div className="w-full relative">
+      <Slider {...settings}>
+        {sliderImages.map((image, index) => (
+          <div key={index}>
+            <img
+              src={image}
+              alt={`Slide ${index + 1}`}
+              className="w-full sm:h-[400px] h-[300px] object-cover object-center"
+            />
+          </div>
+        ))}
+      </Slider>
     </div>
   );
 };

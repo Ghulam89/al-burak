@@ -48,13 +48,13 @@ const CouponSection = () => {
               <img
                 src={product}
                 alt="product"
-                className="w-[90px] md:w-[100px] h-auto mb-1 md:mb-0 md:mr-[10px] object-contain"
+                className="w-full md:w-[100px] h-[200px] mb-1 md:mb-0 md:mr-[10px] sm:object-contain object-cover"
               />
               <div>
                 <h3 className="text-[15px] md:text-[18px]  font-semibold text-black  font-mono mb-1 md:mb-[10px]  md:font-sans">
                   {coupon.title}
                 </h3>
-                <p className="text-[14px] md:text-[17px] text-[#525258] mb-2 md:mb-[15px] font-['Righteous'] md:font-sans">
+                <p className="text-[14px] md:text-[17px] text-[#69696d] mb-2 md:mb-[15px] font-['Righteous'] md:font-sans">
                   <span className="text-[14px] md:text-[17px] text-[#FF2400] font-normal md:font-[400] font-['Righteous'] md:font-sans">
                     {coupon.discount}
                   </span>{" "}

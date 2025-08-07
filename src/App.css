@@ -36,6 +36,45 @@
 }
 
 
+
+.slick-arrow::after{
+  display: none !important;
+}
+
+.slick-arrow::before{
+  display: none !important;
+}
+/* Custom arrows */
+
+
+.custom-arrow:hover {
+  opacity: 1;
+}
+
+.custom-arrow:before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-top: 3px solid white;
+  border-right: 3px solid white;
+}
+
+.slick-next.custom-arrow:before {
+  transform: rotate(45deg);
+  margin-left: -5px;
+}
+
+.slick-prev.custom-arrow:before {
+  transform: rotate(-135deg);
+  margin-right: -5px;
+}
+
+/* Fix for slider items */
+.slick-slide div {
+  outline: none;
+}
+
 @supports (backdrop-filter: blur(12px)) {
   .backdrop-blur-sm {
     backdrop-filter: blur(12px);
