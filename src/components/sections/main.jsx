@@ -18,6 +18,7 @@ import product3 from "../../assets/images/product3.png";
 import product4 from "../../assets/images/product4.png";
 import Button from "../common/Button";
 import AddToCartSideMenu from "../header-footer.jsx/AddToCartSideMenu";
+import { TbArrowBack } from "react-icons/tb";
 
 
 // Skeleton Loader Components
@@ -283,6 +284,9 @@ const BestSelling = () => {
       if (rating) queryString += `&rating=${rating}`;
 
       const response = await axios.get(`${BaseUrl}/v1/product?${queryString}`);
+
+      console.log(response);
+      
       setProducts(response.data.data);
       
       // Update pagination state
@@ -353,6 +357,21 @@ const BestSelling = () => {
   return (
     <>
       <Navbar />
+
+       <div className=" max-w-7xl pt-4 px-4 md:px-0 flex justify-between items-center mx-auto">
+        <Link
+        to={'/'}
+        >
+                     <Button  Icons={<TbArrowBack />} className="  border rounded-lg py-0.6 uppercase"  label={'Go Back'} />
+
+        </Link> 
+         {loading ? (
+      <FilterSkeleton />
+    ) : (
+           <p  className=" text-black">Products {pagination?.totalProducts}</p>
+
+    )}
+          </div> 
       <div className="flex flex-col md:flex-row bg-white text-white p-2.5 font-inter min-h-screen">
         <Sidebar
           isOpen={sidebarOpen}
@@ -368,36 +387,71 @@ const BestSelling = () => {
           ></div>
         )}
 
-        <div className="flex-grow flex flex-col items-center pt-16 md:pt-0 overflow-y-auto">
-          <div className="w-full flex justify-between items-center max-w-7xl py-3 mb-8 md:mb-5 px-4 md:px-0">
-            {loading ? (
-              <FilterSkeleton />
-            ) : (
-              <div onClick={toggleSidebar} className="flex gap-2 items-center cursor-pointer">
-                <img src={require('../../assets/images/filter.png')} alt="" />
-                <h3 className="text-black font-semibold">Filter</h3>
-              </div>
-            )}
-            
-            {loading ? (
-              <FilterSkeleton />
-            ) : (
-              <div>
-                <select
-                  id="sort-by"
-                  value={searchParams.get("sort") || "default"}
-                  onChange={handleSortChange}
-                  className="px-3 py-1 md:px-4 md:py-2 bg-transparent border text-black border-black text-black2 rounded font-inter font-bold text-sm md:text-base cursor-pointer"
-                >
-                  <option value="default">Sort</option>
-                  <option value="price-asc">Price: Low to High</option>
-                  <option value="price-desc">Price: High to Low</option>
-                  <option value="name-asc">Name: A-Z</option>
-                  <option value="name-desc">Name: Z-A</option>
-                </select>
-              </div>
-            )}
-          </div>
+
+
+                    
+        <div className="flex-grow flex  flex-col items-center  overflow-y-auto">
+         <div className="w-full flex flex-col border-b border-black max-w-7xl py-3 mb-8 md:mb-5 px-4 md:px-0">
+  {/* Category Title - Moves to top on mobile */}
+  <div className="md:hidden mb-3 text-center">
+    {loading ? (
+      <FilterSkeleton />
+    ) : (
+      <h2 className="text-black font-semibold text-lg">
+        {searchParams.get("category") 
+          ? searchParams.get("category").toUpperCase() 
+          : "NEW ARRIVALS"}
+      </h2>
+    )}
+  </div>
+
+  {/* Bottom row with filter and sort */}
+  <div className="flex justify-between items-center">
+    {/* Filter - Left side */}
+    {loading ? (
+      <FilterSkeleton />
+    ) : (
+      <div 
+        onClick={toggleSidebar} 
+        className="flex gap-2 items-center cursor-pointer"
+      >
+        <img src={require('../../assets/images/filter.png')} alt="" />
+        <h3 className="text-black font-semibold uppercase">Filter</h3>
+      </div>
+    )}
+
+    {/* Category Title - Hidden on mobile, shows on medium+ screens */}
+    {loading ? (
+      <FilterSkeleton />
+    ) : (
+      <h2 className="hidden md:block text-black font-semibold text-lg md:text-xl">
+        {searchParams.get("category") 
+          ? searchParams.get("category").toUpperCase() 
+          : "NEW ARRIVALS"}
+      </h2>
+    )}
+
+    {/* Sort - Right side */}
+    {loading ? (
+      <FilterSkeleton />
+    ) : (
+      <div>
+        <select
+          id="sort-by"
+          value={searchParams.get("sort") || "default"}
+          onChange={handleSortChange}
+          className="px-1 py-1 md:py-2 border border-black bg-transparent text-black text-black2 rounded font-inter font-bold text-sm md:text-base cursor-pointer"
+        >
+          <option value="default">Sort</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="name-asc">Name: A-Z</option>
+          <option value="name-desc">Name: Z-A</option>
+        </select>
+      </div>
+    )}
+  </div>
+</div>
 
           {loading ? (
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 w-full max-w-7xl pb-8">
@@ -418,13 +472,18 @@ const BestSelling = () => {
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 w-full max-w-7xl pb-8">
                 {products.map((item, index) => (
                   <div key={index} className="relative w-full">
-                    <div className="bg-black rounded-lg border border-black shadow-lg shadow-gold-100">
+                    <div className="bg-black rounded-lg border overflow-hidden relative border-black shadow-lg shadow-gold-100">
                       <img
                         src={item?.images?.[0]}
                         onClick={() => navigate(`/product/${item?._id}`)}
                         alt="product"
                         className="w-full h-[250px] sm:h-[300px] md:h-[400px] object-cover"
                       />
+                         <div className=" absolute top-1 right-1 w-14 text-sm py-1 flex justify-center items-center bg-black text-white">
+
+                    {item?.sizes?.[0]?.discount} %
+
+                  </div>
                     </div>
 
                     <div className="pt-7 text-center sm:px-8 px-4 rounded-b-xl">

@@ -272,7 +272,7 @@ const Navbar = () => {
       {!isMobileView && (
      <nav
   ref={navbarRef}
-  className={`flex justify-between items-center px-2 sm:px-4 md:px-6 lg:px-12 py-3 bg-white border-b border-black ${
+  className={`flex justify-between items-center px-2 sm:px-4 md:px-6 lg:px-12 py-3.5 bg-white  border-black ${
     sticky
       ? "fixed top-0 left-0 right-0 z-50 shadow-lg bg-opacity-80 backdrop-blur-sm transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
       : "relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
@@ -308,7 +308,7 @@ const Navbar = () => {
               <li key={item.name}>
                 <Link
                   to={item.path}
-                  className="no-underline text-black font-medium text-[10px] xs:text-xs sm:text-sm md:text-base hover:text-primary px-1 transition-colors duration-300"
+                  className="no-underline text-black  font-[500] uppercase text-[14px]  hover:text-primary px-1 transition-colors duration-300"
                 >
                   {item.name}
                 </Link>

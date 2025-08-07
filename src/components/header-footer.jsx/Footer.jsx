@@ -17,7 +17,7 @@ export default function Footer() {
       <div className="w-full ">
         <img src={logo} className="w-[120px] bg-black p-2 h-auto mb-2.5   " alt="Logo" />
         <p className="text-black  font-semibold text-base leading-[1.4]">
-          "Where Every Scent<br />Tells a Story."
+          "Where Every Scent Tells a Story."
         </p>
       </div>
 

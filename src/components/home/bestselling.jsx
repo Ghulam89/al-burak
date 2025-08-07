@@ -58,9 +58,9 @@ const BestSelling = () => {
 
   // Render section with skeleton or actual content
   const renderSection = (title, items) => (
-    <div className="bg-white text-white p-4 md:p-10 font-sans">
+    <div className="bg-white text-white p-4 md:p-10 ">
       <div className="flex items-center justify-center mb-8 md:mb-12">
-        <div className="text-xl sm:text-2xl md:text-3xl font-bold font-[roboto] text-black px-4 tracking-wider">
+        <div className="text-xl sm:text-2xl md:text-3xl font-bold  uppercase text-black px-4 tracking-wider">
           {title}
         </div>
       </div>
@@ -72,13 +72,18 @@ const BestSelling = () => {
         ) : (
           items?.map((item, index) => (
             <div key={index} className="relative">
-              <div className="bg-black rounded-lg border border-black shadow-lg shadow-gold-100">
+              <div className="bg-black rounded-lg relative border overflow-hidden border-black shadow-lg shadow-gold-100">
                 <img
                   src={item?.images?.[0]}
                   onClick={() => navigate(`/product/${item?._id}`)}
                   alt="product"
                   className="w-full h-[200px] sm:h-[300px] md:h-[400px] object-cover cursor-pointer"
                 />
+                  <div className=" absolute top-1 right-1 w-14 text-sm py-1 flex justify-center items-center bg-black text-white">
+
+                    {item?.sizes?.[0]?.discount} %
+
+                  </div>
               </div>
               <div className="sm:pt-7 pt-4 text-center sm:px-8 px-0 rounded-b-xl">
                  <h3 className="font-semibold text-base uppercase text-black font-[inter] mb-1 line-clamp-2 h-12 overflow-hidden">

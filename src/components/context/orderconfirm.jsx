@@ -87,24 +87,24 @@ const OrderConfirmationPage = () => {
         {/* Status Tracker - Responsive */}
         <section className="flex justify-center items-center relative mb-10 sm:mb-16 w-full">
           <div className="flex justify-between items-center w-full max-w-2xl">
-            {['Shopping cart', 'Checkout', 'Order completed'].map((step, index) => {
+            {['Shopping cart', 'Checkout' , 'Order completed'].map((step, index) => {
               const isCompleted = 
                 (index === 0) || 
                 (index === 1) || 
                 (index === 2 && orderData?.orderStatus === 'completed');
 
               return (
-                <div key={step} className="flex flex-col items-center text-center flex-1 relative">
+                <div key={step} className="flex  flex-col items-center text-center flex-1 relative">
                   {index > 0 && (
                     <div 
-                      className={`absolute h-0.5 w-1/2 top-5 sm:top-7 -left-1/2 z-0 ${
+                      className={`absolute h-0.5 w-4/5 top-5 sm:top-7 -left-1/2 z-0 ${
                         isCompleted ? 'bg-primary' : 'bg-gray-300'
                       }`}
                     ></div>
                   )}
                   
                   <div 
-                    className={`w-10 h-10 sm:w-14 sm:h-14 rounded-full flex justify-center items-center border-2 relative z-10 ${
+                    className={`w-10 h-10 sm:w-14 sm:h-14  whitespace-nowrap rounded-full flex justify-center items-center border-2 relative z-10 ${
                       isCompleted 
                         ? 'bg-primary border-primary text-white' 
                         : 'border-black text-black'
@@ -121,7 +121,8 @@ const OrderConfirmationPage = () => {
                     }`}
                   >
                     {step.split(' ').map((word, i) => (
-                      <span key={i} className="block sm:inline">{word}</span>
+
+                      <span key={i} className="block   sm:inline"> {word}</span>
                     ))}
                   </span>
                 </div>
