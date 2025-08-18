@@ -29,6 +29,8 @@ const ReviewModal = ({
   const [reviewTitle, setReviewTitle] = useState("");
   const [reviewComment, setReviewComment] = useState("");
   const [file, setFile] = useState(null);
+  const [filePreview, setFilePreview] = useState(null); // Add this new state
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const userData = JSON.parse(localStorage.getItem("userId")) || null;
@@ -76,7 +78,20 @@ console.log(userData );
       setIsSubmitting(false);
     }
   };
-
+ // Modify your file input change handler
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      
+      // Create a preview URL for the image
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFilePreview(reader.result);
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  };
   return (
     <Modal
       isOpen={isModalOpen}
@@ -138,30 +153,36 @@ console.log(userData );
             ></textarea>
           </div>
 
-          <div className="mb-6">
-            <label className="block mb-2 text-black font-normal text-base">
-              PICTURE/VIDEO (OPTIONAL)
-            </label>
-            <label
-              htmlFor="file-upload"
-              className="w-40 h-36 bg-black border-2 border-[#EBC351] flex flex-col justify-center items-center cursor-pointer overflow-hidden"
-            >
-              {file ? (
-                <p className="text-xs text-[#D1C09E] break-all text-center px-1">
-                  {file.name}
-                </p>
-              ) : (
-                <FaCamera className="text-[50px] text-[#EBC351] mb-1" />
-              )}
-              <input
-                id="file-upload"
-                type="file"
-                onChange={(e) => setFile(e.target.files[0])}
-                className="hidden"
-                accept="image/*,video/*"
-              />
-            </label>
-          </div>
+        <div className="mb-6">
+    <label className="block mb-2 text-black font-normal text-base">
+      PICTURE/VIDEO (OPTIONAL)
+    </label>
+    <label
+      htmlFor="file-upload"
+      className="w-40 h-36 bg-black border-2 border-[#EBC351] flex flex-col justify-center items-center cursor-pointer overflow-hidden"
+    >
+      {filePreview ? (
+        <img 
+          src={filePreview} 
+          alt="Preview" 
+          className="w-full h-full object-cover"
+        />
+      ) : file ? (
+        <p className="text-xs text-[#D1C09E] break-all text-center px-1">
+          {file.name}
+        </p>
+      ) : (
+        <FaCamera className="text-[50px] text-[#EBC351] mb-1" />
+      )}
+      <input
+        id="file-upload"
+        type="file"
+        onChange={handleFileChange}  // Use the new handler
+        className="hidden"
+        accept="image/*,video/*"
+      />
+    </label>
+  </div>
 
           <p className="text-black text-sm mt-8 leading-relaxed">
             How we use your data: We'll only contact you about the review you

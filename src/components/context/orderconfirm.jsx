@@ -91,7 +91,7 @@ const OrderConfirmationPage = () => {
               const isCompleted = 
                 (index === 0) || 
                 (index === 1) || 
-                (index === 2 && orderData?.orderStatus === 'completed');
+                (index === 2 && orderData?.orderStatus === 'delivered');
 
               return (
                 <div key={step} className="flex  flex-col items-center text-center flex-1 relative">
@@ -132,7 +132,7 @@ const OrderConfirmationPage = () => {
         </section>
 
         {/* Review Button */}
-        {orderData?.orderStatus === 'completed' && (
+        {orderData?.orderStatus === 'orderDelivery' && (
           <section className="mb-6 sm:mb-8 text-center">
             <button 
               onClick={() => setIsModalOpen(true)} 
