@@ -47,7 +47,7 @@ console.log(userData );
       formData.append("userId", userData?._id);
       formData.append("comment", reviewComment);
       formData.append("rating", rating.toString());
-      formData.append("orderId", fetchData?._id);
+      formData.append("orderId", orderId);
       if (file) {
         formData.append("images", file);
       }
