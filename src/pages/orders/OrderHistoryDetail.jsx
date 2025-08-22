@@ -112,40 +112,39 @@ const OrderHistoryDetail = () => {
     }
   };
 
-  const handleSubmit = async (e,ids) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
+const handleSubmit = async (e, ids) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+  setError(null);
 
-    try {
-      const productId = ids;
-      const formData = new FormData();
-      formData.append("userId", userData?._id);
-      formData.append("comment", reviewComment);
-      // formData.append("rating", rating.toString());
-      formData.append("orderId", id);
-      if (file) {
-        formData.append("images", file);
-      }
-
-      const response = await axios.post(
-        `${BaseUrl}/v1/product/review/${productId}`,
-        formData
-      );
-
-      if (response?.data?.success === true) {
-        toast.success(response?.data?.message);
-        // closeReviewModal();
-      } else {
-        toast.error(response?.data?.message);
-      }
-    } catch (err) {
-      // console.error("Error submitting review:", err);
-      // setError(err.response?.data?.message || "An error occurred");
-    } finally {
-      setIsSubmitting(false);
+  try {
+    const productId = ids;
+    const formData = new FormData();
+    formData.append("userId", userData?._id);
+    formData.append("comment", reviewComment);
+    formData.append("rating", rating.toString());
+    formData.append("orderId", id);
+    if (file) {
+      formData.append("images", file);
     }
-  };
+
+    const response = await axios.put(
+      `${BaseUrl}/v1/product/add-reveiw/${productId}`,
+      formData
+    );
+
+    if (response?.data?.success === true) {
+      toast.success(response?.data?.message);
+      closeReviewModal(); // Uncomment this to close modal on success
+    } else {
+      toast.error(response?.data?.message);
+    }
+  } catch (err) {
+    toast.error(err?.response?.data?.message);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   if (loading) {
     return (
