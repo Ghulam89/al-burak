@@ -13,6 +13,8 @@ import { FaCamera, FaRegStar, FaStar } from "react-icons/fa";
 const OrderHistoryDetail = () => {
   const { id } = useParams();
   const [order, setOrder] = useState(null);
+  console.log(order);
+  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userData, setUserData] = useState(null);
@@ -30,7 +32,7 @@ const OrderHistoryDetail = () => {
     setUserData(data);
   }, []);
 
-  useEffect(() => {
+
     const fetchOrder = async () => {
       try {
         setLoading(true);
@@ -58,6 +60,9 @@ const OrderHistoryDetail = () => {
         setLoading(false);
       }
     };
+
+  useEffect(() => {
+  
 
     fetchOrder();
   }, [id]);
@@ -135,7 +140,9 @@ const handleSubmit = async (e, ids) => {
 
     if (response?.data?.success === true) {
       toast.success(response?.data?.message);
-      closeReviewModal(); // Uncomment this to close modal on success
+    
+      fetchOrder();
+      
     } else {
       toast.error(response?.data?.message);
     }
@@ -331,7 +338,7 @@ const handleSubmit = async (e, ids) => {
                         </tr>
 
                         <div className=" flex">
-                          {order?.orderStatus === "delivered" && (
+                          {order?.orderStatus === "delivered"  && item?.isReviewed===false && (
                             <div className=" bg-opacity-50  border mt-2">
                               <div className="bg-white max-w-2xl rounded-lg w-full ">
                                 <div className="p-6">
