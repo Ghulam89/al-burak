@@ -8,6 +8,11 @@ import { IoMdCheckmark } from 'react-icons/io';
 import Button from '../common/Button';
 import { BaseUrl } from '../../utils/BaseUrl';
 
+import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import { Truck } from 'lucide-react';
+
 const OrderConfirmationPage = () => {
   const { id } = useParams();
   const [orderData, setOrderData] = useState(null);
@@ -18,6 +23,14 @@ const OrderConfirmationPage = () => {
     JSON.parse(localStorage.getItem("userId")) || null
   );
   
+
+    // Google Maps integration
+  const city = orderData?.shippingAddress?.city || 'Lahore';
+  const address = orderData?.shippingAddress?.address;
+  const apiKey = 'AIzaSyBFw0Qbyq9zTFTd-tUY6dOAzKgV';
+  const encodedAddress = encodeURIComponent(`${city}, Pakistan`);
+  const mapSrc = `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodedAddress}&zoom=12`;
+
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
@@ -66,6 +79,116 @@ const OrderConfirmationPage = () => {
     );
   }
 
+
+    // Fix for default marker icons in Leaflet
+  const defaultIcon = L.icon({
+    iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+    iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  });
+  
+  // Warehouse coordinates (fixed)
+  const warehouseCoords = [32.082466, 72.669128];
+  
+  
+  const cityCoords = {
+    'Lahore': [31.5204, 74.3587],
+    'Karachi': [24.8607, 67.0011],
+    'Islamabad': [33.6844, 73.0479],
+    'Rawalpindi': [33.5651, 73.0169],
+    'Faisalabad': [31.4180, 73.0790],
+    'Multan': [30.1575, 71.5249],
+    'Peshawar': [34.0151, 71.5249],
+    'Quetta': [30.1798, 66.9750],
+    'Sargodha': [32.0837, 72.6711],
+    'Sialkot': [32.4945, 74.5229],
+    'Gujranwala': [32.1877, 74.1945],
+    'Bahawalpur': [29.3544, 71.6911],
+    'Sukkur': [27.7136, 68.8481],
+    'Larkana': [27.5589, 68.2120],
+    'Hyderabad': [25.3792, 68.3683],
+    'Mirpur Khas': [25.5269, 69.0111],
+    'Nawabshah': [26.2442, 68.4100],
+    'Sahiwal': [30.6641, 73.1086],
+    'Jhang': [31.2682, 72.3184],
+    'Rahim Yar Khan': [28.4202, 70.2952],
+    'Mardan': [34.1983, 72.0235],
+    'Kasur': [31.1167, 74.4500],
+    'Dera Ghazi Khan': [30.0561, 70.6344],
+    'Gujrat': [32.5739, 74.0789],
+    'Sheikhupura': [31.7167, 73.9850],
+    'Abbottabad': [34.1500, 73.2167],
+    'Wah Cantonment': [33.7731, 72.7441],
+    'Tando Adam': [25.7667, 68.6667],
+    'Jacobabad': [28.2769, 68.4514],
+    'Khuzdar': [27.8000, 66.6167]
+  };
+
+  
+  
+  function OrderMap({ city }) {
+    const customerCoords = cityCoords[city] || [32.0837, 72.6711];
+    const routeCoords = [warehouseCoords, customerCoords];
+   const openGoogleMaps = (coords, isWarehouse = false) => {
+    const [lat, lng] = coords;
+    const label = isWarehouse ? "Our Warehouse" : `Delivery Location: ${city}`;
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
+    window.open(url, '_blank');
+  };
+    return (
+      <div style={{ 
+        width: '100%', 
+        height: '440px', 
+        borderRadius: '10px',
+        overflow: 'hidden',
+        position: 'relative'
+      }}>
+        <MapContainer 
+          center={warehouseCoords} 
+          zoom={7} 
+          style={{ height: '100%', width: '100%' }}
+          attributionControl={false}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          
+          {/* Warehouse Marker */}
+          <Marker position={warehouseCoords} icon={defaultIcon}>
+            <Popup>Our Warehouse</Popup>
+          </Marker>
+          
+          {/* Customer City Marker */}
+          <Marker position={customerCoords} icon={defaultIcon} eventHandlers={{
+            click: () => openGoogleMaps(customerCoords, false)
+          }}>
+            <Popup>Delivery Location: {city}</Popup>
+          </Marker>
+          
+          {/* Route Line */}
+          <Polyline 
+            positions={routeCoords} 
+            color="#D4AF37" 
+            weight={3}
+            dashArray="5, 5"
+          />
+        </MapContainer>
+        
+        <div >
+          <Truck size={14} />
+          <span>From Warehouse to {city}</span>
+        </div>
+      </div>
+    );
+  }
+
+
+  
+
   return (
     <div className="w-full min-h-screen bg-white flex flex-col items-center box-border overflow-x-hidden text-primary px-4 sm:px-0">
       {/* Header */}
@@ -83,6 +206,8 @@ const OrderConfirmationPage = () => {
           
           <h1 className="text-xl sm:text-2xl font-semibold">Thank you for your order</h1>
         </section>
+
+
 
         {/* Status Tracker - Responsive */}
         <section className="flex justify-center items-center relative mb-10 sm:mb-16 w-full">
@@ -228,11 +353,8 @@ const OrderConfirmationPage = () => {
 
           {/* Right Column - Map */}
           <div className="w-full lg:w-6/12 rounded-lg overflow-hidden mt-6 lg:mt-0">
-            <img 
-              src={map} 
-              alt="Delivery location map" 
-              className="w-full h-auto"
-            />
+              <OrderMap city={orderData?.shippingAddress?.city || 'Sargodha'} />
+
             <h2 className='text-black font-semibold pt-2 text-lg'>Your order is confirmed</h2>
             <p className='text-gray-600 font-semibold py-2 sm:py-3 text-sm sm:text-base'>
               COD is only applicable on local orders below 50,000 PKR

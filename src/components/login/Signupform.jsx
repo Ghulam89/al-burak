@@ -52,10 +52,10 @@ const SignupForm = () => {
         });
 
         if (response?.data?.success === true) {
-          toast.success(response?.data?.message, {
-            position: "top-center",
-            autoClose: 3000,
-          });
+          // toast.success(response?.data?.message, {
+          //   position: "top-center",
+          //   autoClose: 3000,
+          // });
           resetForm();
           setTimeout(() => navigate("/login"), 3000);
         }

@@ -79,7 +79,7 @@ const BestSelling = () => {
                   alt="product"
                   className="w-full h-[200px] sm:h-[300px] md:h-[400px] object-cover cursor-pointer"
                 />
-                  <div className=" absolute top-1 right-1 w-14 text-sm py-1 flex justify-center items-center bg-black text-white">
+                  <div className=" absolute top-1 right-1 w-14 text-sm py-1 flex justify-center font-semibold items-center   bg-lightGray text-black">
 
                     {item?.sizes?.[0]?.discount} %
 

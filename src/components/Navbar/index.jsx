@@ -142,7 +142,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const logout = () => {
     localStorage.removeItem("userId");
-    toast.success("Logout Successfully!");
+    // toast.success("Logout Successfully!");
     navigate("/");
   };
 

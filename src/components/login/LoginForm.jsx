@@ -37,10 +37,10 @@ const LoginForm = () => {
         });
 
         if (response?.data?.success === true) {
-          toast.success("Login successful!", {
-            position: "top-center",
-            autoClose: 3000,
-          });
+          // toast.success("Login successful!", {
+          //   position: "top-center",
+          //   autoClose: 3000,
+          // });
 
           console.log("Login successful:", response.data);
           
