@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
 import axios from "axios";
 import { BaseUrl } from "../../utils/BaseUrl";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 const SignupForm = () => {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [apiMessage, setApiMessage] = useState({ text: "", type: "" });
 
   // Validation schema using Yup
   const validationSchema = Yup.object().shape({
@@ -42,6 +44,8 @@ const SignupForm = () => {
     validationSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
+        setApiMessage({ text: "", type: "" });
+        
         // API call to register user
         const response = await axios.patch(`${BaseUrl}/v1/customer`, {
           name: values.name,
@@ -52,20 +56,18 @@ const SignupForm = () => {
         });
 
         if (response?.data?.success === true) {
-          // toast.success(response?.data?.message, {
-          //   position: "top-center",
-          //   autoClose: 3000,
-          // });
+          setApiMessage({
+            text: response?.data?.message || "Registration successful!",
+            type: "success"
+          });
           resetForm();
-          setTimeout(() => navigate("/login"), 3000);
+        navigate("/login");
         }
       } catch (error) {
-        
-        const errorMessage =
-          error.response?.data?.message
-        toast.error(errorMessage, {
-          position: "top-center",
-          autoClose: 5000,
+        const errorMessage = error.response?.data?.message || "An error occurred during registration";
+        setApiMessage({
+          text: errorMessage,
+          type: "error"
         });
       } finally {
         setSubmitting(false);
@@ -74,14 +76,25 @@ const SignupForm = () => {
   });
 
   return (
-    <div className="m-0 p-0 py-5 font-sans  flex justify-center items-center box-border">
-      <div className=" w-[90%] max-w-[800px] p-5 md:p-[20px]  border border-black rounded-[25px] shadow-[0_0_10px_rgba(0,0,0,0.1)] box-border">
+    <div className="m-0 p-0 py-5 font-sans flex justify-center items-center box-border">
+      <div className="w-[90%] max-w-[800px] p-5 md:p-[20px] border border-black rounded-[25px] shadow-[0_0_10px_rgba(0,0,0,0.1)] box-border">
         <h1 className="text-center text-[40px] font-semibold mb-[10px] font-[inter]">
           Al-Buraq
         </h1>
         <h2 className="text-[30px] font-bold mb-[20px] text-left font-[inter]">
           Create Account
         </h2>
+
+        {/* API Message Display */}
+        {apiMessage.text && (
+          <div className={`mb-4 p-3 rounded-md text-center ${
+            apiMessage.type === "success" 
+              ? "bg-green-100 text-green border border-green" 
+              : "bg-[#ecc2c2] text-red border border-red"
+          }`}>
+            {apiMessage.text}
+          </div>
+        )}
 
         <form onSubmit={formik.handleSubmit} className="flex flex-col">
           {/* Name Field */}
@@ -93,7 +106,7 @@ const SignupForm = () => {
             value={formik.values.name}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            className={`p-[10px] mb-[5px]   bg-white placeholder:text-black border-2 ${
+            className={`p-[10px] mb-[5px] bg-white placeholder:text-black border-2 ${
               formik.touched.name && formik.errors.name
                 ? " border-darkRed"
                 : "border-black"
@@ -149,19 +162,35 @@ const SignupForm = () => {
 
           {/* Password Field */}
           <label className="font-bold mb-[5px] mt-[10px]">Password</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter Password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className={`p-[10px] mb-[5px] bg-white placeholder:text-black border-2 ${
-              formik.touched.password && formik.errors.password
-                ? "  border-darkRed"
-                : "border-black"
-            } text-[16px]`}
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Enter Password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={`p-[10px] mb-[5px] w-full bg-white placeholder:text-black border-2 ${
+                formik.touched.password && formik.errors.password
+                  ? "border-darkRed"
+                  : "border-black"
+              } text-[16px]`}
+            />
+            <button
+              type="button"
+              className="absolute right-3 top-4 text-gray-600"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? (
+                <FaRegEye size={20} />
+
+              ) : (
+                
+                <FaRegEyeSlash size={20} />
+
+              )}
+            </button>
+          </div>
           {formik.touched.password && formik.errors.password && (
             <p className="text-darkRed font-medium text-sm mb-2">
               {formik.errors.password}
@@ -171,14 +200,15 @@ const SignupForm = () => {
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className={`mt-[15px] p-[10px] font-[inter] bg-black  text-primary h-[45px] text-[16px] border-none cursor-pointer hover:bg-gray-800 transition-colors ${
+            className={`mt-[15px] p-[10px] font-[inter] bg-black text-white h-[45px] text-[16px] border-none cursor-pointer hover:bg-gray-800 transition-colors ${
               formik.isSubmitting ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
             {formik.isSubmitting ? "Processing..." : "Submit"}
           </button>
-           <p className="text-center text-black pt-4 text-[14px]">
-             Already have an account?{" "}
+          
+          <p className="text-center text-black pt-4 text-[14px]">
+            Already have an account?{" "}
             <Link
               to="/login"
               className="text-black font-semibold hover:underline"

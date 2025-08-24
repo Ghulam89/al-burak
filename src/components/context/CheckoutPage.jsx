@@ -26,6 +26,13 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+   // Coupon state
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponMessage, setCouponMessage] = useState("");
+  const [couponMessageType, setCouponMessageType] = useState("");
+
   const [formData, setFormData] = useState({
     fullName: "",
     country: "",
@@ -172,6 +179,45 @@ const CheckoutPage = () => {
     setPaymentMethod(e.target.value);
   };
 
+
+
+   // Apply coupon function
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) {
+      setCouponMessage("Please enter a coupon code");
+      setCouponMessageType("error");
+      return;
+    }
+    
+    if (!userData?._id) {
+      setCouponMessage("Please complete email verification first");
+      setCouponMessageType("error");
+      return;
+    }
+    
+    setCouponLoading(true);
+    setCouponMessage("");
+    
+    try {
+      const response = await axios.post(`${BaseUrl}/v1/coupon/apply`, {
+        couponCode: couponCode.trim(),
+        customerId: userData._id
+      });
+      
+      if (response.data.success) {
+        setAppliedCoupon(response.data.data);
+        setCouponMessage(response.data.message || "Coupon applied successfully!");
+        setCouponMessageType("success");
+      }
+    } catch (error) {
+      const message = error.response?.data?.message || "Failed to apply coupon";
+      setCouponMessage(message);
+      setCouponMessageType("error");
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
   const updateCustomerAddress = async () => {
     try {
       const response = await axios.patch(`${BaseUrl}/v1/customer/address`, {
@@ -209,6 +255,7 @@ const CheckoutPage = () => {
         paymentMethod: paymentMethod,
         note: note,
         totalAmount: totalAmount,
+        couponId: appliedCoupon?._id || null,
       };
       const response = await axios.post(`${BaseUrl}/v1/order`, orderData);
       return response.data;
@@ -635,14 +682,32 @@ const CheckoutPage = () => {
 
             <div className="flex flex-col sm:flex-row gap-3 mb-5">
               <input
-                type="text"
-                placeholder="Discount code"
-                className="flex-grow p-3 bg-gray-100 placeholder:text-black font-semibold text-black text-sm border-none rounded-md box-border"
-              />
-              <button className="bg-black text-white py-2 px-4 rounded-md cursor-pointer text-sm font-bold hover:bg-gray-900 transition-colors sm:w-auto w-full">
-                Apply
-              </button>
+                  type="text"
+                  placeholder="Discount code"
+                  value={couponCode}
+                  onChange={(e) => setCouponCode(e.target.value)}
+                  className="flex-grow p-3 bg-gray-100 placeholder:text-black font-semibold text-black text-sm border-none rounded-md box-border"
+                />
+                <button 
+                  type="button"
+                  onClick={handleApplyCoupon}
+                  disabled={couponLoading || appliedCoupon}
+                  className="bg-black text-white py-2 px-4 rounded-md cursor-pointer text-sm font-bold hover:bg-gray-900 transition-colors sm:w-auto w-full disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {couponLoading ? "Applying..." : appliedCoupon ? "Applied" : "Apply"}
+                </button>
             </div>
+
+            
+              {couponMessage && (
+                <div className={`mb-4 p-3 rounded-md text-sm ${
+                  couponMessageType === "success" 
+                    ? "bg-[#a6f7b9] text-green border border-green" 
+                    : " bg-[#f1f5f2] text-red border border-red"
+                }`}>
+                  {couponMessage}
+                </div>
+              )}
 
             <div className="mb-0 pt-1">
               <div className="flex justify-between mb-2 text-sm text-gray-300">
@@ -659,7 +724,7 @@ const CheckoutPage = () => {
               </div>
               <div className="flex justify-between text-base font-bold pt-3 mt-4 border-t border-gray-200">
                 <span className="text-black">Total</span>
-                <span className="text-black">Rs {totalAmount}</span>
+                <span className="text-black">Rs { appliedCoupon?.discountValue?totalAmount-appliedCoupon?.discountValue:totalAmount}</span>
               </div>
             </div>
             </div>

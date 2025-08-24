@@ -1,14 +1,15 @@
 import { useNavigate, Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
 import axios from "axios";
 import { BaseUrl } from "../../utils/BaseUrl";
+import { useState } from "react";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 const LoginForm = () => {
-
-
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [apiMessage, setApiMessage] = useState({ text: "", type: "" });
   const userData = JSON.parse(localStorage.getItem("userId")) || null;
 
   // Validation schema using Yup
@@ -30,6 +31,8 @@ const LoginForm = () => {
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
+        setApiMessage({ text: "", type: "" });
+        
         // API call to login user
         const response = await axios.post(`${BaseUrl}/v1/customer/login`, {
           email: values.email,
@@ -37,23 +40,21 @@ const LoginForm = () => {
         });
 
         if (response?.data?.success === true) {
-          // toast.success("Login successful!", {
-          //   position: "top-center",
-          //   autoClose: 3000,
-          // });
-
+          setApiMessage({
+            text: "Login successful!",
+            type: "success"
+          });
+          
           console.log("Login successful:", response.data);
-          
-          
           localStorage.setItem("userId", JSON.stringify(response.data.customer));
-          setTimeout(() => navigate("/"), 1000);
+          navigate("/dashboard");
         }
       } catch (error) {
         const errorMessage =
           error.response?.data?.message || "Login failed. Please try again.";
-        toast.error(errorMessage, {
-          position: "top-center",
-          autoClose: 5000,
+        setApiMessage({
+          text: errorMessage,
+          type: "error"
         });
       } finally {
         setSubmitting(false);
@@ -66,6 +67,18 @@ const LoginForm = () => {
       <div className="bg-white w-[90%] max-w-[800px] p-5 md:p-[20px] rounded-[25px] border border-black shadow-[0_0_10px_rgba(0,0,0,0.1)] box-border">
         <h1 className="text-center text-[40px] font-medium mb-[10px]">Al-Buraq</h1>
         <h2 className="text-[30px] font-bold mb-[20px] text-left">Log in</h2>
+
+        {/* API Message Display */}
+           {/* API Message Display */}
+        {apiMessage.text && (
+          <div className={`mb-4 p-3 rounded-md text-center ${
+            apiMessage.type === "success" 
+              ? "bg-[#b1f5b1] text-green border border-green" 
+              : "bg-[#ecc2c2] text-red border border-red"
+          }`}>
+            {apiMessage.text}
+          </div>
+        )}
 
         <form onSubmit={formik.handleSubmit} className="flex flex-col">
           {/* Email Field */}
@@ -99,19 +112,37 @@ const LoginForm = () => {
               Forgot Password?
             </Link>
           </div>
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter Password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className={`p-[10px] mb-[5px] bg-white placeholder:text-black border-2 ${
-              formik.touched.password && formik.errors.password
-                ? "border-darkRed"
-                : "border-black"
-            } text-[16px]`}
-          />
+          
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Enter Password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={`p-[10px] mb-[5px] w-full bg-white placeholder:text-black border-2 ${
+                formik.touched.password && formik.errors.password
+                  ? "border-darkRed"
+                  : "border-black"
+              } text-[16px]`}
+            />
+            <button
+              type="button"
+              className="absolute right-3 top-4 text-gray-600"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? (
+                              <FaRegEye size={20} />
+              
+                            ) : (
+                              
+                              <FaRegEyeSlash size={20} />
+              
+                            )}
+            </button>
+          </div>
+          
           {formik.touched.password && formik.errors.password && (
             <p className="text-darkRed font-medium text-sm mb-2">
               {formik.errors.password}
@@ -121,7 +152,7 @@ const LoginForm = () => {
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className={`mt-[15px] bg-black text-primary h-[45px] text-[16px] border-none cursor-pointer font-[inter] ${
+            className={`mt-[15px] bg-black text-white h-[45px] text-[16px] border-none cursor-pointer font-[inter] ${
               formik.isSubmitting ? "opacity-70 cursor-not-allowed" : "hover:bg-gray-900"
             }`}
           >

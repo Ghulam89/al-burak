@@ -198,14 +198,14 @@ const Navbar = () => {
                 <>
                   <Link to="/dashboard" onClick={() => setShowDropdown(false)}>
                     <button className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100 transition-colors duration-200">
-                      Profile
+                      Order History
                     </button>
                   </Link>
-                  <Link to="#" onClick={() => setShowDropdown(false)}>
+                  {/* <Link to="#" onClick={() => setShowDropdown(false)}>
                     <button className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100 transition-colors duration-200">
                       Settings
                     </button>
-                  </Link>
+                  </Link> */}
                   <button
                     onClick={logout}
                     className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100 transition-colors duration-200"
@@ -220,7 +220,7 @@ const Navbar = () => {
                       Register
                     </button>
                   </Link>
-                  <Link to="#" onClick={() => setShowDropdown(false)}>
+                  <Link to="/login" onClick={() => setShowDropdown(false)}>
                     <button className="w-full px-3 py-1.5 sm:px-4 sm:py-2 text-left text-xs sm:text-sm text-black hover:bg-gray-100 transition-colors duration-200">
                       Login
                     </button>
@@ -302,8 +302,8 @@ const Navbar = () => {
               { name: "Men Perfumes", path: `/shop?category=Men`},
               { name: "Women Perfumes", path:  `/shop?category=Women`},
               { name: "Attar/Oud", path:  `/shop?category=Attar`},
-              { name: "Deals", path: "#" },
-              { name: "Gift Box", path: "#" },
+              { name: "Deals", path: "/coming-soom" },
+              { name: "Gift Box", path: "/coming-soom" },
             ].map((item) => (
               <li key={item.name}>
                 <Link

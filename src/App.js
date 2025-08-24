@@ -23,6 +23,7 @@ import { ToastContainer } from 'react-toastify';
 import OrderConfirmationPage from './components/context/orderconfirm';
 import { useEffect } from 'react';
 import OrderHistoryDetail from './pages/orders/OrderHistoryDetail';
+import ComingSoon from './pages/ComingSoon';
 function App() {
    const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -46,6 +47,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/new-arrivals" element={<NewArrivals />} />
         <Route path="/shop" element={<MenPerfumes />} />
+        <Route path="/coming-soom" element={<ComingSoon />} />
         <Route path="/women-perfumes" element={<WomenPerfumes />} />
         <Route path="/attar-out" element={<AttarOut />} />
         <Route path="/cart" element={<CartPage />} />
